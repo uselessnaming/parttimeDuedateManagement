@@ -1,0 +1,79 @@
+package com.example.parttimeduedatemanagement.Adapater
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.example.parttimeduedatemanagement.Database.CheckItemList
+import com.example.parttimeduedatemanagement.databinding.ItemBinding
+import com.example.parttimeduedatemanagement.databinding.ItemContainerBinding
+
+private val TAG : String = "ItemAdapter"
+class ItemAdapter(items : List<CheckItemList> = emptyList()) : RecyclerView.Adapter<ItemViewHolder>(){
+    private val items = arrayListOf<CheckItemList>()
+
+    fun submitList(items : List<CheckItemList>){
+        this.items.clear()
+        this.items.addAll(items)
+    }
+
+    private fun getItem(position:Int) : CheckItemList = this.items[position]
+
+    override fun getItemCount(): Int = this.items.size
+
+    override fun getItemViewType(position: Int): Int = getItem(position).layoutId
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType : Int) : ItemViewHolder{
+        val itemView = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+        return when(viewType){
+            CheckItemList.Header.VIEW_TYPE -> ItemHeaderViewHolder(itemView)
+            CheckItemList.Child.VIEW_TYPE -> ItemChildViewHolder(itemView)
+            else -> throw IllegalArgumentException("Cannot create ViewHolder")
+        }
+    }
+    override fun onBindViewHolder(holder : ItemViewHolder, position : Int){
+        holder.bind(getItem(position))
+    }
+}
+
+abstract class ItemViewHolder(
+    itemView : View
+) : RecyclerView.ViewHolder(itemView){
+    abstract fun bind(itemList : CheckItemList)
+}
+
+class ItemHeaderViewHolder(
+    itemView : View
+) : ItemViewHolder(itemView){
+    private val binding by lazy{
+        ItemContainerBinding.bind(itemView)
+    }
+
+    override fun bind(itemList : CheckItemList){
+        val item = (itemList as CheckItemList.Header).item
+        binding.apply{
+            itemLocation.text = item.location
+        }
+    }
+}
+
+class ItemChildViewHolder(
+    itemView : View
+) : ItemViewHolder(itemView){
+    private val binding by lazy{
+        ItemBinding.bind(itemView)
+    }
+    override fun bind(itemList : CheckItemList){
+        val item = (itemList as CheckItemList.Child).item
+
+        binding.apply{
+            itemName.text = item.itemName
+            itemDuedate.text = item.date
+        }
+
+        /* 아이템 클릭 시 */
+        itemView.setOnLongClickListener(View.OnLongClickListener {
+            val dialog
+        })
+    }
+}
