@@ -3,18 +3,24 @@ package com.example.parttimeduedatemanagement.Adapater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parttimeduedatemanagement.Database.CheckItemList
+import com.example.parttimeduedatemanagement.R
 import com.example.parttimeduedatemanagement.databinding.ItemBinding
 import com.example.parttimeduedatemanagement.databinding.ItemContainerBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-private val TAG : String = "ItemAdapter"
 class ItemAdapter(items : List<CheckItemList> = emptyList()) : RecyclerView.Adapter<ItemViewHolder>(){
+    private val TAG : String = "ItemAdapter"
     private val items = arrayListOf<CheckItemList>()
 
     fun submitList(items : List<CheckItemList>){
         this.items.clear()
         this.items.addAll(items)
+        notifyDataSetChanged()
     }
 
     private fun getItem(position:Int) : CheckItemList = this.items[position]
@@ -33,7 +39,21 @@ class ItemAdapter(items : List<CheckItemList> = emptyList()) : RecyclerView.Adap
     }
     override fun onBindViewHolder(holder : ItemViewHolder, position : Int){
         holder.bind(getItem(position))
+
+        holder.itemView.setOnLongClickListener{
+            itemLongClickListener.onLongClick(it)
+            return@setOnLongClickListener(true)
+        }
     }
+
+    interface OnItemLongClickListener{
+        fun onLongClick(v : View)
+    }
+    fun setItemLongClickListener(onItemLongClickListener : OnItemLongClickListener){
+        this.itemLongClickListener = onItemLongClickListener
+    }
+
+    private lateinit var itemLongClickListener : OnItemLongClickListener
 }
 
 abstract class ItemViewHolder(
@@ -70,10 +90,5 @@ class ItemChildViewHolder(
             itemName.text = item.itemName
             itemDuedate.text = item.date
         }
-
-        /* 아이템 클릭 시 */
-        itemView.setOnLongClickListener(View.OnLongClickListener {
-            val dialog
-        })
     }
 }

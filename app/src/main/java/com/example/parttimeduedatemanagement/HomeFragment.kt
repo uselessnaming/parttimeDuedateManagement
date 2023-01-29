@@ -2,9 +2,12 @@ package com.example.parttimeduedatemanagement
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Button
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +15,7 @@ import com.example.part_timedatemanagement.Base.BaseFragment
 import com.example.part_timedatemanagement.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class HomeFragment : BaseFragment() {
     private val TAG = "HomeFragment"
@@ -50,7 +54,27 @@ class HomeFragment : BaseFragment() {
     /** itemContainerRecyclerview를 초기화 */
     private fun initRecyclerView (){
         binding.apply{
-            binding.itemList.adapter = mItemAdapter
+            itemList.adapter = mItemAdapter
+            mItemAdapter.setItemLongClickListener(object : ItemAdapter.OnItemLongClickListener{
+                override fun onLongClick(v: View) {
+                    val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetStyle)
+                    dialog.apply{
+                        setContentView(R.layout.fragment_bottom_dialog)
+                        /* 바텀 다이얼로그에서 update를 눌렀을 때 */
+                        val btnUpdate : Button? = dialog.findViewById(R.id.btnUpdate)
+                        btnUpdate?.setOnClickListener{
+
+                        }
+                        /* 바텀 다이얼로그에서 delete를 눌렀을 때 */
+                        val btnDelete : Button? = dialog.findViewById(R.id.btnDelete)
+                        btnDelete?.setOnClickListener{
+
+                        }
+                        create()
+                        show()
+                    }
+                }
+            })
 
             val layout = LinearLayoutManager(context)
             itemList.layoutManager = layout
@@ -60,7 +84,6 @@ class HomeFragment : BaseFragment() {
         mItemViewModel.items.observe(viewLifecycleOwner, Observer{
             Log.d(TAG, "Observer is Playing")
             Log.d(TAG, "${it}")
-            /* 중복 제거 */
             mItemAdapter.submitList(it)
         })
     }
@@ -87,6 +110,7 @@ class HomeFragment : BaseFragment() {
                         DialogInterface.OnClickListener { dialog, id ->
                             mItemViewModel.deleteAll()
                             Log.d(TAG,"${mItemAdapter.itemCount}")
+                            mItemAdapter.submitList(emptyList())
                         })
                     setNegativeButton("취소", null)
                     show()
