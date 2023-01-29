@@ -12,8 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.part_timedatemanagement.Base.BaseFragment
+import com.example.part_timedatemanagement.Database.Item
 import com.example.part_timedatemanagement.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
+import com.example.parttimeduedatemanagement.Database.CheckItemList
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -56,23 +58,10 @@ class HomeFragment : BaseFragment() {
         binding.apply{
             itemList.adapter = mItemAdapter
             mItemAdapter.setItemLongClickListener(object : ItemAdapter.OnItemLongClickListener{
-                override fun onLongClick(v: View) {
-                    val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetStyle)
-                    dialog.apply{
-                        setContentView(R.layout.fragment_bottom_dialog)
-                        /* 바텀 다이얼로그에서 update를 눌렀을 때 */
-                        val btnUpdate : Button? = dialog.findViewById(R.id.btnUpdate)
-                        btnUpdate?.setOnClickListener{
-
-                        }
-                        /* 바텀 다이얼로그에서 delete를 눌렀을 때 */
-                        val btnDelete : Button? = dialog.findViewById(R.id.btnDelete)
-                        btnDelete?.setOnClickListener{
-
-                        }
-                        create()
-                        show()
-                    }
+                override fun onLongClick(v: View, id : CheckItemList) {
+                    val dialog = BottomDialog()
+                    /* BottomDialogFragment 생성 */
+                    mActivity.createBottomDialog(dialog,id.item)
                 }
             })
 
@@ -122,4 +111,5 @@ class HomeFragment : BaseFragment() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

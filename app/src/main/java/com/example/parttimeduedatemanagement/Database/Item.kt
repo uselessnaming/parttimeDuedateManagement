@@ -8,8 +8,9 @@ import androidx.room.PrimaryKey
 data class Item(
     @ColumnInfo var location : String,
     @ColumnInfo var itemName : String,
-    @ColumnInfo var date : String
+    @ColumnInfo var date : String,
+    @ColumnInfo
+    @PrimaryKey(autoGenerate = true) var id : Int = 0
 ){
     constructor() : this("","","")
-    @PrimaryKey(autoGenerate = true) var id : Int = 0
 }

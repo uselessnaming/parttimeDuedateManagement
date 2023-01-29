@@ -11,6 +11,7 @@ import android.widget.Toast.makeText
 import androidx.fragment.app.Fragment
 import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.databinding.ActivityMainBinding
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class MainActivity : AppCompatActivity() {
     private val TAG : String = "ActivityMain"
@@ -34,5 +35,12 @@ class MainActivity : AppCompatActivity() {
             .replace(currentLayoutId,changedLayout)
             .addToBackStack(null) //뒤로 가기 버튼 누를 시 fragment를 꺼줌
             .commit()
+    }
+
+    fun createBottomDialog(b : BottomSheetDialogFragment, item : Item){
+        val bundle = Bundle()
+        bundle.putInt("mainId", item.id)
+        b.arguments = bundle
+        b.show(supportFragmentManager, b.tag)
     }
 }

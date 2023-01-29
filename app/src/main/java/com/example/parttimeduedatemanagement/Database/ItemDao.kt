@@ -11,6 +11,10 @@ interface ItemDao {
 
     @Query("DELETE FROM itemTable")
     fun deleteAll()
+
+    @Query("SELECT * FROM itemTable WHERE id = (:id)")
+    fun searchItem(id : Int) : Item
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(item : Item)
 

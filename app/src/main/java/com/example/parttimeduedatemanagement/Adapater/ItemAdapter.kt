@@ -41,13 +41,13 @@ class ItemAdapter(items : List<CheckItemList> = emptyList()) : RecyclerView.Adap
         holder.bind(getItem(position))
 
         holder.itemView.setOnLongClickListener{
-            itemLongClickListener.onLongClick(it)
+            itemLongClickListener.onLongClick(it,getItem(position))
             return@setOnLongClickListener(true)
         }
     }
 
     interface OnItemLongClickListener{
-        fun onLongClick(v : View)
+        fun onLongClick(v : View, id : CheckItemList)
     }
     fun setItemLongClickListener(onItemLongClickListener : OnItemLongClickListener){
         this.itemLongClickListener = onItemLongClickListener
