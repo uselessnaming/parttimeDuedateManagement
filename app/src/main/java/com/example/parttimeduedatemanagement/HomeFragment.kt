@@ -111,5 +111,4 @@ class HomeFragment : BaseFragment() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 }

@@ -16,8 +16,8 @@ class ItemRepository (application : Application) {
     fun getAll() : List<Item>{
         return mItemDao.getNew()
     }
-    fun searchItem(id : Int) : Item{
-        return mItemDao.searchItem(id)
+    fun deleteItem(id : Int){
+        mItemDao.deleteItem(id)
     }
 
     fun deleteAll(){

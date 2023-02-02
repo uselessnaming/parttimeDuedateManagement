@@ -1,5 +1,7 @@
 package com.example.parttimeduedatemanagement
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -17,9 +19,6 @@ class BottomDialog : BottomSheetDialogFragment(){
     private lateinit var mItemViewModel : ItemViewModel
     private val TAG = "BottomDialog"
     private lateinit var binding : FragmentBottomDialogBinding
-    private val deleteDialog by lazy{
-        DeleteDialog(requireContext())
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +38,7 @@ class BottomDialog : BottomSheetDialogFragment(){
             /* 삭제 버튼 클릭 시 */
             btnDelete.setOnClickListener{
                 /* dialog 생성 */
-                showDeleteDialog()
+                showAlertDialog()
             }
             /* 수정 버튼 클릭 시 */
             btnUpdate.setOnClickListener{
@@ -48,17 +47,34 @@ class BottomDialog : BottomSheetDialogFragment(){
         }
     }
 
-    private fun showDeleteDialog(){
-        deleteDialog.apply{
-            setOnOkClickedListener(object : DeleteDialog.OkClickedListener{
-                override fun onOkClicked() {
-                    val id = arguments?.getInt("mainId")
-                    if(id == null){
-                        throw NullPointerException("mainId is null value")
+    private fun showAlertDialog(){
+        val dialog = AlertDialog.Builder(requireContext())
+        dialog.apply{
+            var listener = object : DialogInterface.OnClickListener{
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+                    when(p1){
+                        DialogInterface.BUTTON_POSITIVE -> {
+                            val id = arguments?.getInt("mainId")
+                            if (id == null){
+                                throw NullPointerException("id is null")
+                            }
+                            mItemViewModel.deleteItem(id)
+                            dismiss()
+                        }
+                        else -> dismiss()
                     }
-                    mItemViewModel.delete(mItemViewModel.searchItem(id))
+                }
+            }
+            setOnDismissListener(object : DialogInterface.OnDismissListener{
+                override fun onDismiss(p0: DialogInterface?) {
+                    mItemViewModel.fetchItems()
+                    dismiss()
                 }
             })
+            setTitle("Warning")
+            setMessage("Are you sure about that?")
+            setPositiveButton("OK",listener)
+            setNegativeButton("Cancel",null)
             show()
         }
     }

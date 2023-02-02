@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 class ItemViewModel(application : Application) : AndroidViewModel(application){
     private val mItemRepository : ItemRepository = ItemRepository.get(application)
 
-    private var targetItem : Item = Item()
     private var itemLiveData = MutableLiveData<List<CheckItemList>>()
     val items : LiveData<List<CheckItemList>> get() = itemLiveData
 
@@ -39,11 +38,10 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         }
         return result
     }
-    fun searchItem(id : Int) : Item{
+    fun deleteItem(id : Int){
         viewModelScope.launch(Dispatchers.IO){
-            targetItem = mItemRepository.searchItem(id)
+            mItemRepository.deleteItem(id)
         }
-        return targetItem
     }
     fun insert(item : Item){
         viewModelScope.launch(Dispatchers.IO){
