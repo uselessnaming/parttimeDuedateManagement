@@ -13,7 +13,7 @@ import com.example.parttimeduedatemanagement.databinding.ItemContainerBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class ItemAdapter(items : List<CheckItemList> = emptyList()) : RecyclerView.Adapter<ItemViewHolder>(){
+class ItemAdapter : RecyclerView.Adapter<ItemViewHolder>(){
     private val TAG : String = "ItemAdapter"
     private val items = arrayListOf<CheckItemList>()
 

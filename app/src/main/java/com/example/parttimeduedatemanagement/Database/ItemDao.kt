@@ -18,9 +18,9 @@ interface ItemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(item : Item)
 
-    @Update()
-    fun update(item : Item)
+    @Query("UPDATE itemTable SET itemName = (:name), location = (:location), date = (:duedate) WHERE id = (:id)")
+    fun update(id : Int, name : String, location : String, duedate : String)
 
-    @Delete()
-    fun delete(item : Item)
+    @Query("SELECT * FROM itemTable WHERE id = (:id) ")
+    fun searchItem(id : Int) : Item
 }

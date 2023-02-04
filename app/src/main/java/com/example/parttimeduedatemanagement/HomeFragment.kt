@@ -2,6 +2,7 @@ package com.example.parttimeduedatemanagement
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.DialogInterface.OnDismissListener
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -42,11 +43,17 @@ class HomeFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.btnRefresh.setOnClickListener{
+            mItemViewModel.fetchItems()
+        }
+    }
+
     override fun onStart(){
         super.onStart()
         mItemViewModel.fetchItems()
     }
-
     /** ViewModel 초기화 */
     private fun initViewModel(){
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)

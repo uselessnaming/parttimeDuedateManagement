@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import com.example.part_timedatemanagement.Database.Item
 import com.example.part_timedatemanagement.ItemViewModel
@@ -19,6 +21,10 @@ class BottomDialog : BottomSheetDialogFragment(){
     private lateinit var mItemViewModel : ItemViewModel
     private val TAG = "BottomDialog"
     private lateinit var binding : FragmentBottomDialogBinding
+    private val mActivity by lazy{
+        activity as MainActivity
+    }
+    private var itemId : Int? = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,43 +40,38 @@ class BottomDialog : BottomSheetDialogFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        itemId = arguments?.getInt("mainId") ?: throw NullPointerException("id is null")
+
         binding.apply{
             /* 삭제 버튼 클릭 시 */
             btnDelete.setOnClickListener{
                 /* dialog 생성 */
-                showAlertDialog()
+                showDeleteDialog()
             }
             /* 수정 버튼 클릭 시 */
             btnUpdate.setOnClickListener{
-
+                /* dialog 생성 */
+                val updateDialog = UpdateDialog()
+                mActivity.createDialog(updateDialog,itemId!!)
             }
         }
     }
 
-    private fun showAlertDialog(){
+    private fun showDeleteDialog(){
         val dialog = AlertDialog.Builder(requireContext())
-        dialog.apply{
-            var listener = object : DialogInterface.OnClickListener{
-                override fun onClick(p0: DialogInterface?, p1: Int) {
-                    when(p1){
-                        DialogInterface.BUTTON_POSITIVE -> {
-                            val id = arguments?.getInt("mainId")
-                            if (id == null){
-                                throw NullPointerException("id is null")
-                            }
-                            mItemViewModel.deleteItem(id)
-                            dismiss()
-                        }
-                        else -> dismiss()
+        val listener = object : DialogInterface.OnClickListener{
+            override fun onClick(p0: DialogInterface?, p1: Int) {
+                when(p1){
+                    DialogInterface.BUTTON_POSITIVE -> {
+                        mItemViewModel.deleteItem(itemId!!)
+                        dismiss()
                     }
+                    else -> dismiss()
                 }
             }
-            setOnDismissListener(object : DialogInterface.OnDismissListener{
-                override fun onDismiss(p0: DialogInterface?) {
-                    mItemViewModel.fetchItems()
-                    dismiss()
-                }
-            })
+        }
+        dialog.apply{
             setTitle("Warning")
             setMessage("Are you sure about that?")
             setPositiveButton("OK",listener)

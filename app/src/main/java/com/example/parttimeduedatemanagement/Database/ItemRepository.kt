@@ -26,12 +26,13 @@ class ItemRepository (application : Application) {
     fun insert(item : Item){
         mItemDao.insert(item)
     }
-    fun delete(item : Item){
-        mItemDao.delete(item)
+    fun update(id : Int, name : String, location : String, date : String){
+        mItemDao.update(id,name,location,date)
     }
-    fun update(item : Item){
-        mItemDao.update(item)
+    fun searchItem(id : Int) : Item{
+        return mItemDao.searchItem(id)
     }
+
     companion object{
         private var INSTANCE : ItemRepository? = null
         /*

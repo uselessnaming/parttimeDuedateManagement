@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.databinding.ActivityMainBinding
@@ -42,5 +43,12 @@ class MainActivity : AppCompatActivity() {
         bundle.putInt("mainId", item.id)
         b.arguments = bundle
         b.show(supportFragmentManager, b.tag)
+    }
+
+    fun createDialog(d : DialogFragment, itemId : Int){
+        val bundle = Bundle()
+        bundle.putInt("itemId", itemId)
+        d.arguments = bundle
+        d.show(supportFragmentManager, d.tag)
     }
 }
