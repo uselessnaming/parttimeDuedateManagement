@@ -43,9 +43,17 @@ class UpdateDialog : DialogFragment(){
         itemId = arguments?.getInt("itemId") ?: throw NullPointerException("itemId is Null")
         mItemViewModel.viewModelScope.launch(Dispatchers.IO){
             val item = mItemViewModel.searchItem(itemId!!).await()
-            binding.etEditDuedate.setText(item.date)
-            binding.etEditLocation.setText(item.location)
-            binding.etEditName.setText(item.itemName)
+            val duedate = item.date
+            val year = duedate.substring(0,4)
+            val month = duedate.substring(6,8)
+            val day = duedate.substring(10,12)
+            binding.apply{
+                etEditLocation.setText(item.location)
+                etEditName.setText(item.itemName)
+                etUpdateYear.setText(year)
+                etUpdateMonth.setText(month)
+                etUpdateDay.setText(day)
+            }
         }
         binding.apply{
             btnCancel.setOnClickListener{
@@ -53,7 +61,16 @@ class UpdateDialog : DialogFragment(){
                 dismiss()
             }
             btnDone.setOnClickListener{
-                mItemViewModel.update(itemId!!,etEditName.text.toString(),etEditLocation.text.toString(),etEditDuedate.text.toString())
+                var date = binding.etUpdateYear.text.toString() + "년 "
+                if (etUpdateMonth.text.length == 1){
+                    date += "0"
+                }
+                date += etUpdateMonth.text.toString() + "월 "
+                if (etUpdateDay.text.length == 1){
+                    date += "0"
+                }
+                date += etUpdateDay.text.toString() + "일"
+                mItemViewModel.update(itemId!!,etEditName.text.toString(),etEditLocation.text.toString(),date)
                 dismiss()
             }
         }

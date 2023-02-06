@@ -44,6 +44,7 @@ class DuedateCheckFragment : Fragment() {
             val current = LocalDateTime.now()
             val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
             tvToday.text = current.format(formatter)
+
         }
         Log.d(TAG,"onViewCreated is done")
     }
