@@ -47,16 +47,13 @@ class UpdateDialog : DialogFragment(){
             binding.etEditLocation.setText(item.location)
             binding.etEditName.setText(item.itemName)
         }
-        // 문제 발생 데이터가 return되지 않음
-
         binding.apply{
             btnCancel.setOnClickListener{
                 Log.d(TAG,"Cancel clicked")
                 dismiss()
             }
             btnDone.setOnClickListener{
-                Log.d(TAG,"done clicked")
-                mItemViewModel.update(itemId!!,etEditDuedate.text.toString(),etEditLocation.text.toString(),etEditName.text.toString())
+                mItemViewModel.update(itemId!!,etEditName.text.toString(),etEditLocation.text.toString(),etEditDuedate.text.toString())
                 dismiss()
             }
         }

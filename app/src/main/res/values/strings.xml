@@ -5,4 +5,7 @@
     <string name="location">위치</string>
     <string name="name">이름</string>
     <string name="duedate">유통기한</string>
+    <string name="add">추가</string>
+    <string name="checkDuedate">유통기한 확인</string>
+    <string name="dataReset">데이터 초기화</string>
 </resources>

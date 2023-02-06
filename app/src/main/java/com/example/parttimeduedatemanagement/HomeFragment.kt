@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Button
+import androidx.core.view.size
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,11 +46,12 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnRefresh.setOnClickListener{
-            mItemViewModel.fetchItems()
+        binding.apply{
+            btnRefresh.setOnClickListener{
+                mItemViewModel.fetchItems()
+            }
         }
     }
-
     override fun onStart(){
         super.onStart()
         mItemViewModel.fetchItems()
@@ -75,12 +77,14 @@ class HomeFragment : BaseFragment() {
             val layout = LinearLayoutManager(context)
             itemList.layoutManager = layout
             itemList.setHasFixedSize(true)
+            Log.d(TAG,"${mItemAdapter.itemCount}")
         }
 
         mItemViewModel.items.observe(viewLifecycleOwner, Observer{
             Log.d(TAG, "Observer is Playing")
             Log.d(TAG, "${it}")
             mItemAdapter.submitList(it)
+            binding.itemCount.text = "등록된 상품의 개수 : " + mItemViewModel.getItemCount().toString()
         })
     }
 
@@ -111,6 +115,9 @@ class HomeFragment : BaseFragment() {
                     setNegativeButton("취소", null)
                     show()
                 }
+            }
+            R.id.checkDuedate -> {
+                mActivity.fragmentChange(R.id.fragmentContainerView, DuedateCheckFragment())
             }
             else -> {
                 throw IllegalArgumentException("menu is not exist")

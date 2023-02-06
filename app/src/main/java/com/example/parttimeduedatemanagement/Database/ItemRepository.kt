@@ -14,7 +14,7 @@ class ItemRepository (application : Application) {
         mItemDao = mItemDatabase.itemDao()
     }
     fun getAll() : List<Item>{
-        return mItemDao.getNew()
+        return mItemDao.getAll()
     }
     fun deleteItem(id : Int){
         mItemDao.deleteItem(id)

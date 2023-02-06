@@ -10,6 +10,10 @@ import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.databinding.ActivityMainBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -25,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, HomeFragment())
+            .add(R.id.fragmentContainerView,HomeFragment())
             .commit()
 
         Log.d(TAG, "Success")

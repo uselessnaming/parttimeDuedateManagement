@@ -7,7 +7,7 @@ import com.example.parttimeduedatemanagement.Database.CheckItemList
 @Dao
 interface ItemDao {
     @Query("SELECT * FROM itemTable")
-    fun getNew() : List<Item>
+    fun getAll() : List<Item>
 
     @Query("DELETE FROM itemTable")
     fun deleteAll()
