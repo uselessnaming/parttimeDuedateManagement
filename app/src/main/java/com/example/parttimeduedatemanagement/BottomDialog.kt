@@ -60,15 +60,13 @@ class BottomDialog : BottomSheetDialogFragment(){
 
     private fun showDeleteDialog(){
         val dialog = AlertDialog.Builder(requireContext())
-        val listener = object : DialogInterface.OnClickListener{
-            override fun onClick(p0: DialogInterface?, p1: Int) {
-                when(p1){
-                    DialogInterface.BUTTON_POSITIVE -> {
-                        mItemViewModel.deleteItem(itemId!!)
-                        dismiss()
-                    }
-                    else -> dismiss()
+        val listener = DialogInterface.OnClickListener { _, p1 ->
+            when(p1){
+                DialogInterface.BUTTON_POSITIVE -> {
+                    mItemViewModel.deleteItem(itemId!!)
+                    dismiss()
                 }
+                else -> dismiss()
             }
         }
         dialog.apply{

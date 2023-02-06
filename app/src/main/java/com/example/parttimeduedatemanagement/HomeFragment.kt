@@ -106,12 +106,11 @@ class HomeFragment : BaseFragment() {
                 builder.apply {
                     setTitle("Warning")
                     setMessage("정말 초기화 하시겠습니까?")
-                    setPositiveButton("확인",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            mItemViewModel.deleteAll()
-                            Log.d(TAG,"${mItemAdapter.itemCount}")
-                            mItemAdapter.submitList(emptyList())
-                        })
+                    setPositiveButton("확인") { dialog, id ->
+                        mItemViewModel.deleteAll()
+                        Log.d(TAG, "${mItemAdapter.itemCount}")
+                        mItemAdapter.submitList(emptyList())
+                    }
                     setNegativeButton("취소", null)
                     show()
                 }

@@ -1,5 +1,7 @@
 package com.example.parttimeduedatemanagement
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -25,7 +28,7 @@ class DuedateCheckFragment : Fragment() {
     private val TAG = "DuedateCheckFragment"
     private lateinit var binding : FragmentDuedateCheckBinding
     private lateinit var mItemViewModel : ItemViewModel
-    private val mGoneItemAdapter by lazy{ GoneItemAdapter() }
+    private val mGoneItemAdapter by lazy{ GoneItemAdapter()}
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,6 +65,12 @@ class DuedateCheckFragment : Fragment() {
         binding.apply{
             goneItems.adapter = mGoneItemAdapter
 
+            mGoneItemAdapter.setGoneItemClickListener(object : GoneItemAdapter.OnGoneItemClickListener {
+                override fun onClick(itemId: Int) {
+                    showDialog(itemId)
+                }
+            })
+
             val layout = LinearLayoutManager(context)
             goneItems.layoutManager = layout
             goneItems.setHasFixedSize(true)
@@ -70,5 +79,23 @@ class DuedateCheckFragment : Fragment() {
             mGoneItemAdapter.submitList(it)
             Log.d("GoneItemViewHolder","${it}")
         })
+    }
+    private fun showDialog(itemId : Int){
+        val dialog = AlertDialog.Builder(requireContext())
+        dialog.apply{
+            setTitle("Warning")
+            setMessage("Are you sure about deleting this item?")
+            setPositiveButton("OK") { dialog, btnType ->
+                when (btnType) {
+                    DialogInterface.BUTTON_POSITIVE -> {
+                        mItemViewModel.deleteItem(itemId)
+                        dialog?.dismiss()
+                    }
+                    else -> dialog?.dismiss()
+                }
+            }
+            setNegativeButton("Cancel",null)
+            show()
+        }
     }
 }

@@ -28,20 +28,19 @@ class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>
     override fun onBindViewHolder(holder : GoneItemViewHolder, position : Int){
         holder.bind(items[position])
 
-        holder.itemView.setOnLongClickListener{
-            itemLongClickListener.onLongClick(it,items[position].id)
-            return@setOnLongClickListener(true)
+        holder.itemView.setOnClickListener{
+            goneItemClickListener.onClick(items[position].id)
         }
     }
 
-    interface OnItemLongClickListener{
-        fun onLongClick(v : View, itemId : Int)
+    interface OnGoneItemClickListener{
+        fun onClick(itemId : Int)
     }
-    fun setItemLongClickListener(onItemLongClickListener : OnItemLongClickListener){
-        this.itemLongClickListener = onItemLongClickListener
+    fun setGoneItemClickListener(goneItemClickListener : OnGoneItemClickListener){
+        this.goneItemClickListener = goneItemClickListener
     }
 
-    private lateinit var itemLongClickListener : OnItemLongClickListener
+    private lateinit var goneItemClickListener : OnGoneItemClickListener
 
     inner class GoneItemViewHolder(binding : GoneItemContainerBinding) : RecyclerView.ViewHolder(binding.root){
 
