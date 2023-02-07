@@ -1,10 +1,6 @@
 package com.example.part_timedatemanagement.Database
 
 import android.app.Application
-import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.room.Room
-import com.example.parttimeduedatemanagement.Database.CheckItemList
 
 class ItemRepository (application : Application) {
     private var mItemDatabase : ItemDatabase

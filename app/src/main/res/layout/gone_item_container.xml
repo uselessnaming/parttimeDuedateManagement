@@ -1,41 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/update_dialog_last_view_background">
 
-    <LinearLayout
-        android:layout_marginTop = "5dp"
-        android:layout_marginBottom="5dp"
+    <TextView
+        android:id="@+id/goneItemName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:textStyle="bold|normal"
+        android:textSize = "25sp"
+        tools:text="itemName" />
 
-        <TextView
-            android:id="@+id/goneItemName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:textStyle="bold|normal"
-            android:textSize = "20sp"
-            tools:text="itemName" />
-
-        <TextView
-            android:id="@+id/goneItemDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/realRed"
-            android:textStyle="bold|normal"
-            android:textSize = "15sp"
-            tools:text="itemDate" />
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/goneItemDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/realRed"
+        android:textSize="15sp"
+        android:textStyle="bold|normal"
+        tools:text="itemDate" />
+</LinearLayout>

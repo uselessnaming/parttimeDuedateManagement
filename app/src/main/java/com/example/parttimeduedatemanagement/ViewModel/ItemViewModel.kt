@@ -1,17 +1,13 @@
 package com.example.part_timedatemanagement
 
 import android.app.Application
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.example.part_timedatemanagement.Database.Item
 import com.example.part_timedatemanagement.Database.ItemRepository
 import com.example.parttimeduedatemanagement.Database.CheckItemList
 import kotlinx.coroutines.*
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class ItemViewModel(application : Application) : AndroidViewModel(application){

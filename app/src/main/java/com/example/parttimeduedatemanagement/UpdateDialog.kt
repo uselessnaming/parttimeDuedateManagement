@@ -1,16 +1,12 @@
 package com.example.parttimeduedatemanagement
 
-import android.app.Dialog
-import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -25,7 +21,8 @@ class UpdateDialog : DialogFragment(){
 
     private lateinit var binding : FragmentUpdateDialogBinding
     private lateinit var mItemViewModel : ItemViewModel
-    private var itemId : Int? = 0
+    private var itemId : Int = 0
+    private var location = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,13 +39,19 @@ class UpdateDialog : DialogFragment(){
 
         itemId = arguments?.getInt("itemId") ?: throw NullPointerException("itemId is Null")
         mItemViewModel.viewModelScope.launch(Dispatchers.IO){
-            val item = mItemViewModel.searchItem(itemId!!).await()
+            val item = mItemViewModel.searchItem(itemId).await()
             val duedate = item.date
             val year = duedate.substring(0,4)
             val month = duedate.substring(6,8)
             val day = duedate.substring(10,12)
             binding.apply{
-                etEditLocation.setText(item.location)
+                var index = 0
+                if (item.location == "기타"){
+                    index = 9
+                } else {
+                    index = item.location.toInt()-1
+                }
+                snChoiceLocation.setSelection(index)
                 etEditName.setText(item.itemName)
                 etUpdateYear.setText(year)
                 etUpdateMonth.setText(month)
@@ -56,8 +59,16 @@ class UpdateDialog : DialogFragment(){
             }
         }
         binding.apply{
+            val locations = resources.getStringArray(R.array.locations)
+            val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,locations)
+            snChoiceLocation.adapter = adapter
+            snChoiceLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(parent: AdapterView<*>?,view: View?,position: Int,id: Long) {
+                    location = locations[position]
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
             btnCancel.setOnClickListener{
-                Log.d(TAG,"Cancel clicked")
                 dismiss()
             }
             btnDone.setOnClickListener{
@@ -70,7 +81,7 @@ class UpdateDialog : DialogFragment(){
                     date += "0"
                 }
                 date += etUpdateDay.text.toString() + "일"
-                mItemViewModel.update(itemId!!,etEditName.text.toString(),etEditLocation.text.toString(),date)
+                mItemViewModel.update(itemId,etEditName.text.toString(),location,date)
                 dismiss()
             }
         }

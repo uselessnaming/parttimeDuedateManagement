@@ -3,15 +3,11 @@ package com.example.parttimeduedatemanagement
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.FragmentManager
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.example.part_timedatemanagement.Database.Item
 import com.example.part_timedatemanagement.ItemViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentBottomDialogBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -64,17 +60,21 @@ class BottomDialog : BottomSheetDialogFragment(){
             when(p1){
                 DialogInterface.BUTTON_POSITIVE -> {
                     mItemViewModel.deleteItem(itemId!!)
+                    message("삭제되었습니다")
                     dismiss()
                 }
                 else -> dismiss()
             }
         }
         dialog.apply{
-            setTitle("Warning")
-            setMessage("Are you sure about that?")
-            setPositiveButton("OK",listener)
-            setNegativeButton("Cancel",null)
+            setTitle("주의")
+            setMessage("정말 삭제하시겠습니까?")
+            setPositiveButton("확인",listener)
+            setNegativeButton("취소",null)
             show()
         }
+    }
+    private fun message(s : String){
+        Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show()
     }
 }

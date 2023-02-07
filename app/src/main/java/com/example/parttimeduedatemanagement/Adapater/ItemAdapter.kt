@@ -3,15 +3,10 @@ package com.example.parttimeduedatemanagement.Adapater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parttimeduedatemanagement.Database.CheckItemList
-import com.example.parttimeduedatemanagement.R
 import com.example.parttimeduedatemanagement.databinding.ItemBinding
 import com.example.parttimeduedatemanagement.databinding.ItemContainerBinding
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class ItemAdapter : RecyclerView.Adapter<ItemViewHolder>(){
     private val TAG : String = "ItemAdapter"
@@ -72,7 +67,7 @@ class ItemHeaderViewHolder(
     override fun bind(itemList : CheckItemList){
         val item = (itemList as CheckItemList.Header).item
         binding.apply{
-            itemLocation.text = item.location
+            itemLocation.text = "위치 : " + item.location
         }
     }
 }

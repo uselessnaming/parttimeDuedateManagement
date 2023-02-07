@@ -9,8 +9,8 @@
         android:id="@+id/itemName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="30dp"
+        tools:text="Name"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/itemDuedate"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -19,9 +19,19 @@
         android:id="@+id/itemDuedate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize = "20dp"
+        tools:text="Duedate"
+        android:textSize = "20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemName" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="4.5dp"
+        android:layerType="software"
+        app:layout_constraintTop_toBottomOf="@+id/itemDuedate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/item_background" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

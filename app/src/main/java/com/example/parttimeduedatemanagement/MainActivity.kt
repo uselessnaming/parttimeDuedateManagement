@@ -2,18 +2,9 @@ package com.example.parttimeduedatemanagement
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils.replace
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
-import android.widget.Toast.makeText
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.databinding.ActivityMainBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

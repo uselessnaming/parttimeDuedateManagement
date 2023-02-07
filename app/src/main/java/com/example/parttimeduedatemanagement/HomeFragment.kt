@@ -1,25 +1,17 @@
 package com.example.parttimeduedatemanagement
 
 import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.DialogInterface.OnDismissListener
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Button
-import androidx.core.view.size
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.part_timedatemanagement.Base.BaseFragment
-import com.example.part_timedatemanagement.Database.Item
 import com.example.part_timedatemanagement.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
 import com.example.parttimeduedatemanagement.Database.CheckItemList
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
-import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class HomeFragment : BaseFragment() {
     private val TAG = "HomeFragment"
@@ -96,7 +88,7 @@ class HomeFragment : BaseFragment() {
 
     /** menu 선택 시 이벤트 처리 */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item?.itemId) {
+        when (item.itemId) {
             R.id.insert -> {
                 mActivity.fragmentChange(R.id.fragmentContainerView, InsertFragment())
             }

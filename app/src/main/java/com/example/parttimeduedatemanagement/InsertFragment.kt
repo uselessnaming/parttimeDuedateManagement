@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import android.widget.Toast.makeText
 import androidx.lifecycle.*
@@ -35,19 +37,29 @@ class InsertFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.apply{
+            var location = ""
+            /** spinner 연결 */
+            val locations = resources.getStringArray(R.array.locations)
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,locations)
+            snLocationChoice.adapter = adapter
+            snLocationChoice.setSelection(0)
+            snLocationChoice.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    location = locations[position]
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+            }
 
             /** 추가 사항을 입력한 후 버튼 클릭 시 */
             btnDone.setOnClickListener {
                 /* 입력 창에 아무 것도 없으면 오류 출력 */
-                if (etLocationInsert.text.isEmpty()) {
-                    message("Location is Blank")
-                } else if (etNameInsert.text.isEmpty()){
-                    message("Name is Blank")
+                if (etNameInsert.text.isEmpty()){
+                    message("이름을 입력해주세요")
                 } else if (etInputYear.text.isBlank() || etInputMonth.text.isBlank() || etInputDay.text.isBlank()){
-                    message("Duedate is Blank")
+                    message("날짜를 선택해주세요")
                 } else{
                     val name = binding.etNameInsert.text.toString()
-                    val location = binding.etLocationInsert.text.toString()
                     var date = binding.etInputYear.text.toString() + "년 "
                     if (etInputMonth.text.length == 1){
                         date += "0"
@@ -60,7 +72,7 @@ class InsertFragment : BaseFragment() {
 
                     val item = Item(location,name,date)
                     mItemViewModel.insert(item)
-                    Log.d(TAG, "insert success")
+                    message("추가 완료")
                     /* 입력 창에 입력한 상품이 이미 있다면 이미 존재한다는 오류를 출력 */
                 }
                 /** 수정 사항 입력 후 버튼 클릭 시 */
