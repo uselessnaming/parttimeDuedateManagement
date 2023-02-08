@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.*
 import com.example.part_timedatemanagement.Base.BaseFragment
 import com.example.part_timedatemanagement.Database.Item
@@ -20,6 +21,9 @@ class InsertFragment : BaseFragment() {
     private val TAG : String = "InsertFragment"
     private lateinit var binding : FragmentInsertBinding
     private lateinit var mItemViewModel : ItemViewModel
+    private val mActivity by lazy{
+        activity as MainActivity
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,9 +77,10 @@ class InsertFragment : BaseFragment() {
                     val item = Item(location,name,date)
                     mItemViewModel.insert(item)
                     message("추가 완료")
+
+                    /* 추가 버튼을 눌렀을 시 fragment 전환 --> 초기 데이터를 전부 넣은 후에 이 기능을 넣는 것이 좋을 듯 mActivity.finishFragment() */
                     /* 입력 창에 입력한 상품이 이미 있다면 이미 존재한다는 오류를 출력 */
                 }
-                /** 수정 사항 입력 후 버튼 클릭 시 */
             }
         }
         super.onViewCreated(view, savedInstanceState)

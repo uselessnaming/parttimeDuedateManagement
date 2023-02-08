@@ -2,7 +2,7 @@ package com.example.parttimeduedatemanagement
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.part_timedatemanagement.Database.Item
@@ -10,7 +10,8 @@ import com.example.parttimeduedatemanagement.databinding.ActivityMainBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class MainActivity : AppCompatActivity() {
-    private val TAG : String = "ActivityMain"
+    private val TAG = "ActivityMain"
+    private var lastTimeBackPressed : Long = 0
     private val binding by lazy{
         ActivityMainBinding.inflate(layoutInflater)
     }
@@ -22,8 +23,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .add(R.id.fragmentContainerView,HomeFragment())
             .commit()
-
-        Log.d(TAG, "Success")
     }
     /* fragment를 switch해주는 함수 */
     fun fragmentChange(currentLayoutId : Int, changedLayout : Fragment){
@@ -46,4 +45,22 @@ class MainActivity : AppCompatActivity() {
         d.arguments = bundle
         d.show(supportFragmentManager, d.tag)
     }
+    private fun message(s : String){
+        Toast.makeText(this,s,Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() - lastTimeBackPressed < 1500){
+            finish()
+            return
+        }
+        lastTimeBackPressed = System.currentTimeMillis()
+        message("한 번 더 뒤로 가기를 누르면 종료됩니다")
+    }
+
+    /*
+    fun finishFragment(){
+        supportFragmentManager.popBackStack()
+    }
+     */
 }

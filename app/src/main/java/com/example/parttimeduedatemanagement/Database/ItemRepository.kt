@@ -15,7 +15,6 @@ class ItemRepository (application : Application) {
     fun deleteItem(id : Int){
         mItemDao.deleteItem(id)
     }
-
     fun deleteAll(){
         mItemDao.deleteAll()
     }
@@ -28,7 +27,6 @@ class ItemRepository (application : Application) {
     fun searchItem(id : Int) : Item{
         return mItemDao.searchItem(id)
     }
-
     companion object{
         private var INSTANCE : ItemRepository? = null
         /*

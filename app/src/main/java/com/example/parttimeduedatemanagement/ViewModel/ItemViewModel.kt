@@ -96,7 +96,5 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         }
     }
     suspend fun searchItem(id : Int) : Deferred<Item> =
-        viewModelScope.async(Dispatchers.IO){
-            return@async mItemRepository.searchItem(id)
-        }
+        viewModelScope.async(Dispatchers.IO){return@async mItemRepository.searchItem(id) }
 }
