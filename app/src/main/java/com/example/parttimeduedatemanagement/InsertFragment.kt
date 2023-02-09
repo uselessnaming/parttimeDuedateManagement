@@ -1,5 +1,6 @@
 package com.example.parttimeduedatemanagement
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ class InsertFragment : BaseFragment() {
     private val mActivity by lazy{
         activity as MainActivity
     }
+    private lateinit var callback : OnBackPressedCallback
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

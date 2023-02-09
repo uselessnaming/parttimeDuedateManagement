@@ -2,6 +2,7 @@ package com.example.parttimeduedatemanagement
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -50,17 +51,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (System.currentTimeMillis() - lastTimeBackPressed < 1500){
-            finish()
-            return
+        val currentFragment : Fragment = supportFragmentManager.fragments[0]
+        if (currentFragment is HomeFragment){
+            if (System.currentTimeMillis() - lastTimeBackPressed < 1500){
+                finish()
+                return
+            }
+            lastTimeBackPressed = System.currentTimeMillis()
+            message("한 번 더 뒤로 가기를 누르면 종료됩니다")
+        } else{
+            super.onBackPressed()
         }
-        lastTimeBackPressed = System.currentTimeMillis()
-        message("한 번 더 뒤로 가기를 누르면 종료됩니다")
     }
 
     /*
     fun finishFragment(){
         supportFragmentManager.popBackStack()
     }
-     */
+    */
 }
