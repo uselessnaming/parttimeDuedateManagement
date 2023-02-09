@@ -65,21 +65,25 @@ class InsertFragment : BaseFragment() {
                 } else if (etInputYear.text.isBlank() || etInputMonth.text.isBlank() || etInputDay.text.isBlank()){
                     message("날짜를 선택해주세요")
                 } else{
-                    val name = binding.etNameInsert.text.toString()
-                    var date = binding.etInputYear.text.toString() + "년 "
-                    if (etInputMonth.text.length == 1){
-                        date += "0"
+                    if (!checkMonth(etInputMonth.text.toString().toInt())){
+                        message("월은 12월까지 있습니다")
+                    } else if (!checkDay(etInputMonth.text.toString().toInt(),etInputDay.text.toString().toInt())){
+                        message("해당 일은 존재하지 않습니다")
+                    } else {
+                        val name = etNameInsert.text.toString()
+                        var date = etInputYear.text.toString() + "년 "
+                        if (etInputMonth.text.length == 1){
+                            date += "0"
+                        }
+                        date += etInputMonth.text.toString() + "월 "
+                        if (etInputDay.text.length == 1){
+                            date += "0"
+                        }
+                        date += etInputDay.text.toString() + "일"
+                        val item = Item(location,name,date)
+                        mItemViewModel.insert(item)
+                        message("추가 완료")
                     }
-                    date += etInputMonth.text.toString() + "월 "
-                    if (etInputDay.text.length == 1){
-                        date += "0"
-                    }
-                    date += etInputDay.text.toString() + "일"
-
-                    val item = Item(location,name,date)
-                    mItemViewModel.insert(item)
-                    message("추가 완료")
-
                     /* 추가 버튼을 눌렀을 시 fragment 전환 --> 초기 데이터를 전부 넣은 후에 이 기능을 넣는 것이 좋을 듯 mActivity.finishFragment() */
                     /* 입력 창에 입력한 상품이 이미 있다면 이미 존재한다는 오류를 출력 */
                 }
@@ -89,5 +93,17 @@ class InsertFragment : BaseFragment() {
     }
     private fun message(s : String){
         makeText(context, s, Toast.LENGTH_SHORT).show()
+    }
+    private fun checkMonth(m : Int) : Boolean{
+        return m in 1..12
+    }
+    private fun checkDay(m : Int, d : Int) : Boolean {
+        return when (m % 2) {
+            0 -> {
+                if (m == 2) d in 1..28
+                else d in 1..30
+            }
+            else -> { d in 1..31 }
+        }
     }
 }

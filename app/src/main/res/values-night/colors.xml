@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#FF6200EE</color>
+    <color name="primaryVariant">#FF3700B3</color>
+    <color name="secondary">#FF03DAC6</color>
+    <color name="secondaryVariant">#FF018786</color>
+    <color name="background">#FFFFFFFF</color>
+    <color name="onPrimary">#FFFFFFFF</color>
+    <color name="onSecondary">#FF000000</color>
+    <color name="layoutBackground">#FF000000</color>
+    <color name="borderline">#FFFFFFFF</color>
+    <color name="divideLine">#FF14D3FF</color>
+    <color name="target">#CD1039</color>
+    <color name="locationColor">#FF1E82FF</color>
+    <color name="fragmentBackground">#FF000000</color>
+    <color name="itemTextColor">#FFFFFFFF</color>
+    <color name="btnAddColor">#FFD36EEC</color>
+    <color name="tvAddColor">#FF000000</color>
+</resources>

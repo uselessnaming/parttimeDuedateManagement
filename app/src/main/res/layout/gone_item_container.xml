@@ -19,7 +19,7 @@
         android:id="@+id/goneItemDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/realRed"
+        android:textColor="@color/target"
         android:textSize="15sp"
         android:textStyle="bold|normal"
         tools:text="itemDate" />

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".InsertFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/fragmentBackground">
 
     <TextView
         android:id="@+id/title"
@@ -14,7 +15,8 @@
         android:gravity="center_horizontal"
         android:text="@string/insertTitle"
         android:textSize="40sp"
-        android:textStyle="bold|normal"/>
+        android:textStyle="bold|normal"
+        android:textColor="@color/itemTextColor"/>
 
     <TextView
         android:id="@+id/tvLocationInsert"
@@ -23,13 +25,16 @@
         android:layout_marginTop="56dp"
         android:text="@string/inputLocation"
         android:textSize="30sp"
+        android:textColor="@color/itemTextColor"
         android:background="@drawable/text_top_line_background"/>
 
     <Spinner
         android:id="@+id/snLocationChoice"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@drawable/text_bottom_line_background"/>
+        android:background="@drawable/text_bottom_line_background"
+        android:textColor="@color/itemTextColor"
+        android:theme="@style/SpinnerTheme"/>
 
     <TextView
         android:id="@+id/tvNameInsert"
@@ -38,7 +43,8 @@
         android:layout_marginTop="56dp"
         android:text="@string/inputName"
         android:textSize="30sp"
-        android:background="@drawable/text_top_line_background"/>
+        android:background="@drawable/text_top_line_background"
+        android:textColor="@color/itemTextColor"/>
 
     <EditText
         android:id="@+id/etNameInsert"
@@ -50,7 +56,8 @@
         android:inputType="textPersonName"
         android:imeOptions="actionNext"
         android:textSize="25sp"
-        android:background="@drawable/text_bottom_line_background"/>
+        android:background="@drawable/text_bottom_line_background"
+        android:textColor="@color/itemTextColor"/>
 
     <TextView
         android:id="@+id/tvDuedateInsert"
@@ -60,7 +67,8 @@
         android:text="@string/inputDuedate"
         android:textSize="30sp"
         android:background="@drawable/text_top_line_background"
-        android:paddingBottom="15dp"/>
+        android:paddingBottom="15dp"
+        android:textColor="@color/itemTextColor"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,7 +86,8 @@
             android:ems="5"
             android:maxLength="4"
             android:inputType="numberDecimal"
-            android:imeOptions="actionNext"/>
+            android:imeOptions="actionNext"
+            android:textColor="@color/itemTextColor"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -86,7 +95,8 @@
             android:layout_weight="1"
             android:text="@string/year"
             android:textSize="20sp"
-            android:textStyle="bold|normal" />
+            android:textStyle="bold|normal"
+            android:textColor="@color/itemTextColor"/>
 
         <EditText
             android:id="@+id/etInputMonth"
@@ -97,7 +107,8 @@
             android:ems="4"
             android:maxLength="2"
             android:inputType="numberDecimal"
-            android:imeOptions="actionNext"/>
+            android:imeOptions="actionNext"
+            android:textColor="@color/itemTextColor"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -105,7 +116,8 @@
             android:layout_weight="1"
             android:text="@string/month"
             android:textSize="20sp"
-            android:textStyle="bold|normal"/>
+            android:textStyle="bold|normal"
+            android:textColor="@color/itemTextColor"/>
 
         <EditText
             android:id="@+id/etInputDay"
@@ -116,7 +128,8 @@
             android:ems="5"
             android:maxLength="2"
             android:inputType="numberDecimal"
-            android:imeOptions="actionDone"/>
+            android:imeOptions="actionDone"
+            android:textColor="@color/itemTextColor"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -124,7 +137,8 @@
             android:layout_weight="1"
             android:text="@string/day"
             android:textSize="20sp"
-            android:textStyle="bold|normal"/>
+            android:textStyle="bold|normal"
+            android:textColor="@color/itemTextColor"/>
     </LinearLayout>
 
     <Button
@@ -133,6 +147,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="@string/add"
-        android:layout_gravity = "center"/>
+        android:layout_gravity = "center"
+        android:backgroundTint="@color/btnAddColor"
+        android:textColor="@color/tvAddColor"/>
 
 </LinearLayout>

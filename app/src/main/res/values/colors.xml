@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="colorPrimary">#FF9370DB</color>
-    <color name="colorPrimaryDark">#FF8A2BE2</color>
-    <color name="colorAccent">#FF1E90FF</color>
-    <color name="realRed">#CD1039</color>
+    <color name="primary">#FFBB86FC</color>
+    <color name="primaryVariant">#FF3700B3</color>
+    <color name="secondary">#FF03DAC6</color>
+    <color name="secondaryVariant">#FF03DAC6</color>
+    <color name="background">#FF121212</color>
+    <color name="onPrimary">#FF000000</color>
+    <color name="onSecondary">#FF000000</color>
+    <color name="layoutBackground">#FFFFFFFF</color>
+    <color name="borderline">#FF000000</color>
+    <color name="divideLine">#FF33B5E5</color>
+    <color name="target">#FFDC9146</color>
+    <color name="locationColor">#FF6EE0FF</color>
+    <color name="fragmentBackground">#FFFFFFFF</color>
+    <color name="itemTextColor">#FF000000</color>
+    <color name="btnAddColor">#FFA814E7</color>
+    <color name="tvAddColor">#FFFFFFFF</color>
 </resources>

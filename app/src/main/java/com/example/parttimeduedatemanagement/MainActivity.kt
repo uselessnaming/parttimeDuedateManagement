@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.part_timedatemanagement.Database.Item
@@ -21,9 +22,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+    }
+    override fun onStart(){
         supportFragmentManager.beginTransaction()
             .add(R.id.fragmentContainerView,HomeFragment())
             .commit()
+        super.onStart()
     }
     /* fragment를 switch해주는 함수 */
     fun fragmentChange(currentLayoutId : Int, changedLayout : Fragment){
