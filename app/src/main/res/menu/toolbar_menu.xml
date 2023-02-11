@@ -8,5 +8,7 @@
             android:title="@string/checkDuedate"/>
         <item android:id="@+id/reset"
             android:title="@string/dataReset" />
+        <item android:id="@+id/editType"
+            android:title="@string/editType"/>
     </group>
 </menu>

@@ -67,7 +67,7 @@ class ItemHeaderViewHolder(
     override fun bind(itemList : CheckItemList){
         val item = (itemList as CheckItemList.Header).item
         binding.apply{
-            itemLocation.text = "위치 : " + item.location
+            itemLocation.text = "종류 : " + item.location
         }
     }
 }

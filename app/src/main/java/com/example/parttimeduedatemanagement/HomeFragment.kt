@@ -102,7 +102,7 @@ class HomeFragment : BaseFragment() {
                 builder.apply {
                     setTitle("Warning")
                     setMessage("정말 초기화 하시겠습니까?")
-                    setPositiveButton("확인") { dialog, id ->
+                    setPositiveButton("확인") { _, _ ->
                         mItemViewModel.deleteAll()
                         mItemViewModel.fetchItems()
                     }
@@ -113,6 +113,10 @@ class HomeFragment : BaseFragment() {
             }
             R.id.checkDuedate -> {
                 mActivity.fragmentChange(R.id.fragmentContainerView, DuedateCheckFragment())
+                true
+            }
+            R.id.editType -> {
+                mActivity.fragmentChange(R.id.fragmentContainerView, TypeEditFragment())
                 true
             }
             else -> {

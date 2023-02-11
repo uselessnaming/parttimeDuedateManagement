@@ -17,16 +17,7 @@
     <string name="inputLocation">위치를 입력해주세요</string>
     <string name="inputDuedate">유통기한을 입력해주세요</string>
     <string name="insertTitle">아이템 추가</string>
-    <string-array name="locations">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>기타</item>
-    </string-array>
+    <string name="editType">카테고리 수정</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="explainTypeEditFragment">카테고리 수정</string>
 </resources>

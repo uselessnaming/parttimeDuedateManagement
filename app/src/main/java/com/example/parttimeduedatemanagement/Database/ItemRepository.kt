@@ -1,6 +1,7 @@
 package com.example.part_timedatemanagement.Database
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 
 class ItemRepository (application : Application) {
     private var mItemDatabase : ItemDatabase
@@ -26,6 +27,9 @@ class ItemRepository (application : Application) {
     }
     fun searchItem(id : Int) : Item{
         return mItemDao.searchItem(id)
+    }
+    fun getType() : List<String>{
+        return mItemDao.getType()
     }
     companion object{
         private var INSTANCE : ItemRepository? = null

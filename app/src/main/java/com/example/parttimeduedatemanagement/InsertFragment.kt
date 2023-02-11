@@ -25,7 +25,6 @@ class InsertFragment : BaseFragment() {
     private val mActivity by lazy{
         activity as MainActivity
     }
-    private lateinit var callback : OnBackPressedCallback
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +35,6 @@ class InsertFragment : BaseFragment() {
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
                 .create(ItemViewModel::class.java)
 
-        Log.d(TAG, "init Success")
         return binding.root
     }
 
@@ -45,13 +43,17 @@ class InsertFragment : BaseFragment() {
         binding.apply{
             var location = ""
             /** spinner 연결 */
-            val locations = resources.getStringArray(R.array.locations)
+            val locations = mItemViewModel.types
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,locations)
             snLocationChoice.adapter = adapter
             snLocationChoice.setSelection(0)
             snLocationChoice.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     location = locations[position]
+                    val updateDialog = UpdateDialog()
+                    val bundle = Bundle()
+                    bundle.putInt("position",position)
+                    updateDialog.arguments = bundle
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }

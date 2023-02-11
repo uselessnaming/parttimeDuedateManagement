@@ -23,4 +23,7 @@ interface ItemDao {
 
     @Query("SELECT * FROM itemTable WHERE id = (:id) ")
     fun searchItem(id : Int) : Item
+
+    @Query("SELECT location FROM itemTable")
+    fun getType() : List<String>
 }

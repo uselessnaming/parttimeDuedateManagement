@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.part_timedatemanagement.ItemViewModel
@@ -45,12 +46,7 @@ class UpdateDialog : DialogFragment(){
             val month = duedate.substring(6,8)
             val day = duedate.substring(10,12)
             binding.apply{
-                var index = 0
-                if (item.location == "기타"){
-                    index = 9
-                } else {
-                    index = item.location.toInt()-1
-                }
+                val index = arguments?.getInt("position") ?: throw NullPointerException("index is NULL")
                 snChoiceLocation.setSelection(index)
                 etEditName.setText(item.itemName)
                 etUpdateYear.setText(year)
@@ -59,7 +55,7 @@ class UpdateDialog : DialogFragment(){
             }
         }
         binding.apply{
-            val locations = resources.getStringArray(R.array.locations)
+            var locations = mItemViewModel.types
             val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,locations)
             snChoiceLocation.adapter = adapter
             snChoiceLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
