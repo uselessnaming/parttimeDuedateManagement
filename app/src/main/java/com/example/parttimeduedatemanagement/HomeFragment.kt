@@ -27,10 +27,12 @@ class HomeFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentHomeBinding.inflate(inflater,container,false)
 
         initViewModel()
         initRecyclerView()
+
         setHasOptionsMenu(true)
 
         return binding.root
@@ -82,15 +84,17 @@ class HomeFragment : BaseFragment() {
 
     /** menu 생성 */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
         mActivity.menuInflater.inflate(R.menu.toolbar_menu, menu)
-        return super.onCreateOptionsMenu(menu, MenuInflater(requireContext()))
     }
 
     /** menu 선택 시 이벤트 처리 */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.insert -> {
                 mActivity.fragmentChange(R.id.fragmentContainerView, InsertFragment())
+                true
             }
             R.id.reset -> {
                 /* homeFragment에 reset을 넘겨줘서 reset을 받으면 데이터를 reset하도록 */
@@ -105,14 +109,15 @@ class HomeFragment : BaseFragment() {
                     setNegativeButton("취소", null)
                     show()
                 }
+                true
             }
             R.id.checkDuedate -> {
                 mActivity.fragmentChange(R.id.fragmentContainerView, DuedateCheckFragment())
+                true
             }
             else -> {
                 throw IllegalArgumentException("menu is not exist")
             }
         }
-        return super.onOptionsItemSelected(item)
     }
 }

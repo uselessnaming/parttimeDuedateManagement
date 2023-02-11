@@ -31,14 +31,15 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
 
     private fun toListItems(items : List<Item>) : List<CheckItemList>{
         val result = arrayListOf<CheckItemList>()
+        val headers = arrayListOf<String>()
 
-        var groupHeaderLocation = ""
         items.forEach{
-            if (groupHeaderLocation != it.location){
+            if (!(it.location in headers)){
+                headers.add(it.location)
                 result.add(CheckItemList.Header(it))
             }
             result.add(CheckItemList.Child(it))
-            groupHeaderLocation = it.location
+            result.sortWith(compareBy<CheckItemList> {it.item.location})
             count += 1
         }
         return result

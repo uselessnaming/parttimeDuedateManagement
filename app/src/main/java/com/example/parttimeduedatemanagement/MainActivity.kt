@@ -1,5 +1,6 @@
 package com.example.parttimeduedatemanagement
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -21,14 +22,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-    }
-    override fun onStart(){
+
         supportFragmentManager.beginTransaction()
             .add(R.id.fragmentContainerView,HomeFragment())
             .commit()
-        super.onStart()
     }
     /* fragment를 switch해주는 함수 */
     fun fragmentChange(currentLayoutId : Int, changedLayout : Fragment){

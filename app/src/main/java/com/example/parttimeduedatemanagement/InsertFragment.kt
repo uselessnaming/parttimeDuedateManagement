@@ -98,12 +98,11 @@ class InsertFragment : BaseFragment() {
         return m in 1..12
     }
     private fun checkDay(m : Int, d : Int) : Boolean {
-        return when (m % 2) {
-            0 -> {
-                if (m == 2) d in 1..28
-                else d in 1..30
-            }
-            else -> { d in 1..31 }
+        return when (m) {
+            1,3,5,7,8,10,12 -> d in 1..31
+            4,6,9,11 -> d in 1..30
+            2 -> d in 1..28
+            else -> throw IllegalArgumentException("Error input error")
         }
     }
 }
