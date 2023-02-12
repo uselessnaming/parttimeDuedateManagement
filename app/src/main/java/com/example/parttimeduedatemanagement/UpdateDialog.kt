@@ -55,14 +55,17 @@ class UpdateDialog : DialogFragment(){
             }
         }
         binding.apply{
-            var locations = mItemViewModel.types
-            val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,locations)
-            snChoiceLocation.adapter = adapter
-            snChoiceLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                override fun onItemSelected(parent: AdapterView<*>?,view: View?,position: Int,id: Long) {
-                    location = locations[position]
+            var locations = listOf<String>()
+            mItemViewModel.viewModelScope.launch(Dispatchers.IO){
+                locations = mItemViewModel.getType().await()
+                val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,locations)
+                snChoiceLocation.adapter = adapter
+                snChoiceLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                    override fun onItemSelected(parent: AdapterView<*>?,view: View?,position: Int,id: Long) {
+                        location = locations[position]
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
             btnCancel.setOnClickListener{
                 dismiss()

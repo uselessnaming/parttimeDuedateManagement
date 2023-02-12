@@ -18,6 +18,6 @@
     <string name="inputDuedate">유통기한을 입력해주세요</string>
     <string name="insertTitle">아이템 추가</string>
     <string name="editType">카테고리 수정</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="explainTypeEditFragment">카테고리 수정</string>
+    <string name="introBtnPlus">카테고리 추가</string>
 </resources>

@@ -16,16 +16,14 @@ import com.example.part_timedatemanagement.Base.BaseFragment
 import com.example.part_timedatemanagement.Database.Item
 import com.example.part_timedatemanagement.ItemViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentInsertBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 //menu에서 insert 클릭 시
 class InsertFragment : BaseFragment() {
     private val TAG : String = "InsertFragment"
     private lateinit var binding : FragmentInsertBinding
     private lateinit var mItemViewModel : ItemViewModel
-    private val mActivity by lazy{
-        activity as MainActivity
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,22 +41,24 @@ class InsertFragment : BaseFragment() {
         binding.apply{
             var location = ""
             /** spinner 연결 */
-            val locations = mItemViewModel.types
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,locations)
-            snLocationChoice.adapter = adapter
-            snLocationChoice.setSelection(0)
-            snLocationChoice.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    location = locations[position]
-                    val updateDialog = UpdateDialog()
-                    val bundle = Bundle()
-                    bundle.putInt("position",position)
-                    updateDialog.arguments = bundle
-                }
-                override fun onNothingSelected(parent: AdapterView<*>?) {
+            var locations = listOf<String>()
+            mItemViewModel.viewModelScope.launch(Dispatchers.IO){
+                locations = mItemViewModel.getType().await()
+                val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,locations)
+                snLocationChoice.adapter = adapter
+                snLocationChoice.setSelection(0)
+                snLocationChoice.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        location = locations[position]
+                        val updateDialog = UpdateDialog()
+                        val bundle = Bundle()
+                        bundle.putInt("position",position)
+                        updateDialog.arguments = bundle
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                    }
                 }
             }
-
             /** 추가 사항을 입력한 후 버튼 클릭 시 */
             btnDone.setOnClickListener {
                 /* 입력 창에 아무 것도 없으면 오류 출력 */

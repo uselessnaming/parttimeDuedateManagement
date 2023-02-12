@@ -16,4 +16,5 @@
     <color name="itemTextColor">#FF000000</color>
     <color name="btnAddColor">#FFA814E7</color>
     <color name="tvAddColor">#FFFFFFFF</color>
+    <color name="dialogBackground">#FF969696</color>
 </resources>

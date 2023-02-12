@@ -24,6 +24,7 @@
             tools:text="typeName"
             android:textSize="15sp"
             android:textStyle="bold|normal"
+            android:textColor="@color/itemTextColor"
             android:layout_marginStart="15dp"/>
 
         <ImageView

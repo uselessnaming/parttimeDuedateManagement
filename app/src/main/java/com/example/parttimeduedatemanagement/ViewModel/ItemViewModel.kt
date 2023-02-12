@@ -13,7 +13,18 @@ import java.time.format.DateTimeFormatter
 class ItemViewModel(application : Application) : AndroidViewModel(application){
     private val TAG = "ViewModel"
     private val mItemRepository : ItemRepository = ItemRepository.get(application)
-    val types = listOf("라면","컵라면","봉지라면","커피","씨리얼","사탕","과자","가루","통조림","소스","조미료","음료","냉장","냉동","빵","행사상품","기타")
+    suspend fun getType() : Deferred<List<String>> =
+        viewModelScope.async(Dispatchers.IO + coroutineException){
+            val result = arrayListOf<String>()
+            val locations = mItemRepository.getType()
+            locations.forEach{
+                if (it !in result){
+                    result.add(it)
+                }
+            }
+            result.toList()
+            return@async result
+        }
 
     private var itemLiveData = MutableLiveData<List<CheckItemList>>()
     val items : LiveData<List<CheckItemList>> get() = itemLiveData
@@ -39,9 +50,11 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
                 headers.add(it.location)
                 result.add(CheckItemList.Header(it))
             }
-            result.add(CheckItemList.Child(it))
+            if (it.itemName != ""){
+                result.add(CheckItemList.Child(it))
+                count += 1
+            }
             result.sortWith(compareBy { it.item.location})
-            count += 1
         }
         return result
     }

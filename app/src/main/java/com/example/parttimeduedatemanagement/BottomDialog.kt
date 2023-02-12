@@ -49,7 +49,7 @@ class BottomDialog : BottomSheetDialogFragment(){
             btnUpdate.setOnClickListener{
                 /* dialog 생성 */
                 val updateDialog = UpdateDialog()
-                mActivity.createDialog(updateDialog,itemId!!)
+                mActivity.createDialog(updateDialog,itemId!!,"updateDialog")
             }
         }
     }
