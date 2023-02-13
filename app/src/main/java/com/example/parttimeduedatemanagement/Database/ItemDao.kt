@@ -15,6 +15,9 @@ interface ItemDao {
     @Query("DELETE FROM itemTable WHERE id = (:id)")
     fun deleteItem(id : Int)
 
+    @Query("DELETE FROM itemTable WHERE location = (:location) AND itemName = (:itemName)")
+    fun deleteType(location : String, itemName : String)
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(item : Item)
 
@@ -26,4 +29,7 @@ interface ItemDao {
 
     @Query("SELECT location FROM itemTable")
     fun getType() : List<String>
+
+    @Query("SELECT location FROM itemTable WHERE location = (:location)")
+    fun checkType(location : String) : List<String>
 }

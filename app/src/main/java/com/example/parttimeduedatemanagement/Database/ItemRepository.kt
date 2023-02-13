@@ -25,11 +25,17 @@ class ItemRepository (application : Application) {
     fun update(id : Int, name : String, location : String, date : String){
         mItemDao.update(id,name,location,date)
     }
+    fun deleteType(type : String, itemName : String){
+        mItemDao.deleteType(type,itemName)
+    }
     fun searchItem(id : Int) : Item{
         return mItemDao.searchItem(id)
     }
     fun getType() : List<String>{
         return mItemDao.getType()
+    }
+    fun checkType(type : String) : List<String>{
+        return mItemDao.checkType(type)
     }
     companion object{
         private var INSTANCE : ItemRepository? = null

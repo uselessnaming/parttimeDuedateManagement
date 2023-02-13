@@ -1,6 +1,5 @@
 package com.example.parttimeduedatemanagement
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +9,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import android.widget.Toast.makeText
-import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.*
 import com.example.part_timedatemanagement.Base.BaseFragment
 import com.example.part_timedatemanagement.Database.Item
@@ -41,9 +39,8 @@ class InsertFragment : BaseFragment() {
         binding.apply{
             var location = ""
             /** spinner 연결 */
-            var locations = listOf<String>()
             mItemViewModel.viewModelScope.launch(Dispatchers.IO){
-                locations = mItemViewModel.getType().await()
+                val locations = mItemViewModel.getType().await()
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,locations)
                 snLocationChoice.adapter = adapter
                 snLocationChoice.setSelection(0)

@@ -99,7 +99,6 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         }
         Log.d("ViewModel","Insert Done")
     }
-
     fun deleteAll(){
         viewModelScope.launch(Dispatchers.IO) {
             mItemRepository.deleteAll()
@@ -110,6 +109,16 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
             mItemRepository.update(id, name, location, date)
         }
     }
+    fun deleteType(type : String, itemName : String){
+        viewModelScope.launch(Dispatchers.IO){
+            mItemRepository.deleteType(type, itemName)
+        }
+    }
     suspend fun searchItem(id : Int) : Deferred<Item> =
         viewModelScope.async(Dispatchers.IO){return@async mItemRepository.searchItem(id) }
+    suspend fun checkType(type : String) : Deferred<List<String>> =
+        viewModelScope.async(Dispatchers.IO + coroutineException){
+            Log.d("itemViewModel","${mItemRepository.checkType(type)}")
+            return@async mItemRepository.checkType(type)
+        }
 }

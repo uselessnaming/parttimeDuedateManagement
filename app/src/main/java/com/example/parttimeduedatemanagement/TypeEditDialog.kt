@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.util.Size
 import android.view.*
 import android.widget.Toast
@@ -35,9 +36,8 @@ class TypeEditDialog : DialogFragment() {
             btnDone.setOnClickListener{
                 val location = etAddType.text.toString()
                 mItemViewModel.insert(Item(location,"",""))
-                mItemViewModel.fetchItems()
-                dismiss()
                 Toast.makeText(context,"추가 완료",Toast.LENGTH_SHORT).show()
+                dismiss()
             }
         }
     }

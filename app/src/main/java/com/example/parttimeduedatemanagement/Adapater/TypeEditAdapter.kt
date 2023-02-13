@@ -27,6 +27,9 @@ class TypeEditAdapter : RecyclerView.Adapter<TypeEditAdapter.TypeEditViewHolder>
     }
     override fun onBindViewHolder(holder : TypeEditAdapter.TypeEditViewHolder, position : Int){
         holder.bind(types[position])
+        binding.imgDelete.setOnClickListener{
+            onClickListener.onClick(types[position])
+        }
     }
 
     inner class TypeEditViewHolder(binding : TypeEditRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root){
@@ -34,5 +37,12 @@ class TypeEditAdapter : RecyclerView.Adapter<TypeEditAdapter.TypeEditViewHolder>
         fun bind(type : String){
             binding.tvType.text = type
         }
+    }
+    interface OnClickListener{
+        fun onClick(typesHeader : String)
+    }
+    private lateinit var onClickListener : OnClickListener
+    fun setOnClickListener(onClickListener : OnClickListener){
+        this.onClickListener = onClickListener
     }
 }
