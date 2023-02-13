@@ -1,22 +1,15 @@
 package com.example.parttimeduedatemanagement
 
-import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.part_timedatemanagement.Database.Item
 import com.example.part_timedatemanagement.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.TypeEditAdapter
 import com.example.parttimeduedatemanagement.databinding.FragmentTypeEditBinding
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.launch
 
 class TypeEditFragment : Fragment() {
