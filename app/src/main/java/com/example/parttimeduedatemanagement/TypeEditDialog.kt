@@ -1,6 +1,7 @@
 package com.example.parttimeduedatemanagement
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Size
 import android.view.*
+import android.view.View.OnClickListener
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
@@ -34,16 +36,22 @@ class TypeEditDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply{
             btnDone.setOnClickListener{
-                val location = etAddType.text.toString()
-                mItemViewModel.insert(Item(location,"",""))
-                Toast.makeText(context,"추가 완료",Toast.LENGTH_SHORT).show()
-                dismiss()
+                val type = etAddType.text.toString()
+                listener.onClick(type)
             }
         }
     }
     override fun onResume(){
         super.onResume()
         dialogResize()
+    }
+    interface OnBtnClickListener{
+        fun onClick(type : String) {
+        }
+    }
+    private lateinit var listener : OnBtnClickListener
+    fun setBtnClickListener(listener : OnBtnClickListener){
+        this.listener = listener
     }
     private fun initViewModel(){
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)

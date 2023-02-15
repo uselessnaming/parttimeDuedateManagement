@@ -11,7 +11,9 @@ import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.part_timedatemanagement.ItemViewModel
@@ -42,51 +44,58 @@ class UpdateDialog : DialogFragment(){
         super.onViewCreated(view, savedInstanceState)
 
         itemId = arguments?.getInt("itemId") ?: throw NullPointerException("itemId is Null")
-        mItemViewModel.viewModelScope.launch(Dispatchers.IO){
-            val item = mItemViewModel.searchItem(itemId).await()
-            val duedate = item.date
-            val year = duedate.substring(0,4)
-            val month = duedate.substring(6,8)
-            val day = duedate.substring(10,12)
-            binding.apply{
-                val index = arguments?.getInt("position") ?: throw NullPointerException("index is NULL")
-                snChoiceLocation.setSelection(index)
+
+        binding.apply{
+            mItemViewModel.fetchTypes()
+            mItemViewModel.types.observe(viewLifecycleOwner, Observer{
+                val types = it
+                val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,types)
+                snChoiceLocation.adapter = adapter
+                snChoiceLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                    override fun onItemSelected(parent: AdapterView<*>?,view: View?,position: Int,id: Long) {
+                        location = types[position]
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>?) {}
+                }
+            })
+            btnCancel.setOnClickListener{
+                dismiss()
+            }
+            btnDone.setOnClickListener{
+                val month = binding.etUpdateMonth.text.toString()
+                val day = binding.etUpdateDay.text.toString()
+                val name = binding.etEditName.text.toString()
+                var date = binding.etUpdateYear.text.toString() + "년 "
+                if (month.length == 1){
+                    date += "0"
+                }
+                date += month + "월 "
+                if (day.length == 1){
+                    date += "0"
+                }
+                date += day + "일"
+                onDoneClickListener.onClick(itemId,location, name, date)
+                dismiss()
+            }
+            mItemViewModel.viewModelScope.launch(Dispatchers.IO){
+                val item = mItemViewModel.searchItem(itemId).await()
+                val duedate = item.date
+                val year = duedate.substring(0,4)
+                val month = duedate.substring(6,8)
+                val day = duedate.substring(10,12)
                 etEditName.setText(item.itemName)
                 etUpdateYear.setText(year)
                 etUpdateMonth.setText(month)
                 etUpdateDay.setText(day)
             }
         }
-        binding.apply{
-            var locations = listOf<String>()
-            mItemViewModel.viewModelScope.launch(Dispatchers.IO){
-                locations = mItemViewModel.getType().await()
-                val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_list_item_1,locations)
-                snChoiceLocation.adapter = adapter
-                snChoiceLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                    override fun onItemSelected(parent: AdapterView<*>?,view: View?,position: Int,id: Long) {
-                        location = locations[position]
-                    }
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-                }
-            }
-            btnCancel.setOnClickListener{
-                dismiss()
-            }
-            btnDone.setOnClickListener{
-                var date = binding.etUpdateYear.text.toString() + "년 "
-                if (etUpdateMonth.text.length == 1){
-                    date += "0"
-                }
-                date += etUpdateMonth.text.toString() + "월 "
-                if (etUpdateDay.text.length == 1){
-                    date += "0"
-                }
-                date += etUpdateDay.text.toString() + "일"
-                mItemViewModel.update(itemId,etEditName.text.toString(),location,date)
-                dismiss()
-            }
-        }
+    }
+    interface OnDoneClickListener{
+        fun onClick(itemId : Int, type : String, name : String,date : String)
+    }
+    private lateinit var onDoneClickListener : OnDoneClickListener
+    fun setOnDoneClickListener(listener : OnDoneClickListener){
+        onDoneClickListener = listener
     }
     override fun onResume(){
         super.onResume()

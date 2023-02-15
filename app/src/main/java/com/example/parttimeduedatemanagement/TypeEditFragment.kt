@@ -7,9 +7,11 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.part_timedatemanagement.Database.Item
 import com.example.part_timedatemanagement.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.TypeEditAdapter
 import com.example.parttimeduedatemanagement.databinding.FragmentTypeEditBinding
@@ -40,8 +42,6 @@ class TypeEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("TAG","onViewCreated fetchList()")
-        fetchList()
         binding.apply{
             tvEditTitle.text = "카테고리 수정"
             rcTypeEdit.apply{
@@ -67,6 +67,7 @@ class TypeEditFragment : Fragment() {
                                                 message(messageText)
                                             }
                                         }
+                                        mItemViewModel.fetchTypes()
                                         dialog?.dismiss()
                                     }
                                     else -> dialog?.dismiss()
@@ -77,6 +78,9 @@ class TypeEditFragment : Fragment() {
                         }
                     }
                 })
+                mItemViewModel.types.observe(viewLifecycleOwner, Observer{
+                    mTypeEditAdapter.submitList(it)
+                })
                 adapter = mTypeEditAdapter
                 val layout = LinearLayoutManager(context)
                 layoutManager = layout
@@ -84,9 +88,21 @@ class TypeEditFragment : Fragment() {
             }
             btnAddType.setOnClickListener{
                 val dialog = TypeEditDialog()
+                dialog.setBtnClickListener(object : TypeEditDialog.OnBtnClickListener{
+                    override fun onClick(type : String) {
+                        mItemViewModel.insert(Item(type,"",""))
+                        Toast.makeText(context,"추가 완료",Toast.LENGTH_SHORT).show()
+                        mItemViewModel.fetchTypes()
+                        dialog.dismiss()
+                    }
+                })
                 mActivity.createDialog(dialog,0,"typeEditDialog")
             }
         }
+    }
+    override fun onStart(){
+        super.onStart()
+        mItemViewModel.fetchTypes()
     }
     private fun initViewModel(){
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
@@ -94,15 +110,5 @@ class TypeEditFragment : Fragment() {
     }
     private fun message(s : String){
         Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
-    }
-    fun fetchList(){
-        mItemViewModel.viewModelScope.launch(Dispatchers.IO){
-            try{
-                val locations = mItemViewModel.getType().await()
-                mTypeEditAdapter.submitList(locations)
-            } catch(e : Exception){
-                throw IllegalStateException("viewModelScope in Error")
-            }
-        }
     }
 }

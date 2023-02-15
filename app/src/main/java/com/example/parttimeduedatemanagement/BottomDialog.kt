@@ -49,11 +49,22 @@ class BottomDialog : BottomSheetDialogFragment(){
             btnUpdate.setOnClickListener{
                 /* dialog 생성 */
                 val updateDialog = UpdateDialog()
+                updateDialog.setOnDoneClickListener(object : UpdateDialog.OnDoneClickListener{
+                    override fun onClick(itemId: Int, type : String, name : String, date : String) {
+                        onDoneClickListener.onClick(itemId, name, type, date)
+                    }
+                })
                 mActivity.createDialog(updateDialog,itemId!!,"updateDialog")
             }
         }
     }
-
+    interface OnDoneClickListener{
+        fun onClick(itemId : Int, name : String, type : String, date : String)
+    }
+    private lateinit var onDoneClickListener : OnDoneClickListener
+    fun setOnDoneClickListener(listener : OnDoneClickListener){
+        onDoneClickListener = listener
+    }
     private fun showDeleteDialog(){
         val dialog = AlertDialog.Builder(requireContext())
         val listener = DialogInterface.OnClickListener { _, p1 ->

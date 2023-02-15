@@ -13,19 +13,37 @@ import java.time.format.DateTimeFormatter
 class ItemViewModel(application : Application) : AndroidViewModel(application){
     private val TAG = "ViewModel"
     private val mItemRepository : ItemRepository = ItemRepository.get(application)
-    suspend fun getType() : Deferred<List<String>> =
-        viewModelScope.async(Dispatchers.IO + coroutineException){
-            val result = arrayListOf<String>()
-            val locations = mItemRepository.getType()
-            locations.forEach{
-                if (it !in result){
-                    result.add(it)
-                }
-            }
-            result.toList()
-            return@async result
-        }
 
+    /* type을 받는 live data */
+    private var typeLiveData = MutableLiveData<List<String>>()
+    val types : LiveData<List<String>> get() = typeLiveData
+    fun fetchTypes() {
+        viewModelScope.launch(Dispatchers.IO){
+            val news = getType()
+            typeLiveData.postValue(news)
+        }
+    }
+    fun getType() : List<String> {
+        val result = arrayListOf<String>()
+        val locations = mItemRepository.getType()
+        locations.forEach{
+            if (it !in result){
+                result.add(it)
+            }
+        }
+        return result.toList()
+    }
+    fun deleteType(type : String, itemName : String){
+        viewModelScope.launch(Dispatchers.IO){
+            mItemRepository.deleteType(type, itemName)
+        }
+    }
+    suspend fun checkType(type : String) : Deferred<List<String>> =
+        viewModelScope.async(Dispatchers.IO + coroutineException){
+            Log.d("itemViewModel","${mItemRepository.checkType(type)}")
+            return@async mItemRepository.checkType(type)
+        }
+    /* 전체 item을 받는 live data */
     private var itemLiveData = MutableLiveData<List<CheckItemList>>()
     val items : LiveData<List<CheckItemList>> get() = itemLiveData
 
@@ -109,16 +127,6 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
             mItemRepository.update(id, name, location, date)
         }
     }
-    fun deleteType(type : String, itemName : String){
-        viewModelScope.launch(Dispatchers.IO){
-            mItemRepository.deleteType(type, itemName)
-        }
-    }
     suspend fun searchItem(id : Int) : Deferred<Item> =
         viewModelScope.async(Dispatchers.IO){return@async mItemRepository.searchItem(id) }
-    suspend fun checkType(type : String) : Deferred<List<String>> =
-        viewModelScope.async(Dispatchers.IO + coroutineException){
-            Log.d("itemViewModel","${mItemRepository.checkType(type)}")
-            return@async mItemRepository.checkType(type)
-        }
 }

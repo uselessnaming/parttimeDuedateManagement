@@ -64,6 +64,13 @@ class HomeFragment : BaseFragment() {
                 override fun onLongClick(v: View, id : CheckItemList) {
                     val dialog = BottomDialog()
                     /* BottomDialogFragment 생성 */
+                    dialog.setOnDoneClickListener(object : BottomDialog.OnDoneClickListener{
+                        override fun onClick(itemId: Int,name: String,type: String,date: String,) {
+                            mItemViewModel.update(itemId, name, type, date)
+                            mItemViewModel.fetchItems()
+                            dialog.dismiss()
+                        }
+                    })
                     mActivity.createBottomDialog(dialog,id.item)
                 }
             })

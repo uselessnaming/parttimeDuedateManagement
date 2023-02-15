@@ -39,8 +39,9 @@ class InsertFragment : BaseFragment() {
         binding.apply{
             var location = ""
             /** spinner 연결 */
-            mItemViewModel.viewModelScope.launch(Dispatchers.IO){
-                val locations = mItemViewModel.getType().await()
+            mItemViewModel.fetchTypes()
+            mItemViewModel.types.observe(viewLifecycleOwner, Observer{
+                val locations = it
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,locations)
                 snLocationChoice.adapter = adapter
                 snLocationChoice.setSelection(0)
@@ -55,7 +56,7 @@ class InsertFragment : BaseFragment() {
                     override fun onNothingSelected(parent: AdapterView<*>?) {
                     }
                 }
-            }
+            })
             /** 추가 사항을 입력한 후 버튼 클릭 시 */
             btnDone.setOnClickListener {
                 /* 입력 창에 아무 것도 없으면 오류 출력 */
