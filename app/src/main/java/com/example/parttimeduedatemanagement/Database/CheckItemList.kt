@@ -6,10 +6,12 @@ import com.example.parttimeduedatemanagement.R
 sealed class CheckItemList{
     abstract val item : Item
     abstract val layoutId : Int
+    abstract val order : Int
 
     data class Header(
         override val item : Item,
-        override val layoutId : Int = VIEW_TYPE
+        override val layoutId : Int = VIEW_TYPE,
+        override val order : Int = 0
     ) : CheckItemList(){
         companion object{
             const val VIEW_TYPE = R.layout.item_container
@@ -18,7 +20,8 @@ sealed class CheckItemList{
 
     data class Child(
         override val item : Item,
-        override val layoutId : Int = VIEW_TYPE
+        override val layoutId : Int = VIEW_TYPE,
+        override val order : Int = 1
     ) : CheckItemList(){
         companion object{
             const val VIEW_TYPE = R.layout.item

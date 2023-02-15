@@ -49,17 +49,16 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
 
     var count : Int = 0
 
-    fun fetchItems(){
+    fun fetchItems(sortedType : String){
         viewModelScope.launch(Dispatchers.IO){
             count = 0
-            val news = toListItems(mItemRepository.getAll())
+            val news = toListItems(mItemRepository.getAll(), sortedType)
             itemLiveData.postValue(news)
         }
-        Log.d("BottomDialog","fetchItems is done")
     }
     fun getItemCount() : Int { return count }
 
-    private fun toListItems(items : List<Item>) : List<CheckItemList>{
+    private fun toListItems(items : List<Item>, sortedType : String) : List<CheckItemList>{
         val result = arrayListOf<CheckItemList>()
         val headers = arrayListOf<String>()
 
@@ -72,8 +71,22 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
                 result.add(CheckItemList.Child(it))
                 count += 1
             }
-            result.sortWith(compareBy { it.item.location})
         }
+        when(sortedType){
+            "addTime" -> {
+                result.sortWith(compareBy({it.item.location},{it.order},{it.item.id}))
+            }
+            "duedate" -> {
+                result.sortWith(compareBy({it.item.location},{it.order},{it.item.date}))
+            }
+            "name" -> {
+                result.sortWith(compareBy({it.item.location},{it.order},{it.item.itemName}))
+            }
+            else -> {
+                result.sortWith(compareBy{it.item.location})
+            }
+        }
+        Log.d(TAG,"${result}")
         return result
     }
 
@@ -102,7 +115,6 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
                 result.add(it)
             }
         }
-        Log.d(TAG,"result ? : ${result}")
         return result
     }
 
@@ -115,7 +127,6 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         viewModelScope.launch(Dispatchers.IO){
             mItemRepository.insert(item)
         }
-        Log.d("ViewModel","Insert Done")
     }
     fun deleteAll(){
         viewModelScope.launch(Dispatchers.IO) {

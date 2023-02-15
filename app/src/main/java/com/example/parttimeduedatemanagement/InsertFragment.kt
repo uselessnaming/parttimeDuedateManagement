@@ -31,11 +31,12 @@ class InsertFragment : BaseFragment() {
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
                 .create(ItemViewModel::class.java)
 
+        Log.d(TAG,"insertFragment create")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        Log.d(TAG,"onViewCreated")
         binding.apply{
             var location = ""
             /** spinner 연결 */

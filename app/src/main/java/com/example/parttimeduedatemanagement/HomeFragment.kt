@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,13 +44,32 @@ class HomeFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply{
             btnRefresh.setOnClickListener{
-                mItemViewModel.fetchItems()
+                mItemViewModel.fetchItems("")
+            }
+            val menus = listOf("아이템 추가 순","유통기한순","이름순")
+            val adapter = ArrayAdapter.createFromResource(requireContext(),R.array.sortingMenu,R.layout.choice_spinner_item)
+            spSort.adapter = adapter
+            spSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long,
+                ) {
+                    when(menus[position]){
+                        "아이템 추가 순" ->{mItemViewModel.fetchItems("addTime")}
+                        "유통기한순" -> {mItemViewModel.fetchItems("duedate")}
+                        "이름순" -> {mItemViewModel.fetchItems("name")}
+                    }
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
             }
         }
     }
     override fun onStart(){
         super.onStart()
-        mItemViewModel.fetchItems()
+        mItemViewModel.fetchItems("")
     }
     /** ViewModel 초기화 */
     private fun initViewModel(){
@@ -67,7 +88,7 @@ class HomeFragment : BaseFragment() {
                     dialog.setOnDoneClickListener(object : BottomDialog.OnDoneClickListener{
                         override fun onClick(itemId: Int,name: String,type: String,date: String,) {
                             mItemViewModel.update(itemId, name, type, date)
-                            mItemViewModel.fetchItems()
+                            mItemViewModel.fetchItems("")
                             dialog.dismiss()
                         }
                     })
@@ -82,8 +103,6 @@ class HomeFragment : BaseFragment() {
         }
 
         mItemViewModel.items.observe(viewLifecycleOwner, Observer{
-            Log.d(TAG, "Observer is Playing")
-            Log.d(TAG, "${it}")
             mItemAdapter.submitList(it)
             binding.itemCount.text = "등록된 상품의 개수 : " + mItemViewModel.getItemCount().toString()
         })
@@ -100,6 +119,7 @@ class HomeFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.insert -> {
+                Log.d(TAG,"menu item in INSERT")
                 mActivity.fragmentChange(R.id.fragmentContainerView, InsertFragment())
                 true
             }
@@ -111,7 +131,7 @@ class HomeFragment : BaseFragment() {
                     setMessage("정말 초기화 하시겠습니까?")
                     setPositiveButton("확인") { _, _ ->
                         mItemViewModel.deleteAll()
-                        mItemViewModel.fetchItems()
+                        mItemViewModel.fetchItems("")
                     }
                     setNegativeButton("취소", null)
                     show()

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.databinding.GoneItemContainerBinding
-import com.example.parttimeduedatemanagement.databinding.ItemContainerBinding
 
 class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>(){
     private val TAG : String = "ItemAdapter"

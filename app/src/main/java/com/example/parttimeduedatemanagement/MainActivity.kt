@@ -1,6 +1,5 @@
 package com.example.parttimeduedatemanagement
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -30,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     }
     /* fragment를 switch해주는 함수 */
     fun fragmentChange(currentLayoutId : Int, changedLayout : Fragment){
+        Log.d(TAG,"fragmentChange function is acting")
         supportFragmentManager.beginTransaction()
             .replace(currentLayoutId,changedLayout)
             .addToBackStack(null) //뒤로 가기 버튼 누를 시 fragment를 꺼줌

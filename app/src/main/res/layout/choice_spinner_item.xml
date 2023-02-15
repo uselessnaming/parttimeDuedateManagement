@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:singleLine="true"
-    tools:text="spinnerItem"
+    android:textSize="25sp"
     android:textColor="@color/itemTextColor"
-    android:id="@+id/spSpinner"/>
+    android:gravity="center_horizontal|bottom"
+    android:background="@drawable/update_dialog_last_view_background"/>
