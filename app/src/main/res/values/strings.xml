@@ -22,9 +22,11 @@
     <string name="introBtnPlus">카테고리 추가</string>
     <string name="updateDialogTitle">아이템 수정</string>
     <string name="sortMessage">정 렬 : </string>
-    <string-array name ="sortingMenu">
+    <string-array name="sortingMenu">
         <item>아이템 추가 순</item>
         <item>유통기한순</item>
         <item>이름순</item>
     </string-array>
+    <string name="countInventory">재고 파악</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

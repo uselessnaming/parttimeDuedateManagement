@@ -63,14 +63,12 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.insert -> {
-                    Log.d(TAG, "insert clicked ${curFragment}")
                     switchFragment(InsertFragment())
                     isHomeFragment = false
                     drawerLayout.closeDrawer(GravityCompat.END)
                     true
                 }
                 R.id.checkDuedate -> {
-                    Log.d(TAG, "duedate check clicked ${curFragment}")
                     switchFragment(DuedateCheckFragment())
                     isHomeFragment = false
                     drawerLayout.closeDrawer(GravityCompat.END)
@@ -92,8 +90,13 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.editType -> {
-                    Log.d(TAG, "editType clicked ${curFragment}")
                     switchFragment(TypeEditFragment())
+                    isHomeFragment = false
+                    drawerLayout.closeDrawer(GravityCompat.END)
+                    true
+                }
+                R.id.countInventory -> {
+
                     isHomeFragment = false
                     drawerLayout.closeDrawer(GravityCompat.END)
                     true
