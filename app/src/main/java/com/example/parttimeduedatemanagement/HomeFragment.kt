@@ -1,21 +1,20 @@
 package com.example.parttimeduedatemanagement
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.part_timedatemanagement.Base.BaseFragment
 import com.example.part_timedatemanagement.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
 import com.example.parttimeduedatemanagement.Database.CheckItemList
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
     private lateinit var binding : FragmentHomeBinding
     private lateinit var mItemViewModel : ItemViewModel
@@ -35,7 +34,7 @@ class HomeFragment : BaseFragment() {
         initViewModel()
         initRecyclerView()
 
-        setHasOptionsMenu(true)
+        Log.d(TAG,"onCreate")
 
         return binding.root
     }
@@ -67,10 +66,12 @@ class HomeFragment : BaseFragment() {
             }
         }
     }
+
     override fun onStart(){
         super.onStart()
         mItemViewModel.fetchItems("")
     }
+
     /** ViewModel 초기화 */
     private fun initViewModel(){
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
@@ -106,49 +107,5 @@ class HomeFragment : BaseFragment() {
             mItemAdapter.submitList(it)
             binding.itemCount.text = "등록된 상품의 개수 : " + mItemViewModel.getItemCount().toString()
         })
-    }
-
-    /** menu 생성 */
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
-        mActivity.menuInflater.inflate(R.menu.toolbar_menu, menu)
-    }
-
-    /** menu 선택 시 이벤트 처리 */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.insert -> {
-                Log.d(TAG,"menu item in INSERT")
-                mActivity.fragmentChange(R.id.fragmentContainerView, InsertFragment())
-                true
-            }
-            R.id.reset -> {
-                /* homeFragment에 reset을 넘겨줘서 reset을 받으면 데이터를 reset하도록 */
-                val builder = AlertDialog.Builder(context)
-                builder.apply {
-                    setTitle("Warning")
-                    setMessage("정말 초기화 하시겠습니까?")
-                    setPositiveButton("확인") { _, _ ->
-                        mItemViewModel.deleteAll()
-                        mItemViewModel.fetchItems("")
-                    }
-                    setNegativeButton("취소", null)
-                    show()
-                }
-                true
-            }
-            R.id.checkDuedate -> {
-                mActivity.fragmentChange(R.id.fragmentContainerView, DuedateCheckFragment())
-                true
-            }
-            R.id.editType -> {
-                mActivity.fragmentChange(R.id.fragmentContainerView, TypeEditFragment())
-                true
-            }
-            else -> {
-                throw IllegalArgumentException("menu is not exist")
-            }
-        }
     }
 }

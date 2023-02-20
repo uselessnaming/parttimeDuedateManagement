@@ -8,7 +8,8 @@
     tools:context=".HomeFragment"
     android:orientation="vertical"
     android:id="@+id/homeFragment"
-    android:background="@color/fragmentBackground">
+    android:background="@color/fragmentBackground"
+    android:tag="home">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,14 +20,12 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
             android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
 
                 <TextView
                     android:id="@+id/itemCount"

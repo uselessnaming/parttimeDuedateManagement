@@ -9,16 +9,14 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
-import com.example.part_timedatemanagement.Base.BaseFragment
 import com.example.part_timedatemanagement.Database.Item
 import com.example.part_timedatemanagement.ItemViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentInsertBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 //menu에서 insert 클릭 시
-class InsertFragment : BaseFragment() {
+class InsertFragment : Fragment() {
     private val TAG : String = "InsertFragment"
     private lateinit var binding : FragmentInsertBinding
     private lateinit var mItemViewModel : ItemViewModel
@@ -45,6 +43,7 @@ class InsertFragment : BaseFragment() {
                 val locations = it
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,locations)
                 snLocationChoice.adapter = adapter
+                adapter.notifyDataSetChanged()
                 snLocationChoice.setSelection(0)
                 snLocationChoice.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
