@@ -90,7 +90,7 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         return result
     }
 
-    /* DuedateCheckFragment에서 사용할 데이터 가공 */
+    /* DuedateCheckFragment에서 사용할 데이터 */
     private var goneItemLiveData = MutableLiveData<List<Item>>()
     val goneItems : LiveData<List<Item>> get() = goneItemLiveData
 
@@ -110,11 +110,15 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         val currentDate = LocalDate.parse(today,baseFormat)
 
         items.forEach{
-            val targetDate = LocalDate.parse(it.date,baseFormat)
-            if (currentDate.isAfter(targetDate)){
-                result.add(it)
+            Log.d(TAG,"${it}")
+            if (it.date != ""){
+                val targetDate = LocalDate.parse(it.date,baseFormat)
+                if (currentDate.isAfter(targetDate)){
+                    result.add(it)
+                }
             }
         }
+        Log.d(TAG,"${result}")
         return result
     }
 
@@ -124,6 +128,7 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         }
     }
     fun insert(item : Item){
+        Log.d(TAG,"${item}")
         viewModelScope.launch(Dispatchers.IO){
             mItemRepository.insert(item)
         }

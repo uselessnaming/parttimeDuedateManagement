@@ -1,7 +1,6 @@
 package com.example.part_timedatemanagement.Database
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 
 class ItemRepository (application : Application) {
     private var mItemDatabase : ItemDatabase
@@ -39,12 +38,6 @@ class ItemRepository (application : Application) {
     }
     companion object{
         private var INSTANCE : ItemRepository? = null
-        /*
-        fun initialize(context : Context){
-            if(INSTANCE == null){
-                INSTANCE = ItemRepository(application)
-            }
-        }*/
 
         fun get(appliation : Application) : ItemRepository{
             return INSTANCE ?:

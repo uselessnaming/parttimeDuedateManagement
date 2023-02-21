@@ -96,7 +96,6 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.countInventory -> {
-
                     isHomeFragment = false
                     drawerLayout.closeDrawer(GravityCompat.END)
                     true

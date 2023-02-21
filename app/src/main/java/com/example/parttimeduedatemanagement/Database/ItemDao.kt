@@ -1,8 +1,6 @@
 package com.example.part_timedatemanagement.Database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.parttimeduedatemanagement.Database.CheckItemList
 
 @Dao
 interface ItemDao {
