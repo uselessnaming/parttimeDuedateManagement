@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.part_timedatemanagement.ItemViewModel
+import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
 import com.example.parttimeduedatemanagement.Database.CheckItemList
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
@@ -100,7 +100,6 @@ class HomeFragment : Fragment() {
             val layout = LinearLayoutManager(context)
             itemList.layoutManager = layout
             itemList.setHasFixedSize(true)
-            Log.d(TAG,"${mItemAdapter.itemCount}")
         }
 
         mItemViewModel.items.observe(viewLifecycleOwner, Observer{

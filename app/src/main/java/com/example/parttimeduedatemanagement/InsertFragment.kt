@@ -12,7 +12,7 @@ import android.widget.Toast.makeText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import com.example.part_timedatemanagement.Database.Item
-import com.example.part_timedatemanagement.ItemViewModel
+import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentInsertBinding
 
 //menu에서 insert 클릭 시
@@ -28,8 +28,6 @@ class InsertFragment : Fragment() {
 
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
                 .create(ItemViewModel::class.java)
-
-        Log.d(TAG,"insertFragment create")
         return binding.root
     }
 

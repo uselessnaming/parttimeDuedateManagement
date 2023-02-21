@@ -36,6 +36,9 @@ class ItemRepository (application : Application) {
     fun checkType(type : String) : List<String>{
         return mItemDao.checkType(type)
     }
+    fun updateEA(id : Int, ea : Int) {
+        return mItemDao.updateEA(id, ea)
+    }
     companion object{
         private var INSTANCE : ItemRepository? = null
 

@@ -3,7 +3,6 @@ package com.example.parttimeduedatemanagement
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -12,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.part_timedatemanagement.Database.Item
-import com.example.part_timedatemanagement.ItemViewModel
+import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.TypeEditAdapter
 import com.example.parttimeduedatemanagement.databinding.FragmentTypeEditBinding
 import kotlinx.coroutines.Dispatchers
@@ -49,19 +48,19 @@ class TypeEditFragment : Fragment() {
                     override fun onClick(typesHeader : String) {
                         val dialog = AlertDialog.Builder(requireContext())
                         dialog.apply{
-                            var messageText = ""
                             setTitle("경고")
                             setMessage("정말 삭제하시겠습니까?")
                             setPositiveButton("확인") { dialog, btnType ->
                                 when (btnType) {
                                     DialogInterface.BUTTON_POSITIVE -> {
+                                        var messageText = ""
                                         mItemViewModel.viewModelScope.launch(Dispatchers.IO){
                                             val typeItems = mItemViewModel.checkType(typesHeader).await()
-                                            if (typeItems.size == 1){
+                                            messageText = if (typeItems.size == 1){
                                                 mItemViewModel.deleteType(typesHeader,"")
-                                                messageText = "삭제 완료"
+                                                "삭제 완료"
                                             } else {
-                                                messageText = "해당 타입에 속한 아이템이 있습니다.\n아이템 정보를 변경한 후 시도해주세요"
+                                                "해당 타입에 속한 아이템이 있습니다.\n아이템 정보를 변경한 후 시도해주세요"
                                             }
                                             withContext(Dispatchers.Main){
                                                 message(messageText)

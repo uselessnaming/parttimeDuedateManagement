@@ -1,4 +1,4 @@
-package com.example.parttimeduedatemanagement
+package com.example.parttimeduedatemanagement.LiveData
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData

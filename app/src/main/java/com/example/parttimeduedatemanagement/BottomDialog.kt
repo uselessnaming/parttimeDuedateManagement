@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.example.part_timedatemanagement.ItemViewModel
+import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentBottomDialogBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

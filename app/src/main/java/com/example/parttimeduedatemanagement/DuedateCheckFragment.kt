@@ -3,16 +3,14 @@ package com.example.parttimeduedatemanagement
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.part_timedatemanagement.ItemViewModel
+import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.GoneItemAdapter
 import com.example.parttimeduedatemanagement.databinding.FragmentDuedateCheckBinding
 import java.time.LocalDateTime
@@ -66,9 +64,9 @@ class DuedateCheckFragment : Fragment() {
             goneItems.layoutManager = layout
             goneItems.setHasFixedSize(true)
         }
-        mItemViewModel.goneItems.observe(viewLifecycleOwner, Observer{
+        mItemViewModel.goneItems.observe(viewLifecycleOwner){
             mGoneItemAdapter.submitList(it)
-        })
+        }
     }
     private fun showDialog(itemId : Int){
         val dialog = AlertDialog.Builder(requireContext())

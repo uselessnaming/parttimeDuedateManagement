@@ -1,21 +1,16 @@
 package com.example.parttimeduedatemanagement
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.util.Size
 import android.view.*
-import android.view.View.OnClickListener
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.part_timedatemanagement.Database.Item
-import com.example.part_timedatemanagement.ItemViewModel
+import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentTypeEditDialogBinding
 
 class TypeEditDialog : DialogFragment() {

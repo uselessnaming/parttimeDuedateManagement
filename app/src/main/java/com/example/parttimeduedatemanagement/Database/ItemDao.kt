@@ -30,4 +30,7 @@ interface ItemDao {
 
     @Query("SELECT location FROM itemTable WHERE location = (:location)")
     fun checkType(location : String) : List<String>
+
+    @Query("UPDATE itemTable SET ea = (:ea) WHERE id = (:id)")
+    fun updateEA(id : Int, ea : Int)
 }

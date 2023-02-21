@@ -1,4 +1,4 @@
-package com.example.part_timedatemanagement
+package com.example.parttimeduedatemanagement.ViewModel
 
 import android.app.Application
 import android.util.Log
@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.example.part_timedatemanagement.Database.Item
 import com.example.part_timedatemanagement.Database.ItemRepository
 import com.example.parttimeduedatemanagement.Database.CheckItemList
+import com.example.parttimeduedatemanagement.Database.EaItem
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -14,6 +15,37 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
     private val TAG = "ViewModel"
     private val mItemRepository : ItemRepository = ItemRepository.get(application)
 
+    /* EA 관련 데이터 */
+    private var eaLiveData = MutableLiveData<List<EaItem>>()
+    val eaData : LiveData<List<EaItem>>get() = eaLiveData
+
+    fun updateEA(id : Int, ea : Int){
+        viewModelScope.launch(Dispatchers.IO + coroutineException){
+            mItemRepository.updateEA(id, ea)
+        }
+    }
+    fun fetchEas(){
+        viewModelScope.launch(Dispatchers.IO + coroutineException){
+            val news = toEaList(mItemRepository.getAll())
+            eaLiveData.postValue(news)
+        }
+    }
+    private fun toEaList(items : List<Item>) : List<EaItem>{
+        val result = arrayListOf<EaItem>()
+        val headers = arrayListOf<String>()
+
+        items.forEach{
+            if (it.location !in headers){
+                headers.add(it.location)
+                result.add(EaItem.Header(it))
+            }
+            if (it.itemName != ""){
+                result.add(EaItem.Child(it))
+            }
+        }
+        result.sortWith(compareBy({it.item.location},{it.order}))
+        return result
+    }
     /* type을 받는 live data */
     private var typeLiveData = MutableLiveData<List<String>>()
     val types : LiveData<List<String>> get() = typeLiveData
@@ -23,7 +55,7 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
             typeLiveData.postValue(news)
         }
     }
-    fun getType() : List<String> {
+    private fun getType() : List<String> {
         val result = arrayListOf<String>()
         val locations = mItemRepository.getType()
         locations.forEach{
@@ -40,7 +72,6 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
     }
     suspend fun checkType(type : String) : Deferred<List<String>> =
         viewModelScope.async(Dispatchers.IO + coroutineException){
-            Log.d("itemViewModel","${mItemRepository.checkType(type)}")
             return@async mItemRepository.checkType(type)
         }
     /* 전체 item을 받는 live data */
@@ -86,7 +117,6 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
                 result.sortWith(compareBy{it.item.location})
             }
         }
-        Log.d(TAG,"${result}")
         return result
     }
 
@@ -110,7 +140,6 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         val currentDate = LocalDate.parse(today,baseFormat)
 
         items.forEach{
-            Log.d(TAG,"${it}")
             if (it.date != ""){
                 val targetDate = LocalDate.parse(it.date,baseFormat)
                 if (currentDate.isAfter(targetDate)){
@@ -118,7 +147,6 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
                 }
             }
         }
-        Log.d(TAG,"${result}")
         return result
     }
 
@@ -128,7 +156,6 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         }
     }
     fun insert(item : Item){
-        Log.d(TAG,"${item}")
         viewModelScope.launch(Dispatchers.IO){
             mItemRepository.insert(item)
         }

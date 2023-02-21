@@ -35,9 +35,11 @@ class ItemAdapter : RecyclerView.Adapter<ItemViewHolder>(){
     override fun onBindViewHolder(holder : ItemViewHolder, position : Int){
         holder.bind(getItem(position))
 
-        holder.itemView.setOnLongClickListener{
-            itemLongClickListener.onLongClick(it,getItem(position))
-            return@setOnLongClickListener(true)
+        if (holder is ItemChildViewHolder){
+            holder.itemView.setOnLongClickListener{
+                itemLongClickListener.onLongClick(it,getItem(position))
+                return@setOnLongClickListener(true)
+            }
         }
     }
 
