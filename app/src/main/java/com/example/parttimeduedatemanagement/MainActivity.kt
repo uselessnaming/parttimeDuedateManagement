@@ -3,6 +3,8 @@ package com.example.parttimeduedatemanagement
 import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
@@ -58,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 android.R.id.home -> {
+                    Log.d(TAG,"Home")
                     onBackPressed()
                     true
                 }
@@ -171,6 +174,16 @@ class MainActivity : AppCompatActivity() {
         else {
             switchFragment(HomeFragment())
             isHomeFragment = true
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> false
         }
     }
 }

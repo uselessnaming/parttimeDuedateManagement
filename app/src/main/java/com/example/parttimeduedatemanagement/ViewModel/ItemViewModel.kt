@@ -62,6 +62,7 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         }
         return result
     }
+
     /* type을 받는 live data */
     private var typeLiveData = MutableLiveData<List<String>>()
     val types : LiveData<List<String>> get() = typeLiveData
@@ -90,12 +91,11 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         viewModelScope.async(Dispatchers.IO + coroutineException){
             return@async mItemRepository.checkType(type)
         }
+
     /* 전체 item을 받는 live data */
     private var itemLiveData = MutableLiveData<List<CheckItemList>>()
     val items : LiveData<List<CheckItemList>> get() = itemLiveData
-
     var count : Int = 0
-
     fun fetchItems(sortedType : String){
         viewModelScope.launch(Dispatchers.IO){
             count = 0
@@ -104,7 +104,6 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         }
     }
     fun getItemCount() : Int { return count }
-
     private fun toListItems(items : List<Item>, sortedType : String) : List<CheckItemList>{
         val result = arrayListOf<CheckItemList>()
         val headers = arrayListOf<String>()
@@ -139,11 +138,9 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
     /* DuedateCheckFragment에서 사용할 데이터 */
     private var goneItemLiveData = MutableLiveData<List<Item>>()
     val goneItems : LiveData<List<Item>> get() = goneItemLiveData
-
     private val coroutineException = CoroutineExceptionHandler{_, throwable ->
         throwable.printStackTrace()
     }
-
     fun goneItemsFetch(today : String){
         viewModelScope.launch(Dispatchers.IO + coroutineException){
             val news = getGoneItems(mItemRepository.getAll(),today)
@@ -166,6 +163,7 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         return result
     }
 
+    /* Repository 구현 */
     fun deleteItem(id : Int){
         viewModelScope.launch(Dispatchers.IO){
             mItemRepository.deleteItem(id)

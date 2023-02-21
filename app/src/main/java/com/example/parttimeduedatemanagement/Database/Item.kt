@@ -10,7 +10,7 @@ data class Item(
     @ColumnInfo var itemName : String,
     @ColumnInfo var date : String,
     @ColumnInfo
-    @PrimaryKey(autoGenerate = true) var id : Int = 0,
+    @PrimaryKey(autoGenerate = true) val id : Int = 0,
     @ColumnInfo var ea : Int = 0
 ){
     constructor() : this("","","")
