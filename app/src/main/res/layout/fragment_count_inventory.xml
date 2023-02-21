@@ -33,6 +33,6 @@
         android:layout_height="wrap_content"
         android:textStyle="bold|normal"
         android:textColor="@color/itemTextColor"
-        android:textSize="15sp"/>
+        android:textSize="17sp"/>
 
 </LinearLayout>

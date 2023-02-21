@@ -69,6 +69,7 @@ class CountInventoryFragment : Fragment() {
         }
         mItemViewModel.eaData.observe(viewLifecycleOwner) {
             mCountInventoryAdapter.submitList(it)
+            binding.tvTotalCount.text = mItemViewModel.sb
         }
     }
 }

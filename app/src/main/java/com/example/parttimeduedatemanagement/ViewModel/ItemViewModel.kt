@@ -18,6 +18,8 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
     /* EA 관련 데이터 */
     private var eaLiveData = MutableLiveData<List<EaItem>>()
     val eaData : LiveData<List<EaItem>>get() = eaLiveData
+    val sb = StringBuilder()
+    private var curLocation : String = ""
 
     fun updateEA(id : Int, ea : Int){
         viewModelScope.launch(Dispatchers.IO + coroutineException){
@@ -44,6 +46,20 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
             }
         }
         result.sortWith(compareBy({it.item.location},{it.order}))
+        Log.d(TAG,"${result}")
+        sb.clear()
+        curLocation = ""
+        result.forEach{
+            if (it is EaItem.Child){
+                if (it.item.ea != 0){
+                    if (curLocation != it.item.location){
+                        curLocation = it.item.location
+                        sb.append("\n${it.item.location} : ")
+                    }
+                sb.append("${it.item.itemName}${it.item.ea}\t")
+                }
+            }
+        }
         return result
     }
     /* type을 받는 live data */
