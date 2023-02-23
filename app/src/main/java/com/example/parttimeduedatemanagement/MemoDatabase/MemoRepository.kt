@@ -18,6 +18,12 @@ class MemoRepository(application : Application) {
     fun insert(memo : Memo){
         mMemoDao.insertMemo(memo)
     }
+    fun updateMemo(id : Int, memo : Memo){
+        mMemoDao.updateMemo(id, memo.title, memo.content, memo.date)
+    }
+    fun deleteMemo(id : Int){
+        mMemoDao.deleteMemo(id)
+    }
 
     companion object{
         private var INSTANCE : MemoRepository? = null

@@ -15,6 +15,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.part_timedatemanagement.Database.Item
+import com.example.parttimeduedatemanagement.Memo.AddMemoFragment
+import com.example.parttimeduedatemanagement.Memo.MemoFragment
+import com.example.parttimeduedatemanagement.Memo.UpdateMemoFragment
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.databinding.ActivityMainBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -103,6 +106,12 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.closeDrawer(GravityCompat.END)
                     true
                 }
+                R.id.memo -> {
+                    switchFragment(MemoFragment())
+                    isHomeFragment = false
+                    drawerLayout.closeDrawer(GravityCompat.END)
+                    true
+                }
                 else -> {
                     throw IllegalStateException("Error : this menu is not exist")
                 }
@@ -110,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     /* fragment를 switch해주는 함수 */
-    private fun switchFragment(fragment : Fragment){
+    fun switchFragment(fragment : Fragment){
         val transaction = supportFragmentManager.beginTransaction()
         if (curFragment == fragment) {
             message("현재 선택된 화면에 있습니다.\n다른 메뉴를 선택해 주세요")
@@ -142,19 +151,20 @@ class MainActivity : AppCompatActivity() {
             d.arguments = bundle
             d.show(supportFragmentManager, tag)
         }
-
     }
-
     private fun message(s : String){
         Toast.makeText(this,s,Toast.LENGTH_SHORT).show()
     }
-
     private fun initViewModel(){
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.application)
             .create(ItemViewModel::class.java)
     }
-
     override fun onBackPressed() {
+        /* 현재 UpdateMemoFragment 라면 뒤로가기 버튼 시 MemoFragment로 변경*/
+        if (curFragment is UpdateMemoFragment || curFragment is AddMemoFragment){
+            switchFragment(MemoFragment())
+            return
+        }
         /* drawer가 열려있을 때 -> 닫음 */
         if (binding.mainDrawerLayout.isDrawerOpen(GravityCompat.END)){
             binding.mainDrawerLayout.closeDrawer(GravityCompat.END)
@@ -163,7 +173,7 @@ class MainActivity : AppCompatActivity() {
         /* HomeFragment라면 뒤로가기 2번을 눌렀을 때 종료 */
         if (isHomeFragment){
             if (System.currentTimeMillis() - lastTimeBackPressed < 1500){
-                finish() //finish()?
+                finish()
                 return
             }
             lastTimeBackPressed = System.currentTimeMillis()
@@ -176,7 +186,6 @@ class MainActivity : AppCompatActivity() {
             isHomeFragment = true
         }
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             android.R.id.home -> {

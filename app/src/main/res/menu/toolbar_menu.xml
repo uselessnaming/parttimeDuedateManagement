@@ -9,6 +9,8 @@
         android:title="@string/countInventory"/>
     <item android:id="@+id/editType"
         android:title="@string/editType"/>
+    <item android:id="@+id/memo"
+        android:title="@string/memo"/>
     <item android:id="@+id/reset"
         android:title="@string/dataReset"/>
     <item android:id="@+id/setting"

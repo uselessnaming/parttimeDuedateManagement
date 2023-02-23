@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MemoFragment"
+    tools:context=".Memo.MemoFragment"
     android:background="@color/layoutBackground">
 
     <LinearLayout
@@ -17,20 +17,24 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/memoFragment"
+            android:text="@string/memo"
             android:textColor="@color/itemTextColor"
             android:textSize="25sp"
             android:textStyle="bold|normal"
-            android:gravity="center" />
+            android:gravity="center"
+            android:layout_marginTop="10dp"/>
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvMemoTitle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"/>
 
         </ScrollView>
 

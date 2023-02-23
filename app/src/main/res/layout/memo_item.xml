@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/memoItem">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -14,7 +15,10 @@
         android:textSize="25sp"
         android:textColor="@color/itemTextColor"
         android:textStyle="bold|normal"
-        android:gravity="center"
+        android:gravity="start"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"
         tools:text="test"/>
 
     <TextView
@@ -26,6 +30,9 @@
         android:textStyle="bold|normal"
         android:textSize="15sp"
         android:gravity="end"
-        tools:text="date"/>
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        tools:text="date"
+        android:layout_marginBottom="5dp"/>
 
 </LinearLayout>

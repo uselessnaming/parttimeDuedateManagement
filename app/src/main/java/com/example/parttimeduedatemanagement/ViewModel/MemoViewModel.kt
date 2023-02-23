@@ -32,4 +32,14 @@ class MemoViewModel(application : Application) : AndroidViewModel(application) {
             mMemoRepository.insert(memo)
         }
     }
+    fun updateMemo(id : Int, memo : Memo){
+        viewModelScope.launch(Dispatchers.IO + coroutineException){
+            mMemoRepository.updateMemo(id, memo)
+        }
+    }
+    fun deleteMemo(id : Int){
+        viewModelScope.launch(Dispatchers.IO + coroutineException){
+            mMemoRepository.deleteMemo(id)
+        }
+    }
 }

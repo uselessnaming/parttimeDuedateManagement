@@ -77,6 +77,7 @@ class DuedateCheckFragment : Fragment() {
                 when (btnType) {
                     DialogInterface.BUTTON_POSITIVE -> {
                         mItemViewModel.deleteItem(itemId)
+                        mItemViewModel.fetchItems("")
                         message("삭제 완료")
                         dialog?.dismiss()
                     }

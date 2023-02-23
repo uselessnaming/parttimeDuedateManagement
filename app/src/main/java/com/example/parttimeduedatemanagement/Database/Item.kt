@@ -11,7 +11,8 @@ data class Item(
     @ColumnInfo var date : String,
     @ColumnInfo
     @PrimaryKey(autoGenerate = true) val id : Int = 0,
-    @ColumnInfo var ea : Int = 0
+    @ColumnInfo var ea : Int = 0,
+    @ColumnInfo var isEmpty : Boolean = false
 ){
     constructor() : this("","","")
 }

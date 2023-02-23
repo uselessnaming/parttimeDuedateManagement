@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Memo.AddMemoFragment"
+    android:background="@color/layoutBackground"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvFragmentTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="@string/addMemo"
+        android:textStyle="bold|normal"
+        android:textColor="@color/itemTextColor"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        tools:text="메모 추가"/>
+
+    <EditText
+        android:id="@+id/etTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="start"
+        android:inputType="text"
+        android:hint="@string/inputTitle"
+        android:textColor="@color/itemTextColor"
+        android:textSize="25sp"
+        android:textStyle="bold|normal"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:id="@+id/etContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="20sp"
+        android:textColor="@color/itemTextColor"
+        android:textStyle="bold|normal"
+        android:inputType="textMultiLine"
+        android:gravity="start"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="60dp"
+        android:hint="@string/inputContent"/>
+
+    <Button
+        android:layout_marginTop="-50dp"
+        android:id="@+id/btnDone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/okMessage"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+
+</LinearLayout>

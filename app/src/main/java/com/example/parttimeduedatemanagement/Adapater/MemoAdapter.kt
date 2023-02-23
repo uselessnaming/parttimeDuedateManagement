@@ -1,6 +1,7 @@
 package com.example.parttimeduedatemanagement.Adapater
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parttimeduedatemanagement.Database.CheckItemList
@@ -25,11 +26,28 @@ class MemoAdapter : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
     }
     override fun onBindViewHolder(holder : MemoViewHolder, position : Int){
         holder.bind(memos[position])
+        binding.memoItem.setOnClickListener{
+            onClickListener.onClick(memos[position])
+        }
     }
     inner class MemoViewHolder(binding : MemoItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(memo : Memo){
             binding.tvTitle.text = memo.title
             binding.tvUpdateDate.text = memo.date
         }
+    }
+    interface OnClickListener{
+        fun onClick(memo : Memo)
+    }
+    interface OnLongClickListener{
+        fun onLongClick(id : Int)
+    }
+    private lateinit var onClickListener : OnClickListener
+    private lateinit var onLongClickListener : OnLongClickListener
+    fun setOnClickListener(onClickListener : OnClickListener){
+        this.onClickListener = onClickListener
+    }
+    fun setOnLongClickListener(onLongClickListener : OnLongClickListener){
+        this.onLongClickListener = onLongClickListener
     }
 }
