@@ -77,9 +77,8 @@ class ItemHeaderViewHolder(
 class ItemChildViewHolder(
     itemView : View
 ) : ItemViewHolder(itemView){
-    private val binding by lazy{
-        ItemBinding.bind(itemView)
-    }
+    private val binding by lazy{ItemBinding.bind(itemView)}
+    val layout = binding.layoutMain
     override fun bind(itemList : CheckItemList){
         val item = (itemList as CheckItemList.Child).item
 

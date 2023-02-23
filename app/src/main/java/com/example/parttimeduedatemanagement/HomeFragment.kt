@@ -8,10 +8,12 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
 import com.example.parttimeduedatemanagement.Database.CheckItemList
+import com.example.parttimeduedatemanagement.Event.SwipeController
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -96,15 +98,16 @@ class HomeFragment : Fragment() {
                     mActivity.createBottomDialog(dialog,id.item)
                 }
             })
-
+            val itemTouchHelper = ItemTouchHelper(SwipeController(requireContext()))
+            itemTouchHelper.attachToRecyclerView(itemList)
             val layout = LinearLayoutManager(context)
             itemList.layoutManager = layout
             itemList.setHasFixedSize(true)
         }
 
-        mItemViewModel.items.observe(viewLifecycleOwner, Observer{
+        mItemViewModel.items.observe(viewLifecycleOwner){
             mItemAdapter.submitList(it)
             binding.itemCount.text = "등록된 상품의 개수 : " + mItemViewModel.getItemCount().toString()
-        })
+        }
     }
 }

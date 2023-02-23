@@ -1,39 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/itemName"
+    <!--스와이프 레이아웃-->
+    <LinearLayout
+        android:id="@+id/ly_swipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Name"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/itemDuedate"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/itemTextColor" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/itemDuedate"
+        <FrameLayout
+            android:id="@+id/swipeView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/imgSoldOut"
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/stat_notify_error"
+                android:visibility="visible"/>
+
+            <ImageButton
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:id="@+id/imgCancel"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:visibility="gone"/>
+
+        </FrameLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/swipeItemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/itemTextColor"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toTopOf="@+id/swipeItemDuedate"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Name" />
+
+            <TextView
+                android:id="@+id/swipeItemDuedate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/itemTextColor"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/swipeItemName"
+                tools:text="Duedate" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <!-- 메인 레이아웃 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Duedate"
-        android:textSize = "20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemName"
-        android:textColor="@color/itemTextColor"/>
+        android:background="@color/layoutBackground"
+        android:id="@+id/layoutMain">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="4.5dp"
-        android:layerType="software"
-        app:layout_constraintTop_toBottomOf="@+id/itemDuedate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/item_background" />
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/itemTextColor"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/itemDuedate"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Name" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/itemDuedate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/itemTextColor"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itemName"
+            tools:text="Duedate" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="4.5dp"
+            android:layerType="software"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/itemDuedate"
+            app:srcCompat="@drawable/item_background" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
