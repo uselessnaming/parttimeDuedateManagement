@@ -39,6 +39,13 @@ class ItemRepository (application : Application) {
     fun updateEA(id : Int, ea : Int) {
         return mItemDao.updateEA(id, ea)
     }
+    fun updateIsEmpty(id : Int, isEmpty : Boolean){
+        val isEmptyToInt = if (isEmpty) 1 else 0
+        mItemDao.updateIsEmpty(id, isEmptyToInt)
+    }
+    fun checkItem(itemName : String, location : String) : Boolean {
+        return mItemDao.checkItem(itemName,location)
+    }
     companion object{
         private var INSTANCE : ItemRepository? = null
 

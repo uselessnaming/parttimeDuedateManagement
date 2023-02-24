@@ -2,6 +2,7 @@ package com.example.parttimeduedatemanagement.Event
 
 import android.content.Context
 import android.graphics.Canvas
+import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parttimeduedatemanagement.Adapater.ItemChildViewHolder
@@ -12,8 +13,12 @@ class SwipeController(val context : Context) : ItemTouchHelper.Callback() {
     private var swipeStarted = false
     private var initialSwipeX = 0f
     companion object{
-        private val MAX_SWIPE_DISTANCE = 200f
-        private val SWIPE_THRESHOLD = 0f
+        private const val MAX_SWIPE_DISTANCE = 250f
+        private const val SWIPE_THRESHOLD = 0f
+    }
+
+    override fun getSwipeEscapeVelocity(defaultValue: Float): Float {
+        return defaultValue * 10
     }
     override fun getMovementFlags(recyclerView: RecyclerView,viewHolder: RecyclerView.ViewHolder,): Int {
         val swipeFlags = ItemTouchHelper.RIGHT
@@ -23,7 +28,14 @@ class SwipeController(val context : Context) : ItemTouchHelper.Callback() {
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val itemAdapter = viewHolder as ItemChildViewHolder
         if (direction == ItemTouchHelper.RIGHT) {
-
+            itemAdapter.binding.imgCancel.setOnClickListener{
+                itemAdapter.binding.imgCancel.visibility = View.GONE
+                itemAdapter.binding.imgSoldOut.visibility = View.VISIBLE
+            }
+            itemAdapter.binding.imgSoldOut.setOnClickListener{
+                itemAdapter.binding.imgSoldOut.visibility = View.GONE
+                itemAdapter.binding.imgCancel.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -41,7 +53,7 @@ class SwipeController(val context : Context) : ItemTouchHelper.Callback() {
         isCurrentlyActive: Boolean
     ) {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
-            if (!swipeStarted && abs(dX) < SWIPE_THRESHOLD){
+            if (!swipeStarted && kotlin.math.abs(dX) < SWIPE_THRESHOLD){
                 return super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             } else {
                 swipeStarted = true
@@ -53,7 +65,7 @@ class SwipeController(val context : Context) : ItemTouchHelper.Callback() {
                 } else {
                     dX - initialSwipeX
                 }
-                val view = (viewHolder as ItemChildViewHolder).layout
+                val view = (viewHolder as ItemChildViewHolder).binding.layoutMain
                 getDefaultUIUtil().onDraw(c,recyclerView,view,newDX,dY,actionState,isCurrentlyActive)
             }
         } else {

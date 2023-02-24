@@ -29,6 +29,10 @@ class MemoAdapter : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
         binding.memoItem.setOnClickListener{
             onClickListener.onClick(memos[position])
         }
+        binding.memoItem.setOnLongClickListener {
+            onLongClickListener.onLongClick(memos[position].id)
+            return@setOnLongClickListener(true)
+        }
     }
     inner class MemoViewHolder(binding : MemoItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(memo : Memo){

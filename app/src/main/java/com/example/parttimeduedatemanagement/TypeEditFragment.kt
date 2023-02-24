@@ -58,6 +58,7 @@ class TypeEditFragment : Fragment() {
                                             val typeItems = mItemViewModel.checkType(typesHeader).await()
                                             messageText = if (typeItems.size == 1){
                                                 mItemViewModel.deleteType(typesHeader,"")
+                                                mItemViewModel.fetchTypes()
                                                 "삭제 완료"
                                             } else {
                                                 "해당 타입에 속한 아이템이 있습니다.\n아이템 정보를 변경한 후 시도해주세요"
@@ -66,7 +67,6 @@ class TypeEditFragment : Fragment() {
                                                 message(messageText)
                                             }
                                         }
-                                        mItemViewModel.fetchTypes()
                                         dialog?.dismiss()
                                     }
                                     else -> dialog?.dismiss()
@@ -77,9 +77,9 @@ class TypeEditFragment : Fragment() {
                         }
                     }
                 })
-                mItemViewModel.types.observe(viewLifecycleOwner, Observer{
+                mItemViewModel.types.observe(viewLifecycleOwner){
                     mTypeEditAdapter.submitList(it)
-                })
+                }
                 adapter = mTypeEditAdapter
                 val layout = LinearLayoutManager(context)
                 layoutManager = layout

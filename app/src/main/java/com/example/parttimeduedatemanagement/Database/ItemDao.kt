@@ -33,4 +33,10 @@ interface ItemDao {
 
     @Query("UPDATE itemTable SET ea = (:ea) WHERE id = (:id)")
     fun updateEA(id : Int, ea : Int)
+
+    @Query("UPDATE itemTable SET isEmpty = (:isEmpty) WHERE id = (:id)")
+    fun updateIsEmpty(id : Int, isEmpty : Int)
+
+    @Query("SELECT EXISTS(SELECT 1 FROM itemTable WHERE itemName = (:itemName) AND location = (:location))")
+    fun checkItem(itemName : String, location : String) : Boolean
 }

@@ -112,6 +112,11 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.closeDrawer(GravityCompat.END)
                     true
                 }
+                R.id.setting -> {
+                    message("이 메뉴는 준비중입니다 ><")
+                    drawerLayout.closeDrawer(GravityCompat.END)
+                    true
+                }
                 else -> {
                     throw IllegalStateException("Error : this menu is not exist")
                 }

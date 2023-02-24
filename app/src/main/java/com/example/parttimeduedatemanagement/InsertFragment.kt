@@ -9,11 +9,15 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import android.widget.Toast.makeText
+import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentInsertBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 //menu에서 insert 클릭 시
 class InsertFragment : Fragment() {
@@ -37,7 +41,7 @@ class InsertFragment : Fragment() {
             var location = ""
             /** spinner 연결 */
             mItemViewModel.fetchTypes()
-            mItemViewModel.types.observe(viewLifecycleOwner, Observer{
+            mItemViewModel.types.observe(viewLifecycleOwner){
                 val locations = it
                 val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,locations)
                 snLocationChoice.adapter = adapter
@@ -54,7 +58,7 @@ class InsertFragment : Fragment() {
                     override fun onNothingSelected(parent: AdapterView<*>?) {
                     }
                 }
-            })
+            }
             /** 추가 사항을 입력한 후 버튼 클릭 시 */
             btnDone.setOnClickListener {
                 /* 입력 창에 아무 것도 없으면 오류 출력 */
@@ -79,8 +83,19 @@ class InsertFragment : Fragment() {
                         }
                         date += etInputDay.text.toString() + "일"
                         val item = Item(location,name,date)
-                        mItemViewModel.insert(item)
-                        message("추가 완료")
+                        mItemViewModel.viewModelScope.launch(Dispatchers.IO){
+                            val isCheck = mItemViewModel.checkItem(item.itemName,item.location).await()
+                            var textMessage = ""
+                            if (isCheck){
+                                textMessage = "이 아이템은 이미 존재합니다"
+                            } else {
+                                mItemViewModel.insert(item)
+                                textMessage = "추가 완료"
+                            }
+                            withContext(Dispatchers.Main){
+                                message(textMessage)
+                            }
+                        }
                     }
                     /* 추가 버튼을 눌렀을 시 fragment 전환 --> 초기 데이터를 전부 넣은 후에 이 기능을 넣는 것이 좋을 듯 mActivity.finishFragment() */
                     /* 입력 창에 입력한 상품이 이미 있다면 이미 존재한다는 오류를 출력 */

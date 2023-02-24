@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
+import com.example.parttimeduedatemanagement.Adapater.ItemChildViewHolder
+import com.example.parttimeduedatemanagement.Adapater.OnImageButtonClickListener
 import com.example.parttimeduedatemanagement.Database.CheckItemList
 import com.example.parttimeduedatemanagement.Event.SwipeController
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
@@ -35,8 +37,6 @@ class HomeFragment : Fragment() {
 
         initViewModel()
         initRecyclerView()
-
-        Log.d(TAG,"onCreate")
 
         return binding.root
     }
@@ -96,6 +96,12 @@ class HomeFragment : Fragment() {
                         }
                     })
                     mActivity.createBottomDialog(dialog,id.item)
+                }
+            })
+            mItemAdapter.setImgBtnClickListener(object : OnImageButtonClickListener{
+                override fun onImageButtonClick(id: Int) {
+                    mItemViewModel.updateIsEmpty(id)
+                    mItemViewModel.fetchItems("")
                 }
             })
             val itemTouchHelper = ItemTouchHelper(SwipeController(requireContext()))

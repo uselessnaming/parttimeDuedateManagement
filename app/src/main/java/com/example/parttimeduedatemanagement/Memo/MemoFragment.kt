@@ -82,7 +82,7 @@ class MemoFragment : Fragment() {
             })
             mMemoAdapter.setOnLongClickListener(object : MemoAdapter.OnLongClickListener{
                 override fun onLongClick(id : Int) {
-                    val dialog = AlertDialog.Builder(requireContext())
+                    val dialog = AlertDialog.Builder(context)
                     val listener = DialogInterface.OnClickListener { _, p1 ->
                         when(p1){
                             DialogInterface.BUTTON_POSITIVE -> {
