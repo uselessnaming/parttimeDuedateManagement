@@ -1,22 +1,27 @@
 package com.example.parttimeduedatemanagement
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
 import com.example.parttimeduedatemanagement.Adapater.ItemChildViewHolder
-import com.example.parttimeduedatemanagement.Adapater.OnImageButtonClickListener
 import com.example.parttimeduedatemanagement.Database.CheckItemList
-import com.example.parttimeduedatemanagement.Event.SwipeController
+import com.example.parttimeduedatemanagement.Event.HoldableSwipeHelper
+import com.example.parttimeduedatemanagement.Event.SwipeButtonAction
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
@@ -81,9 +86,41 @@ class HomeFragment : Fragment() {
     }
 
     /** itemContainerRecyclerview를 초기화 */
+    @SuppressLint("ClickableViewAccessibility")
     private fun initRecyclerView (){
+        mItemViewModel.items.observe(viewLifecycleOwner){
+            mItemAdapter.submitList(it)
+            binding.itemCount.text = "등록된 상품의 개수 : " + mItemViewModel.getItemCount().toString()
+        }
         binding.apply{
-            itemList.adapter = mItemAdapter
+            /* swipe 이벤트 적용 */
+            HoldableSwipeHelper.Builder(requireContext())
+                .setOnRecyclerView(itemList)
+                .setSwipeButtonAction(object : SwipeButtonAction{
+                    override fun onClickFirstButton(viewHolder: RecyclerView.ViewHolder) {
+                        val currentViewHolder = (viewHolder as ItemChildViewHolder)
+                        val id = currentViewHolder.getBindingId()
+                        mItemViewModel.viewModelScope.launch(Dispatchers.IO){
+                            val item = mItemViewModel.searchItem(id).await()
+                            withContext(Dispatchers.Main){
+                                currentViewHolder.setImageTag(item.isEmpty)
+                            }
+                            mItemViewModel.updateIsEmpty(item.id)
+                        }
+                    }
+                })
+                .setDismissOnClickFirstItem(true)
+                .excludeFromHoldableViewHolder(200)
+                .setBackgroundColor("#ff0000")
+                .setDirectionAsRightToLeft(false)
+                .build()
+
+            itemList.apply{
+                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+                layoutManager = LinearLayoutManager(context)
+                adapter = mItemAdapter
+                setHasFixedSize(true)
+            }
             mItemAdapter.setItemLongClickListener(object : ItemAdapter.OnItemLongClickListener{
                 override fun onLongClick(v: View, id : CheckItemList) {
                     val dialog = BottomDialog()
@@ -98,22 +135,6 @@ class HomeFragment : Fragment() {
                     mActivity.createBottomDialog(dialog,id.item)
                 }
             })
-            mItemAdapter.setImgBtnClickListener(object : OnImageButtonClickListener{
-                override fun onImageButtonClick(id: Int) {
-                    mItemViewModel.updateIsEmpty(id)
-                    mItemViewModel.fetchItems("")
-                }
-            })
-            val itemTouchHelper = ItemTouchHelper(SwipeController(requireContext()))
-            itemTouchHelper.attachToRecyclerView(itemList)
-            val layout = LinearLayoutManager(context)
-            itemList.layoutManager = layout
-            itemList.setHasFixedSize(true)
-        }
-
-        mItemViewModel.items.observe(viewLifecycleOwner){
-            mItemAdapter.submitList(it)
-            binding.itemCount.text = "등록된 상품의 개수 : " + mItemViewModel.getItemCount().toString()
         }
     }
 }

@@ -103,7 +103,7 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
             itemLiveData.postValue(news)
         }
     }
-    fun getItemCount() : Int { return count }
+    fun getItemCount() : Int = count
     private fun toListItems(items : List<Item>, sortedType : String) : List<CheckItemList>{
         val result = arrayListOf<CheckItemList>()
         val headers = arrayListOf<String>()

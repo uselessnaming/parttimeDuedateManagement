@@ -4,7 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.Database.CheckItemList
+import com.example.parttimeduedatemanagement.HomeFragment
 import com.example.parttimeduedatemanagement.databinding.ItemBinding
 import com.example.parttimeduedatemanagement.databinding.ItemContainerBinding
 
@@ -40,7 +42,6 @@ class ItemAdapter : RecyclerView.Adapter<ItemViewHolder>(){
                 itemLongClickListener.onLongClick(it,getItem(position))
                 return@setOnLongClickListener(true)
             }
-            holder.setOnImageButtonClickListener(imgBtnClickListener)
         }
     }
 
@@ -51,14 +52,6 @@ class ItemAdapter : RecyclerView.Adapter<ItemViewHolder>(){
         this.itemLongClickListener = onItemLongClickListener
     }
     private lateinit var itemLongClickListener : OnItemLongClickListener
-    private lateinit var imgBtnClickListener : OnImageButtonClickListener
-    fun setImgBtnClickListener(listener : OnImageButtonClickListener){
-        this.imgBtnClickListener = listener
-    }
-}
-
-interface OnImageButtonClickListener{
-    fun onImageButtonClick(id : Int)
 }
 
 abstract class ItemViewHolder(
@@ -85,21 +78,24 @@ class ItemHeaderViewHolder(
 class ItemChildViewHolder(
     itemView : View
 ) : ItemViewHolder(itemView){
-    val binding by lazy{ItemBinding.bind(itemView)}
+    private val binding by lazy{ItemBinding.bind(itemView)}
+    var id : Int = 0
     override fun bind(itemList : CheckItemList){
         val item = (itemList as CheckItemList.Child).item
-
+        id = item.id
         binding.apply{
             itemName.text = item.itemName
             itemDuedate.text = item.date
-            imgSoldOut.setOnClickListener{
-                onImageButtonClickListener.onImageButtonClick(item.id)
-            }
+            setImageTag(item.isEmpty)
         }
     }
-    private lateinit var onImageButtonClickListener : OnImageButtonClickListener
-    fun setOnImageButtonClickListener(listener : OnImageButtonClickListener){
-        onImageButtonClickListener = listener
+    fun setImageTag(isSoldOut : Boolean){
+        if (isSoldOut){
+            binding.imgSoldOutTag.visibility = View.VISIBLE
+        } else {
+            binding.imgSoldOutTag.visibility = View.GONE
+        }
     }
+    fun getBindingId() : Int {return id}
 }
 

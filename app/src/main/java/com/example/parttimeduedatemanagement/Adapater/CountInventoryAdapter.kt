@@ -1,10 +1,15 @@
 package com.example.parttimeduedatemanagement.Adapater
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.Database.CheckItemList
 import com.example.parttimeduedatemanagement.Database.EaItem
 import com.example.parttimeduedatemanagement.databinding.CountInventoryItemBinding
@@ -28,7 +33,6 @@ class CountInventoryAdapter : RecyclerView.Adapter<CountInventoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup,viewType: Int,): CountInventoryViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
-        Log.d(TAG,"${viewType}")
         return when(viewType) {
             EaItem.Header.VIEW_TYPE -> CountInventoryHeaderViewHolder(itemView)
             EaItem.Child.VIEW_TYPE -> CountInventoryChildViewHolder(itemView)
@@ -40,6 +44,9 @@ class CountInventoryAdapter : RecyclerView.Adapter<CountInventoryViewHolder>() {
     }
     fun setOnBtnClickListener(listener : OnBtnClickListener){
         onBtnClickListener = listener
+    }
+    fun setOnEditorActionListener(listener : OnEditorActionListener){
+        onEditorActionListener = listener
     }
 }
 interface OnBtnClickListener{
@@ -69,12 +76,14 @@ class CountInventoryHeaderViewHolder(
     }
 }
 
+interface OnEditorActionListener{
+    fun onClickEnter(item : Item, ea :Int)
+}
+private lateinit var onEditorActionListener : OnEditorActionListener
 class CountInventoryChildViewHolder(
     itemView : View
 ) : CountInventoryViewHolder(itemView){
-    private val binding by lazy{
-        CountInventoryItemBinding.bind(itemView)
-    }
+    private val binding by lazy{ CountInventoryItemBinding.bind(itemView) }
     override fun bind(eaItem : EaItem){
         val item = (eaItem as EaItem.Child).item
         binding.apply{
@@ -85,6 +94,11 @@ class CountInventoryChildViewHolder(
             }
             btnPlus.setOnClickListener{
                 onBtnClickListener.onPlus(item.id, item.ea)
+            }
+            etCount.setOnEditorActionListener { _, _, _ ->
+                Log.d("CountInventoryAdapter","onEditorActionListener")
+                onEditorActionListener.onClickEnter(item, etCount.text.toString().toInt())
+                true
             }
         }
     }

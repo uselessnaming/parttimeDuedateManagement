@@ -24,6 +24,15 @@ class MemoRepository(application : Application) {
     fun deleteMemo(id : Int){
         mMemoDao.deleteMemo(id)
     }
+    fun isTitle(title : String) : Boolean{
+        return mMemoDao.isTitle(title)
+    }
+    fun searchId(title : String) : Int{
+        return mMemoDao.searchId(title)
+    }
+    fun searchMemo(id : Int) : Memo? {
+        return mMemoDao.searchMemo(id)
+    }
 
     companion object{
         private var INSTANCE : MemoRepository? = null

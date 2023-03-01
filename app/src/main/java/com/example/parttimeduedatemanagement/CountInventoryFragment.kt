@@ -1,6 +1,7 @@
 package com.example.parttimeduedatemanagement
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,18 +9,33 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.Adapater.CountInventoryAdapter
 import com.example.parttimeduedatemanagement.Adapater.OnBtnClickListener
+import com.example.parttimeduedatemanagement.Adapater.OnEditorActionListener
+import com.example.parttimeduedatemanagement.Memo.MemoFragment
+import com.example.parttimeduedatemanagement.MemoDatabase.Memo
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
+import com.example.parttimeduedatemanagement.ViewModel.MemoViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentCountInventoryBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class CountInventoryFragment : Fragment() {
 
     private lateinit var binding : FragmentCountInventoryBinding
     private lateinit var mItemViewModel : ItemViewModel
+    private lateinit var sb : StringBuilder
+
     private val mCountInventoryAdapter by lazy{
         CountInventoryAdapter()
+    }
+    private val mActivity by lazy{
+        activity as MainActivity
     }
 
     override fun onCreateView(
@@ -28,10 +44,28 @@ class CountInventoryFragment : Fragment() {
     ): View? {
         binding = FragmentCountInventoryBinding.inflate(layoutInflater, container, false)
 
-        initViewModel()
+        initItemViewModel()
         initRecyclerView()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply{
+            btnDone.setOnClickListener{
+                val memoFragment = MemoFragment()
+                val bundle = Bundle()
+                bundle.putString("content",sb.toString())
+                memoFragment.arguments = bundle
+                message("확인")
+
+                mActivity.switchFragment(memoFragment)
+            }
+            btnCancel.setOnClickListener{
+                mActivity.onBackPressed()
+            }
+        }
     }
 
     override fun onStart() {
@@ -42,7 +76,7 @@ class CountInventoryFragment : Fragment() {
     private fun message(s : String){
         Toast.makeText(requireContext(),s,Toast.LENGTH_SHORT).show()
     }
-    private fun initViewModel(){
+    private fun initItemViewModel(){
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
             .create(ItemViewModel::class.java)
     }
@@ -63,13 +97,20 @@ class CountInventoryFragment : Fragment() {
                     mItemViewModel.fetchEas()
                 }
             })
+            mCountInventoryAdapter.setOnEditorActionListener(object : OnEditorActionListener{
+                override fun onClickEnter(item: Item, ea : Int) {
+                    mItemViewModel.updateEA(item.id, ea)
+                    mItemViewModel.fetchEas()
+                }
+            })
             val layoutManager = LinearLayoutManager(context)
             rcvCountInventory.layoutManager = layoutManager
             rcvCountInventory.setHasFixedSize(true)
         }
         mItemViewModel.eaData.observe(viewLifecycleOwner) {
             mCountInventoryAdapter.submitList(it)
-            binding.tvTotalCount.text = mItemViewModel.sb
+            this.sb = mItemViewModel.sb
+            Log.d("TestTest","string builder : ${this.sb}")
         }
     }
 }
