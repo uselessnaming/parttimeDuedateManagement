@@ -2,6 +2,8 @@ package com.example.parttimeduedatemanagement.Memo
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,7 +37,6 @@ class MemoFragment : Fragment() {
     private val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
     private val currentDate = current.format(formatter)
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -50,6 +52,21 @@ class MemoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        /* view create 당시 재고파악 memo의 date와 현재 날짜가 다르다면 memo.delete */
+        mMemoViewModel.viewModelScope.launch(Dispatchers.Main){
+            val isTitle = mMemoViewModel.isTitle("재고 파악").await()
+            if (isTitle) {
+                val memoId = mMemoViewModel.searchId("재고 파악").await()
+                val memo = mMemoViewModel.searchMemo(memoId).await()
+                val date = LocalDateTime.parse(memo.date, formatter)
+                if (!currentDate.equals(date)){
+                    mMemoViewModel.deleteMemo(memoId)
+                    mMemoViewModel.fetchMemos()
+                }
+            }
+        }
+
         binding.imgPlus.setOnClickListener{
             /* AddMemoFragment 띄우기 */
             val addMemoFragment = AddMemoFragment()
