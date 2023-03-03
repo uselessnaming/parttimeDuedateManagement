@@ -7,23 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.Adapater.CountInventoryAdapter
 import com.example.parttimeduedatemanagement.Adapater.OnBtnClickListener
 import com.example.parttimeduedatemanagement.Adapater.OnEditorActionListener
 import com.example.parttimeduedatemanagement.Memo.MemoFragment
-import com.example.parttimeduedatemanagement.MemoDatabase.Memo
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
-import com.example.parttimeduedatemanagement.ViewModel.MemoViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentCountInventoryBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class CountInventoryFragment : Fragment() {
 
@@ -110,7 +102,6 @@ class CountInventoryFragment : Fragment() {
         mItemViewModel.eaData.observe(viewLifecycleOwner) {
             mCountInventoryAdapter.submitList(it)
             this.sb = mItemViewModel.sb
-            Log.d("TestTest","string builder : ${this.sb}")
         }
     }
 }

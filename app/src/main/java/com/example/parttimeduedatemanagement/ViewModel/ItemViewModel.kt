@@ -20,12 +20,15 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
 
     private var eaLiveData = MutableLiveData<List<EaItem>>()
     val eaData : LiveData<List<EaItem>>get() = eaLiveData
+    /* 나중에 설정에서는 exceptTarget을 개인적으로 설정할 수 있도록 */
+    private val essentialTarget = listOf("묶음라면","커피","차","씨리얼","과자","음료 캔","음료 작은펱","음료 큰펱")
     val sb = StringBuilder()
     private var curLocation : String = ""
 
     private var itemLiveData = MutableLiveData<List<CheckItemList>>()
     val items : LiveData<List<CheckItemList>> get() = itemLiveData
     var count : Int = 0
+
 
     /* EA 관련 데이터 */
     fun updateEA(id : Int, ea : Int){
@@ -44,12 +47,14 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         val headers = arrayListOf<String>()
 
         items.forEach{
-            if (it.location !in headers){
-                headers.add(it.location)
-                result.add(EaItem.Header(it))
-            }
-            if (it.itemName != ""){
-                result.add(EaItem.Child(it))
+            if (it.location in essentialTarget){
+                if (it.location !in headers){
+                    headers.add(it.location)
+                    result.add(EaItem.Header(it))
+                }
+                if (it.itemName != ""){
+                    result.add(EaItem.Child(it))
+                }
             }
         }
         result.sortWith(compareBy({it.item.location},{it.order}))
