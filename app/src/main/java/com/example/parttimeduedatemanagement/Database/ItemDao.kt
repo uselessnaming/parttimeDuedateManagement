@@ -39,4 +39,8 @@ interface ItemDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM itemTable WHERE itemName = (:itemName) AND location = (:location))")
     fun checkItem(itemName : String, location : String) : Boolean
+
+    /* EA 초기화 */
+    @Query("UPDATE itemTable SET ea = 0")
+    fun resetEA()
 }

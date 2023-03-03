@@ -1,8 +1,8 @@
 package com.example.parttimeduedatemanagement.Event
 
-import androidx.recyclerview.widget.RecyclerView
+import com.example.parttimeduedatemanagement.Adapater.ItemChildViewHolder
 
 interface SwipeButtonAction {
     //fun onClickFirstButton(absoluteAdapterPosition : Int)
-    fun onClickFirstButton(viewHolder : RecyclerView.ViewHolder)
+    fun onClickFirstButton(viewHolder : ItemChildViewHolder, isChecked : Boolean)
 }

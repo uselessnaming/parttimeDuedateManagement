@@ -18,15 +18,23 @@ import com.example.parttimeduedatemanagement.Adapater.ItemChildViewHolder
 import com.example.parttimeduedatemanagement.Database.CheckItemList
 import com.example.parttimeduedatemanagement.Event.HoldableSwipeHelper
 import com.example.parttimeduedatemanagement.Event.SwipeButtonAction
+import com.example.parttimeduedatemanagement.ViewModel.MemoViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class HomeFragment : Fragment() {
     private val TAG = "HomeFragment"
     private lateinit var binding : FragmentHomeBinding
     private lateinit var mItemViewModel : ItemViewModel
+    private lateinit var mMemoViewModel : MemoViewModel
+    private var isReset = false
+    private val current = LocalDateTime.now()
+    private val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
+    private val currentDate = current.format(formatter)
     private val mActivity by lazy {
         activity as MainActivity
     }
@@ -40,7 +48,8 @@ class HomeFragment : Fragment() {
 
         binding = FragmentHomeBinding.inflate(inflater,container,false)
 
-        initViewModel()
+        initItemViewModel()
+        initMemoViewModel()
         initRecyclerView()
 
         return binding.root
@@ -48,6 +57,23 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /* view create 당시 재고파악 memo의 date와 현재 날짜가 다르다면 memo.delete */
+        mMemoViewModel.viewModelScope.launch(Dispatchers.IO){
+            val isTitle = mMemoViewModel.isTitle("재고 파악").await()
+            if (isTitle) {
+                val memoId = mMemoViewModel.searchId("재고 파악").await()
+                val memo = mMemoViewModel.searchMemo(memoId).await()
+                if (!currentDate.equals(memo.date)){
+                    mMemoViewModel.deleteMemo(memoId)
+                    mMemoViewModel.fetchMemos()
+                    setResetFlag(true)
+                }
+            }
+            if (isReset){
+                mItemViewModel.resetEA()
+                setResetFlag(false)
+            }
+        }
         binding.apply{
             btnRefresh.setOnClickListener{
                 mItemViewModel.fetchItems("")
@@ -80,9 +106,13 @@ class HomeFragment : Fragment() {
     }
 
     /** ViewModel 초기화 */
-    private fun initViewModel(){
+    private fun initItemViewModel(){
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
             .create(ItemViewModel::class.java)
+    }
+    private fun initMemoViewModel(){
+        mMemoViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+            .create(MemoViewModel::class.java)
     }
 
     /** itemContainerRecyclerview를 초기화 */
@@ -97,13 +127,12 @@ class HomeFragment : Fragment() {
             HoldableSwipeHelper.Builder(requireContext())
                 .setOnRecyclerView(itemList)
                 .setSwipeButtonAction(object : SwipeButtonAction{
-                    override fun onClickFirstButton(viewHolder: RecyclerView.ViewHolder) {
-                        val currentViewHolder = (viewHolder as ItemChildViewHolder)
-                        val id = currentViewHolder.getBindingId()
+                    override fun onClickFirstButton(viewHolder: ItemChildViewHolder, isChecked : Boolean) {
+                        val id = viewHolder.getBindingId()
                         mItemViewModel.viewModelScope.launch(Dispatchers.IO){
                             val item = mItemViewModel.searchItem(id).await()
                             withContext(Dispatchers.Main){
-                                currentViewHolder.setImageTag(item.isEmpty)
+                                viewHolder.setImageTag(item.isEmpty)
                             }
                             mItemViewModel.updateIsEmpty(item.id)
                         }
@@ -136,5 +165,8 @@ class HomeFragment : Fragment() {
                 }
             })
         }
+    }
+    private fun setResetFlag(isReset : Boolean){
+        this.isReset = isReset
     }
 }
