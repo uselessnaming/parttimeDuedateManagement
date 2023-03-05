@@ -95,7 +95,7 @@ class TypeEditFragment : Fragment() {
                         dialog.dismiss()
                     }
                 })
-                mActivity.createDialog(dialog,0,"typeEditDialog")
+                mActivity.createDialog(dialog,"typeEditDialog")
             }
         }
     }

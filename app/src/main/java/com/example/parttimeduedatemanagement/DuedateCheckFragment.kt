@@ -23,6 +23,10 @@ class DuedateCheckFragment : Fragment() {
     private lateinit var binding : FragmentDuedateCheckBinding
     private lateinit var mItemViewModel : ItemViewModel
     private val mGoneItemAdapter by lazy{ GoneItemAdapter()}
+    private val mActivity by lazy {activity as MainActivity}
+    private val current = LocalDateTime.now()
+    private val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
+    private val currentDate = current.format(formatter)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +61,29 @@ class DuedateCheckFragment : Fragment() {
 
             mGoneItemAdapter.setGoneItemClickListener(object : GoneItemAdapter.OnGoneItemClickListener {
                 override fun onClick(item : Item) {
-                    showDialog(item)
+                    val dialog = DuedateCheckDialog()
+                    dialog.setOnButtonClickListener(object : DuedateCheckDialog.OnButtonClickListener{
+                        override fun onSoldOutClick() {
+                            mItemViewModel.updateIsEmpty(item.id)
+                            mItemViewModel.update(item.id,item.itemName,item.location,"")
+                            mItemViewModel.goneItemsFetch(currentDate)
+                            dialog.dismiss()
+                        }
+                        override fun onUpdateDateClick() {
+                            val updateDialog = UpdateDialog()
+
+                            updateDialog.setOnDoneClickListener(object : UpdateDialog.OnDoneClickListener{
+                                override fun onClick(itemId: Int, type : String, name : String, date : String) {
+                                    mItemViewModel.update(itemId, name, type, date)
+                                    mItemViewModel.goneItemsFetch(currentDate)
+                                    updateDialog.dismiss()
+                                }
+                            })
+                            mActivity.createDialog(updateDialog,item.id,"UpdateDialog")
+                            dialog.dismiss()
+                        }
+                    })
+                    mActivity.createDialog(dialog,"DuedateCheckDialog")
                 }
             })
 

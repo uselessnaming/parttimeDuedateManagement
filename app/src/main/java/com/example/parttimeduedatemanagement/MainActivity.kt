@@ -148,14 +148,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun createDialog(d : DialogFragment, itemId : Int, tag : String){
-        if (tag == "typeEditDialog"){
-            d.show(supportFragmentManager,tag)
-        } else if (tag == "updateDialog"){
-            val bundle = Bundle()
-            bundle.putInt("itemId", itemId)
-            d.arguments = bundle
-            d.show(supportFragmentManager, tag)
-        }
+        val bundle = Bundle()
+        bundle.putInt("itemId", itemId)
+        d.arguments = bundle
+        d.show(supportFragmentManager, tag)
+    }
+    fun createDialog(d : DialogFragment, tag : String){
+        d.show(supportFragmentManager, tag)
     }
     private fun message(s : String){
         Toast.makeText(this,s,Toast.LENGTH_SHORT).show()

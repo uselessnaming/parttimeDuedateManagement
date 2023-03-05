@@ -2,7 +2,6 @@ package com.example.parttimeduedatemanagement
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -11,13 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
 import com.example.parttimeduedatemanagement.Adapater.ItemChildViewHolder
 import com.example.parttimeduedatemanagement.Database.CheckItemList
-import com.example.parttimeduedatemanagement.Event.HoldableSwipeHelper
-import com.example.parttimeduedatemanagement.Event.SwipeButtonAction
 import com.example.parttimeduedatemanagement.ViewModel.MemoViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
 import kotlinx.coroutines.Dispatchers
@@ -124,26 +120,6 @@ class HomeFragment : Fragment() {
         }
         binding.apply{
             /* swipe 이벤트 적용 */
-            HoldableSwipeHelper.Builder(requireContext())
-                .setOnRecyclerView(itemList)
-                .setSwipeButtonAction(object : SwipeButtonAction{
-                    override fun onClickFirstButton(viewHolder: ItemChildViewHolder, isChecked : Boolean) {
-                        val id = viewHolder.getBindingId()
-                        mItemViewModel.viewModelScope.launch(Dispatchers.IO){
-                            val item = mItemViewModel.searchItem(id).await()
-                            withContext(Dispatchers.Main){
-                                viewHolder.setImageTag(item.isEmpty)
-                            }
-                            mItemViewModel.updateIsEmpty(item.id)
-                        }
-                    }
-                })
-                .setDismissOnClickFirstItem(true)
-                .excludeFromHoldableViewHolder(200)
-                .setBackgroundColor("#ff0000")
-                .setDirectionAsRightToLeft(false)
-                .build()
-
             itemList.apply{
                 addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
                 layoutManager = LinearLayoutManager(context)
