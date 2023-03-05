@@ -165,7 +165,7 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
         items.forEach{
             if (it.date != ""){
                 val targetDate = LocalDate.parse(it.date,baseFormat)
-                if (currentDate.isAfter(targetDate)){
+                if (!currentDate.isBefore(targetDate)){
                     result.add(it)
                 }
             }

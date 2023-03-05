@@ -27,12 +27,12 @@ class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>
         holder.bind(items[position])
 
         holder.itemView.setOnClickListener{
-            goneItemClickListener.onClick(items[position].id)
+            goneItemClickListener.onClick(items[position])
         }
     }
 
     interface OnGoneItemClickListener{
-        fun onClick(itemId : Int)
+        fun onClick(item : Item)
     }
     fun setGoneItemClickListener(goneItemClickListener : OnGoneItemClickListener){
         this.goneItemClickListener = goneItemClickListener

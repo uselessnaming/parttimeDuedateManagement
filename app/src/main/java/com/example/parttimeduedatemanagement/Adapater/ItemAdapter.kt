@@ -85,7 +85,12 @@ class ItemChildViewHolder(
         id = item.id
         binding.apply{
             itemName.text = item.itemName
-            itemDuedate.text = item.date
+            val dateText = if(item.date == ""){
+                "유통기한이 지났습니다. 갱신해주세요"
+            } else {
+                item.date
+            }
+            itemDuedate.text = dateText
             setImageTag(item.isEmpty)
         }
     }

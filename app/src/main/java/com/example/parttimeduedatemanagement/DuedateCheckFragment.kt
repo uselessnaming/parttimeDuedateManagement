@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.GoneItemAdapter
 import com.example.parttimeduedatemanagement.databinding.FragmentDuedateCheckBinding
@@ -55,8 +56,8 @@ class DuedateCheckFragment : Fragment() {
             goneItems.adapter = mGoneItemAdapter
 
             mGoneItemAdapter.setGoneItemClickListener(object : GoneItemAdapter.OnGoneItemClickListener {
-                override fun onClick(itemId: Int) {
-                    showDialog(itemId)
+                override fun onClick(item : Item) {
+                    showDialog(item)
                 }
             })
 
@@ -68,25 +69,24 @@ class DuedateCheckFragment : Fragment() {
             mGoneItemAdapter.submitList(it)
         }
     }
-    private fun showDialog(itemId : Int){
+    private fun showDialog(item : Item){
         val dialog = AlertDialog.Builder(requireContext())
         dialog.apply{
-            setTitle("Warning")
-            setMessage("Are you sure about deleting this item?")
-            setPositiveButton("OK") { dialog, btnType ->
+            setMessage("날짜를 초기화 하시겠습니까?")
+            setPositiveButton("확인") { dialog, btnType ->
                 when (btnType) {
                     DialogInterface.BUTTON_POSITIVE -> {
-                        mItemViewModel.deleteItem(itemId)
-                        mItemViewModel.fetchItems("")
-                        message("삭제 완료")
+                        mItemViewModel.update(item.id,item.itemName,item.location,"")
+                        message("체크 완료")
                         dialog?.dismiss()
                     }
                     else -> dialog?.dismiss()
                 }
             }
-            setNegativeButton("Cancel",null)
+            setNegativeButton("취소",null)
             show()
         }
+        mItemViewModel.fetchItems("")
     }
     private fun message(s : String){
         Toast.makeText(requireContext(),s,Toast.LENGTH_SHORT).show()
