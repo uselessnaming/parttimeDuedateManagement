@@ -43,8 +43,9 @@ class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>
     inner class GoneItemViewHolder(binding : GoneItemContainerBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item : Item){
-            binding.goneItemName.text = item.itemName
-            binding.goneItemDate.text = item.date
+            binding.tvItemName.text = item.itemName
+            binding.tvItemDate.text = item.date
+            binding.tvItemLocation.text = item.location
         }
     }
 }
