@@ -3,21 +3,13 @@ package com.example.parttimeduedatemanagement.Event
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.Drawable
-import androidx.annotation.ColorInt
 import android.graphics.Canvas
-import android.util.Log
 import android.view.MotionEvent
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parttimeduedatemanagement.Adapater.ItemChildViewHolder
 import com.example.parttimeduedatemanagement.Adapater.ItemHeaderViewHolder
-import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
-import kotlin.math.max
-import kotlin.math.min
+import kotlin.math.*
 
 class HoldableSwipeHelper private constructor(builder : Builder) : ItemTouchHelper.Callback() {
     private var swipeBackgroundHolder = builder.swipeBackgroundHolder
@@ -25,7 +17,7 @@ class HoldableSwipeHelper private constructor(builder : Builder) : ItemTouchHelp
     private var firstItemDismissFlag = builder.firstItemDismissFlag
     private val excludeViewTypeSet : Set<Int> = builder.excludeViewTypeSet
     private var isRightToLeft = builder.isRightToLeft
-    private var currentViewHolder : RecyclerView.ViewHolder? = null
+    private var currentViewHolder : ItemChildViewHolder? = null
     private var absoluteDX = 0f
     private var scopedX = 0f
     private var isFirst = builder.isFirst
@@ -36,7 +28,6 @@ class HoldableSwipeHelper private constructor(builder : Builder) : ItemTouchHelp
 
         val itemTouchHelper = ItemTouchHelper(this)
         itemTouchHelper.attachToRecyclerView(builder.recyclerView!!)
-
     }
 
     class Builder(context : Context) {
@@ -55,17 +46,8 @@ class HoldableSwipeHelper private constructor(builder : Builder) : ItemTouchHelp
         fun setOnRecyclerView(recyclerView : RecyclerView) = this.apply{
             this.recyclerView = recyclerView
         }
-        fun setFirstItemSideMarginDp(value : Int) = this.apply{
-            swipeBackgroundHolder.firstItemSideMargin = value
-        }
-        fun setFirstItemDrawable(drawable : Drawable) = this.apply{
-            swipeBackgroundHolder.firstIcon = drawable
-        }
         fun setBackgroundColor(colorString : String,) = this.apply{
             swipeBackgroundHolder.backgroundColor = Color.parseColor(colorString)
-        }
-        fun setBackgroundColor(@ColorInt color : Int) = this.apply{
-            swipeBackgroundHolder.backgroundColor = color
         }
         fun excludeFromHoldableViewHolder(itemViewType : Int) = this.apply{
             this.excludeViewTypeSet.add(itemViewType)
@@ -87,13 +69,7 @@ class HoldableSwipeHelper private constructor(builder : Builder) : ItemTouchHelp
         }
     }
 
-    override fun onMove(
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
-        target: RecyclerView.ViewHolder,
-    ): Boolean {
-        return false
-    }
+    override fun onMove(recyclerView: RecyclerView,viewHolder: RecyclerView.ViewHolder,target: RecyclerView.ViewHolder,): Boolean = false
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = Unit
 
@@ -102,7 +78,7 @@ class HoldableSwipeHelper private constructor(builder : Builder) : ItemTouchHelp
         viewHolder: RecyclerView.ViewHolder,
     ): Int {
         return if (viewHolder is ItemHeaderViewHolder){
-            makeMovementFlags(0,0)
+            0
         } else {
             makeMovementFlags(0,ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
         }
@@ -117,28 +93,30 @@ class HoldableSwipeHelper private constructor(builder : Builder) : ItemTouchHelp
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-        if (excludeViewTypeSet.contains(viewHolder.itemViewType)){
+        val localViewHolder = viewHolder as ItemChildViewHolder
+        if (excludeViewTypeSet.contains(localViewHolder.itemViewType)){
             return
         }
         absoluteDX = dX
         swipeBackgroundHolder.updateHolderWidth()
-        val isHolding = getViewHolderTag(viewHolder)
+        val isHolding = getViewHolderTag(localViewHolder)
         scopedX = holdViewPositionHorizontal(dX, isHolding)
 
-        viewHolder.itemView.translationX = scopedX
+        localViewHolder.itemView.translationX = scopedX
 
-        swipeBackgroundHolder.drawHoldingBackground(c, viewHolder, scopedX.toInt(), isRightToLeft, isFirst)
-        currentViewHolder = viewHolder
+        swipeBackgroundHolder.drawHoldingBackground(c, localViewHolder, scopedX.toInt(), isRightToLeft, isFirst)
+        currentViewHolder = localViewHolder
     }
 
     /* 얼마나 길게 swipe해야 인식할 지 */
     override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
+        val localViewHolder = viewHolder as ItemChildViewHolder
         val shouldHold = if (isRightToLeft){
             absoluteDX <= -swipeBackgroundHolder.holderWidth
         } else {
             absoluteDX >= swipeBackgroundHolder.holderWidth
         }
-        setViewHolderTag(viewHolder, shouldHold)
+        setViewHolderTag(localViewHolder, shouldHold)
         return 2f
     }
 
@@ -149,16 +127,17 @@ class HoldableSwipeHelper private constructor(builder : Builder) : ItemTouchHelp
     
     /* item holding을 그만 뒀을 때 원상태로 복구 */
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+        val localViewHolder = viewHolder as ItemChildViewHolder
         currentViewHolder?.let{
             if (getViewHolderTag(it)){
-                addFirstItemClickListener(recyclerView,viewHolder)
+                addFirstItemClickListener(recyclerView,localViewHolder)
             }
         }
     }
-    private fun setViewHolderTag(viewHolder : RecyclerView.ViewHolder, isHolding : Boolean){
+    private fun setViewHolderTag(viewHolder : ItemChildViewHolder, isHolding : Boolean){
         viewHolder.itemView.tag = isHolding
     }
-    private fun getViewHolderTag(viewHolder : RecyclerView.ViewHolder?) : Boolean {
+    private fun getViewHolderTag(viewHolder : ItemChildViewHolder?) : Boolean {
         return viewHolder?.itemView?.tag as? Boolean ?: false
     }
     private fun holdViewPositionHorizontal(
@@ -187,7 +166,7 @@ class HoldableSwipeHelper private constructor(builder : Builder) : ItemTouchHelp
         }
     }
     @SuppressLint("ClickableViewAccessibility")
-    private fun addFirstItemClickListener(recyclerView : RecyclerView, viewHolder : RecyclerView.ViewHolder){
+    private fun addFirstItemClickListener(recyclerView : RecyclerView, viewHolder : ItemChildViewHolder){
         recyclerView.setOnTouchListener{ _, downEvent ->
             if (downEvent.action == MotionEvent.ACTION_DOWN){
                 if (swipeBackgroundHolder.isFirstItemArea(downEvent.x.toInt(), downEvent.y.toInt())){
@@ -198,9 +177,11 @@ class HoldableSwipeHelper private constructor(builder : Builder) : ItemTouchHelp
                                     releaseCurrentViewHolderImmediately()
                                 }
                                 if (viewHolder.adapterPosition >= 0){
-                                    buttonAction.onClickFirstButton(viewHolder)
-                                    isFirst = !isFirst
-                                    //buttonAction.onClickFirstButton(viewHolder.adapterPosition)
+                                    if (isFirst){
+                                        buttonAction.onClickFirstButton(viewHolder,true)
+                                    } else {
+                                        buttonAction.onClickFirstButton(viewHolder,false)
+                                    }
                                 }
                             }
                         }
@@ -263,4 +244,8 @@ class HoldableSwipeHelper private constructor(builder : Builder) : ItemTouchHelp
             currentViewHolder = null
         }
     }
+
+    override fun isItemViewSwipeEnabled(): Boolean = true
+
+    override fun isLongPressDragEnabled(): Boolean = false
 }

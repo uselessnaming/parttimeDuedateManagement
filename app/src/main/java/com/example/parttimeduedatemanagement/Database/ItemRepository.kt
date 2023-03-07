@@ -46,6 +46,9 @@ class ItemRepository (application : Application) {
     fun checkItem(itemName : String, location : String) : Boolean {
         return mItemDao.checkItem(itemName,location)
     }
+    fun resetEA(){
+        mItemDao.resetEA()
+    }
     companion object{
         private var INSTANCE : ItemRepository? = null
 

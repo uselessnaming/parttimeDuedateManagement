@@ -22,7 +22,6 @@ import com.example.parttimeduedatemanagement.ViewModel.MemoViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentMemoBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -53,6 +52,7 @@ class MemoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+<<<<<<< HEAD
         /* view create 당시 재고파악 memo의 date와 현재 날짜가 다르다면 memo.delete */
         mMemoViewModel.viewModelScope.launch(Dispatchers.Main){
             val isTitle = mMemoViewModel.isTitle("재고 파악").await()
@@ -67,6 +67,8 @@ class MemoFragment : Fragment() {
             }
         }
 
+=======
+>>>>>>> d9bdbe945eb72798e93dc611c962f6b02caaf2dd
         binding.imgPlus.setOnClickListener{
             /* AddMemoFragment 띄우기 */
             val addMemoFragment = AddMemoFragment()
@@ -79,6 +81,10 @@ class MemoFragment : Fragment() {
             })
             mActivity.switchFragment(addMemoFragment)
         }
+        binding.btnRefresh.setOnClickListener{ 
+            mMemoViewModel.fetchMemos()
+            message("새로 고침 완료")
+        }
     }
 
     override fun onStart() {
@@ -89,7 +95,6 @@ class MemoFragment : Fragment() {
             if (content != "") {
                 if (isTitle) {
                     val id = mMemoViewModel.searchId("재고 파악").await()
-                    Log.d("TestTest", "id : ${id}")
                     mMemoViewModel.updateMemo(id, Memo("재고 파악", content, currentDate))
                     mMemoViewModel.fetchMemos()
                 } else {
@@ -110,8 +115,6 @@ class MemoFragment : Fragment() {
                 override fun onClick(memo : Memo) {
                     val updateMemoFragment = UpdateMemoFragment()
                     val id = memo.id
-                    Log.d("TestTest","onClick id : ${id}")
-                    Log.d("TestTest","memo : ${memo}")
                     updateMemoFragment.setOnDoneClickListener(object : UpdateMemoFragment.OnClickListener{
                         override fun onDoneClick(memo: Memo) {
                             mMemoViewModel.updateMemo(id, memo)

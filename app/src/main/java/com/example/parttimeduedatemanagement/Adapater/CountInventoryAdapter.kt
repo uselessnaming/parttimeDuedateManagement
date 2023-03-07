@@ -1,5 +1,6 @@
 package com.example.parttimeduedatemanagement.Adapater
 
+import android.app.Activity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -87,8 +88,8 @@ class CountInventoryChildViewHolder(
     override fun bind(eaItem : EaItem){
         val item = (eaItem as EaItem.Child).item
         binding.apply{
-            tvItemName.text = item.itemName
             etCount.setText(item.ea.toString())
+            tvItemName.text = item.itemName
             btnMinus.setOnClickListener{
                 onBtnClickListener.onMinus(item.id, item.ea)
             }
@@ -96,8 +97,22 @@ class CountInventoryChildViewHolder(
                 onBtnClickListener.onPlus(item.id, item.ea)
             }
             etCount.setOnEditorActionListener { _, _, _ ->
-                Log.d("CountInventoryAdapter","onEditorActionListener")
-                onEditorActionListener.onClickEnter(item, etCount.text.toString().toInt())
+                val newEA = if (etCount.text.isBlank()){
+                    onEditorActionListener.onClickEnter(item, item.ea)
+                    item.ea
+                } else {
+                    onEditorActionListener.onClickEnter(item, etCount.text.toString().toInt())
+                    etCount.text.toString().toInt()
+                }
+                if (newEA != item.ea){
+                    etCount.setText(newEA.toString())
+                    (itemView.context as? Activity)?.let { activity ->
+                        activity.runOnUiThread {
+                            (itemView.parent as? RecyclerView)?.adapter?.notifyItemChanged(adapterPosition)
+                        }
+                    }
+                    etCount.clearFocus()
+                }
                 true
             }
         }
