@@ -196,10 +196,9 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
     }
     suspend fun searchItem(id : Int) : Deferred<Item> =
         viewModelScope.async(Dispatchers.IO){return@async mItemRepository.searchItem(id) }
-    fun updateIsEmpty(id : Int){
+    fun updateIsEmpty(id : Int, isEmpty : Boolean){
         viewModelScope.launch(Dispatchers.IO + coroutineException){
-            val item = searchItem(id).await()
-            mItemRepository.updateIsEmpty(id, !(item.isEmpty))
+            mItemRepository.updateIsEmpty(id, isEmpty)
         }
     }
     suspend fun checkItem(itemName : String, location : String) : Deferred<Boolean> =

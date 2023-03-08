@@ -91,16 +91,8 @@ class ItemChildViewHolder(
                 item.date
             }
             itemDuedate.text = dateText
-            setImageTag(item.isEmpty)
+            imgSoldOutTag.visibility = if (item.isEmpty) View.VISIBLE else View.GONE
         }
     }
-    fun setImageTag(isSoldOut : Boolean){
-        if (isSoldOut){
-            binding.imgSoldOutTag.visibility = View.VISIBLE
-        } else {
-            binding.imgSoldOutTag.visibility = View.GONE
-        }
-    }
-    fun getBindingId() : Int {return id}
 }
 

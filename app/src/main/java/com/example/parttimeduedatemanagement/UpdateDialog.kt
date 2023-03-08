@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -61,30 +62,29 @@ class UpdateDialog : DialogFragment(){
                 dismiss()
             }
             btnDone.setOnClickListener{
-                binding.apply{
-                    if (etUpdateYear.text.isBlank() || etUpdateMonth.text.isBlank() || etUpdateDay.text.isBlank()){
-                        message("유통기한 란이 공백입니다. 빈칸 없이 입력해주세요")
-                    } else if (etEditName.text.isBlank()) {
-                        message("이름 란이 공백입니다. 빈칸 없이 입력해주세요")
-                    } else if (etUpdateMonth.text.toString().toInt() !in 1..12) {
-                        message("1년은 12월까지만 있습니다")
-                    } else {
-                        val month = etUpdateMonth.text.toString()
-                        val day = etUpdateDay.text.toString()
-                        val name = etEditName.text.toString()
-                        var date = etUpdateYear.text.toString() + "년 "
+                if (etUpdateYear.text.isBlank() || etUpdateMonth.text.isBlank() || etUpdateDay.text.isBlank()){
+                    message("유통기한 란이 공백입니다. 빈칸 없이 입력해주세요")
+                } else if (etEditName.text.isBlank()) {
+                    message("이름 란이 공백입니다. 빈칸 없이 입력해주세요")
+                } else if (etUpdateMonth.text.toString().toInt() !in 1..12) {
+                    message("1년은 12월까지만 있습니다")
+                } else {
+                    val month = etUpdateMonth.text.toString()
+                    val day = etUpdateDay.text.toString()
+                    val name = etEditName.text.toString()
+                    var date = etUpdateYear.text.toString() + "년 "
 
-                        if (month.length == 1){
-                            date += "0"
-                        }
-                        date += month + "월 "
-                        if (day.length == 1){
-                            date += "0"
-                        }
-                        date += day + "일"
-                        onDoneClickListener.onClick(itemId,location, name, date)
-                        dismiss()
+                    if (month.length == 1){
+                        date += "0"
                     }
+                    date += month + "월 "
+                    if (day.length == 1){
+                        date += "0"
+                    }
+                    date += day + "일"
+                    onDoneClickListener.onClick(itemId,location, name, date)
+                    mItemViewModel.updateIsEmpty(itemId,false)
+                    dismiss()
                 }
             }
             mItemViewModel.viewModelScope.launch(Dispatchers.IO){

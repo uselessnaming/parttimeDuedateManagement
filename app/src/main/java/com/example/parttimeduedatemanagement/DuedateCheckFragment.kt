@@ -64,7 +64,7 @@ class DuedateCheckFragment : Fragment() {
                     val dialog = DuedateCheckDialog()
                     dialog.setOnButtonClickListener(object : DuedateCheckDialog.OnButtonClickListener{
                         override fun onSoldOutClick() {
-                            mItemViewModel.updateIsEmpty(item.id)
+                            mItemViewModel.updateIsEmpty(item.id, true)
                             mItemViewModel.update(item.id,item.itemName,item.location,"")
                             mItemViewModel.goneItemsFetch(currentDate)
                             dialog.dismiss()
@@ -94,25 +94,6 @@ class DuedateCheckFragment : Fragment() {
         mItemViewModel.goneItems.observe(viewLifecycleOwner){
             mGoneItemAdapter.submitList(it)
         }
-    }
-    private fun showDialog(item : Item){
-        val dialog = AlertDialog.Builder(requireContext())
-        dialog.apply{
-            setMessage("날짜를 초기화 하시겠습니까?")
-            setPositiveButton("확인") { dialog, btnType ->
-                when (btnType) {
-                    DialogInterface.BUTTON_POSITIVE -> {
-                        mItemViewModel.update(item.id,item.itemName,item.location,"")
-                        message("체크 완료")
-                        dialog?.dismiss()
-                    }
-                    else -> dialog?.dismiss()
-                }
-            }
-            setNegativeButton("취소",null)
-            show()
-        }
-        mItemViewModel.fetchItems("")
     }
     private fun message(s : String){
         Toast.makeText(requireContext(),s,Toast.LENGTH_SHORT).show()
