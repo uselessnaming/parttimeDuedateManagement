@@ -1,6 +1,7 @@
 package com.example.part_timedatemanagement.Database
 
 import android.app.Application
+import com.example.parttimeduedatemanagement.Database.Item
 
 class ItemRepository (application : Application) {
     private var mItemDatabase : ItemDatabase
@@ -27,7 +28,7 @@ class ItemRepository (application : Application) {
     fun deleteType(type : String, itemName : String){
         mItemDao.deleteType(type,itemName)
     }
-    fun searchItem(id : Int) : Item{
+    fun searchItem(id : Int) : Item {
         return mItemDao.searchItem(id)
     }
     fun getType() : List<String>{
@@ -52,9 +53,9 @@ class ItemRepository (application : Application) {
     companion object{
         private var INSTANCE : ItemRepository? = null
 
-        fun get(appliation : Application) : ItemRepository{
+        fun get(application : Application) : ItemRepository{
             return INSTANCE ?:
-            ItemRepository(appliation)
+            ItemRepository(application)
             //throw IllegalStateException("TodoRepository must be initialized")
         }
     }

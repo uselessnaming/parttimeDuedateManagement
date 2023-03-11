@@ -1,7 +1,5 @@
 package com.example.parttimeduedatemanagement
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.part_timedatemanagement.Database.Item
+import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.GoneItemAdapter
 import com.example.parttimeduedatemanagement.databinding.FragmentDuedateCheckBinding
@@ -71,7 +69,6 @@ class DuedateCheckFragment : Fragment() {
                         }
                         override fun onUpdateDateClick() {
                             val updateDialog = UpdateDialog()
-
                             updateDialog.setOnDoneClickListener(object : UpdateDialog.OnDoneClickListener{
                                 override fun onClick(itemId: Int, type : String, name : String, date : String) {
                                     mItemViewModel.update(itemId, name, type, date)

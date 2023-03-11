@@ -3,10 +3,8 @@ package com.example.parttimeduedatemanagement.ViewModel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.part_timedatemanagement.Database.Item
+import com.example.parttimeduedatemanagement.Database.Item
 import com.example.part_timedatemanagement.Database.ItemRepository
-import com.example.parttimeduedatemanagement.Database.CheckItemList
-import com.example.parttimeduedatemanagement.Database.EaItem
 import kotlinx.coroutines.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -18,66 +16,13 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
     private var typeLiveData = MutableLiveData<List<String>>()
     val types : LiveData<List<String>> get() = typeLiveData
 
-    private var eaLiveData = MutableLiveData<List<EaItem>>()
-    val eaData : LiveData<List<EaItem>>get() = eaLiveData
-    /* 나중에 설정에서는 exceptTarget을 개인적으로 설정할 수 있도록 */
-    private val essentialTarget = listOf("묶음라면","커피","차","씨리얼","과자","음료 캔","음료 작은펱","음료 큰펱")
-    val sb = StringBuilder()
+    private val sb = StringBuilder()
     private var curLocation : String = ""
 
-    private var itemLiveData = MutableLiveData<List<CheckItemList>>()
-    val items : LiveData<List<CheckItemList>> get() = itemLiveData
+    private var itemLiveData = MutableLiveData<List<Item>>()
+    val items : LiveData<List<Item>> get() = itemLiveData
     var count : Int = 0
 
-
-    /* EA 관련 데이터 */
-    fun updateEA(id : Int, ea : Int){
-        viewModelScope.launch(Dispatchers.IO + coroutineException){
-            mItemRepository.updateEA(id, ea)
-        }
-    }
-    fun fetchEas(){
-        viewModelScope.launch(Dispatchers.IO + coroutineException){
-            val news = toEaList(mItemRepository.getAll())
-            eaLiveData.postValue(news)
-        }
-    }
-    private fun toEaList(items : List<Item>) : List<EaItem>{
-        val result = arrayListOf<EaItem>()
-        val headers = arrayListOf<String>()
-
-        items.forEach{
-            if (it.location in essentialTarget){
-                if (it.location !in headers){
-                    headers.add(it.location)
-                    result.add(EaItem.Header(it))
-                }
-                if (it.itemName != ""){
-                    result.add(EaItem.Child(it))
-                }
-            }
-        }
-        result.sortWith(compareBy({it.item.location},{it.order}))
-        sb.clear()
-        curLocation = ""
-        result.forEach{
-            if (it is EaItem.Child){
-                if (it.item.ea != 0){
-                    if (curLocation != it.item.location){
-                        curLocation = it.item.location
-                        sb.append("\n${it.item.location} : ")
-                    }
-                sb.append("${it.item.itemName}${it.item.ea}\t")
-                }
-            }
-        }
-        return result
-    }
-    fun resetEA(){
-        viewModelScope.launch(Dispatchers.IO){
-            mItemRepository.resetEA()
-        }
-    }
     /* type을 받는 live data */
     fun fetchTypes() {
         viewModelScope.launch(Dispatchers.IO){
@@ -107,43 +52,65 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
 
     /* 전체 item을 받는 live data */
     fun fetchItems(sortedType : String){
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             count = 0
-            val news = toListItems(mItemRepository.getAll(), sortedType)
+            val news = toListItems(mItemRepository.getAll(),sortedType)
             itemLiveData.postValue(news)
         }
     }
     fun getItemCount() : Int = count
-    private fun toListItems(items : List<Item>, sortedType : String) : List<CheckItemList>{
-        val result = arrayListOf<CheckItemList>()
+    private fun toListItems(items : List<Item>, sortedType : String) : List<Item>{
+        val result = arrayListOf<Item>()
         val headers = arrayListOf<String>()
 
         items.forEach{
             if (it.location !in headers){
                 headers.add(it.location)
-                result.add(CheckItemList.Header(it))
+                result.add(it)
             }
-            if (it.itemName != ""){
-                result.add(CheckItemList.Child(it))
+            if (it.itemName!= "" ){
                 count += 1
+                result.add(it)
             }
         }
+
+
         when(sortedType){
             "addTime" -> {
-                result.sortWith(compareBy({it.item.location},{it.order},{it.item.id}))
+                result.sortWith(compareBy({it.location},{it.id}))
             }
             "duedate" -> {
-                result.sortWith(compareBy({it.item.location},{it.order},{it.item.date}))
+                result.sortWith(compareBy({it.location},{it.date}))
             }
             "name" -> {
-                result.sortWith(compareBy({it.item.location},{it.order},{it.item.itemName}))
+                result.sortWith(compareBy({it.location},{it.itemName}))
+            }
+            "stringBuilder" -> {
+                result.sortWith(compareBy({it.location},{it.id}))
+                setStringBuilder(result)
             }
             else -> {
-                result.sortWith(compareBy{it.item.location})
+                result.sortWith(compareBy{it.location})
             }
         }
         return result
     }
+    private fun setStringBuilder(result : ArrayList<Item>){
+        sb.clear()
+        curLocation = ""
+        result.forEach{
+            if (it.itemName != ""){
+                if (it.ea != 0){
+                    if (curLocation != it.location){
+                        curLocation = it.location
+                        sb.append("\n${it.location} : ")
+                    }
+                    sb.append("${it.itemName} - ${it.ea}  ")
+                }
+            }
+        }
+    }
+    fun getStringBuilder() : StringBuilder = sb
 
     /* DuedateCheckFragment에서 사용할 데이터 */
     private var goneItemLiveData = MutableLiveData<List<Item>>()
@@ -204,4 +171,16 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
     suspend fun checkItem(itemName : String, location : String) : Deferred<Boolean> =
         viewModelScope.async(Dispatchers.IO + coroutineException){
             return@async mItemRepository.checkItem(itemName,location)}
+
+    fun updateEA(id : Int, ea : Int){
+        viewModelScope.launch(Dispatchers.IO + coroutineException){
+            mItemRepository.updateEA(id, ea)
+        }
+    }
+    fun resetEA(){
+        viewModelScope.launch(Dispatchers.IO){
+            mItemRepository.resetEA()
+        }
+    }
+
 }

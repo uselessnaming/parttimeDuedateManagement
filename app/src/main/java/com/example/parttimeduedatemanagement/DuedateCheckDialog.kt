@@ -41,7 +41,7 @@ class DuedateCheckDialog : DialogFragment() {
                     setPositiveButton("확인") { _, _ ->
                         onButtonClickListener.onSoldOutClick()
                     }
-                    setNegativeButton("확인",null)
+                    setNegativeButton("취소",null)
                 }
                 dialog.show()
             }
@@ -86,7 +86,7 @@ class DuedateCheckDialog : DialogFragment() {
     private fun dialogResize(){
         val size = ScreenMetricsCompat.getScreenSize(requireContext())
         val newWidth = (size.width * 0.8).toInt()
-        val newHeight = (size.height * 0.5).toInt()
+        val newHeight = (size.height * 0.3).toInt()
         val window = this.dialog?.window
         window?.setLayout(newWidth,newHeight)
     }

@@ -1,9 +1,10 @@
 package com.example.parttimeduedatemanagement.Adapater
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.part_timedatemanagement.Database.Item
+import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.databinding.GoneItemContainerBinding
 
 class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>(){
@@ -27,6 +28,7 @@ class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>
         holder.bind(items[position])
 
         holder.itemView.setOnClickListener{
+            Log.d("AAAAA","item[position] - ${items[position]}")
             goneItemClickListener.onClick(items[position])
         }
     }
@@ -40,9 +42,10 @@ class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>
 
     private lateinit var goneItemClickListener : OnGoneItemClickListener
 
-    inner class GoneItemViewHolder(binding : GoneItemContainerBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class GoneItemViewHolder(private val binding : GoneItemContainerBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item : Item){
+
             binding.tvItemName.text = item.itemName
             binding.tvItemDate.text = item.date
             binding.tvItemLocation.text = item.location

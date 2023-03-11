@@ -14,7 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.part_timedatemanagement.Database.Item
+import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.Memo.AddMemoFragment
 import com.example.parttimeduedatemanagement.Memo.MemoFragment
 import com.example.parttimeduedatemanagement.Memo.UpdateMemoFragment

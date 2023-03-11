@@ -3,10 +3,7 @@ package com.example.parttimeduedatemanagement.Adapater
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.part_timedatemanagement.Database.Item
-import com.example.parttimeduedatemanagement.databinding.GoneItemContainerBinding
 import com.example.parttimeduedatemanagement.databinding.TypeEditRecyclerItemBinding
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 class TypeEditAdapter : RecyclerView.Adapter<TypeEditAdapter.TypeEditViewHolder>(){
     private val TAG : String = "TypeEditAdapter"

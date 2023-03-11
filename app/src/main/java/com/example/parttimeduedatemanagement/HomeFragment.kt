@@ -2,6 +2,7 @@ package com.example.parttimeduedatemanagement
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -12,13 +13,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
-import com.example.parttimeduedatemanagement.Adapater.ItemChildViewHolder
-import com.example.parttimeduedatemanagement.Database.CheckItemList
+import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.ViewModel.MemoViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -115,6 +114,7 @@ class HomeFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun initRecyclerView (){
         mItemViewModel.items.observe(viewLifecycleOwner){
+            Log.d("BBBBB","${it}")
             mItemAdapter.submitList(it)
             binding.itemCount.text = "등록된 상품의 개수 : " + mItemViewModel.getItemCount().toString()
         }
@@ -127,7 +127,7 @@ class HomeFragment : Fragment() {
                 setHasFixedSize(true)
             }
             mItemAdapter.setItemLongClickListener(object : ItemAdapter.OnItemLongClickListener{
-                override fun onLongClick(v: View, id : CheckItemList) {
+                override fun onLongClick(v: View, item : Item) {
                     val dialog = BottomDialog()
                     /* BottomDialogFragment 생성 */
                     dialog.setOnDoneClickListener(object : BottomDialog.OnDoneClickListener{
@@ -137,7 +137,7 @@ class HomeFragment : Fragment() {
                             dialog.dismiss()
                         }
                     })
-                    mActivity.createBottomDialog(dialog,id.item)
+                    mActivity.createBottomDialog(dialog,item)
                 }
             })
         }

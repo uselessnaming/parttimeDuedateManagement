@@ -1,17 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
+    android:layout_margin="5dp">
 
-    <TextView
-        android:id="@+id/itemLocation"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/item_container_background"
-        tools:text="Location"
-        android:textSize ="50sp"
-        android:textColor ="@color/locationColor"/>
+        app:strokeWidth="1dp"
+        app:cardCornerRadius="3dp"
+        android:background="@color/fragmentBackground" >
+
+        <TextView
+            android:id="@+id/tvItemLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
+            tools:text="Location"
+            android:textSize ="50sp"
+            android:textColor ="@color/locationColor"/>
+
+        <ImageButton
+            android:id="@+id/imgImageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+            android:src="@android:drawable/arrow_down_float" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:id="@+id/lyDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@color/layoutBackground">
+
+    </LinearLayout>
 
 </LinearLayout>
