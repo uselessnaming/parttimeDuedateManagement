@@ -1,88 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".HomeFragment"
     android:orientation="vertical"
     android:id="@+id/homeFragment"
     android:background="@color/fragmentBackground"
-    android:tag="home">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".HomeFragment"
-        android:orientation="vertical">
+        android:scrollbars="none">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/itemCount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:gravity="center"
+                tools:text="Duedate Management System"
+                android:textColor="@color/itemTextColor"
+                android:textSize="20sp"
+                android:background="@drawable/update_dialog_last_view_background"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/itemCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    tools:text="Duedate Management System"
-                    android:textColor="@color/itemTextColor"
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toStartOf="@+id/spSort"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/sortMessage"
                     android:textSize="20sp"
-                    android:background="@drawable/update_dialog_last_view_background"/>
+                    android:textColor="@color/itemTextColor"
+                    android:textStyle="bold|normal"
+                    android:layout_marginEnd="15dp"/>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                <Spinner
+                    android:id="@+id/spSort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:hint="정렬"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        app:layout_constraintEnd_toStartOf="@+id/spSort"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="@string/sortMessage"
-                        android:textSize="20sp"
-                        android:textColor="@color/itemTextColor"
-                        android:textStyle="bold|normal"
-                        android:layout_marginEnd="15dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/itemList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                    <Spinner
-                        android:id="@+id/spSort"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:hint="정렬"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.recyclerview.widget.RecyclerView>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/itemList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-            </LinearLayout>
-        </ScrollView>
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/btnRefresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_rotate"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

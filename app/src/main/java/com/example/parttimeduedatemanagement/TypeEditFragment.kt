@@ -96,6 +96,11 @@ class TypeEditFragment : Fragment() {
                 })
                 mActivity.createDialog(dialog,"typeEditDialog")
             }
+            typeEditFragment.setOnRefreshListener {
+                onStart()
+                message("새로고침 완료")
+                typeEditFragment.isRefreshing = false
+            }
         }
     }
     override fun onStart(){

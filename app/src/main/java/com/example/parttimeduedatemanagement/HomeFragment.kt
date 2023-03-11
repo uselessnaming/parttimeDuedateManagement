@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -70,9 +71,6 @@ class HomeFragment : Fragment() {
             }
         }
         binding.apply{
-            btnRefresh.setOnClickListener{
-                mItemViewModel.fetchItems("")
-            }
             val menus = listOf("아이템 추가 순","유통기한순","이름순")
             val adapter = ArrayAdapter.createFromResource(requireContext(),R.array.sortingMenu,R.layout.choice_spinner_item)
             spSort.adapter = adapter
@@ -91,6 +89,11 @@ class HomeFragment : Fragment() {
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
+            }
+            homeFragment.setOnRefreshListener {
+                onStart()
+                message("새로고침 완료")
+                homeFragment.isRefreshing = false
             }
         }
     }
@@ -144,5 +147,8 @@ class HomeFragment : Fragment() {
     }
     private fun setResetFlag(isReset : Boolean){
         this.isReset = isReset
+    }
+    private fun message(s : String){
+        Toast.makeText(context,s,Toast.LENGTH_SHORT).show()
     }
 }
