@@ -79,7 +79,7 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(){
                         }
                         val viewItemName = TextView(binding.root.context).apply {
                             text = "${item.itemName}"
-                            textSize = 40f
+                            textSize = 25f
                             setPadding(10, 10, 5, 10)
                             setBackgroundResource(R.color.layoutBackground)
                             setTextColor(ContextCompat.getColor(context, R.color.itemTextColor))

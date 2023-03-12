@@ -91,18 +91,18 @@ class HomeFragment : Fragment() {
                 }
             }
             homeFragment.setOnRefreshListener {
-                onStart()
-                message("새로고침 완료")
-                homeFragment.isRefreshing = false
+                val isAtTop = scrollView.scrollY == 0
+
+                if (isAtTop){
+                    mItemViewModel.fetchItems("")
+                    message("새로고침 완료")
+                    homeFragment.isRefreshing = false
+                } else {
+                    scrollView.smoothScrollTo(0,0)
+                }
             }
         }
     }
-
-    override fun onStart(){
-        super.onStart()
-        mItemViewModel.fetchItems("")
-    }
-
     /** ViewModel 초기화 */
     private fun initItemViewModel(){
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
