@@ -28,7 +28,9 @@ class ItemAdapter : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(){
         this.headers.clear()
         this.items.addAll(items)
         items.forEach{
-            if (it.itemName == "") headers.add(it.location)
+            if (it.itemName == "") {
+                headers.add(it.location)
+            }
         }
         notifyDataSetChanged()
     }

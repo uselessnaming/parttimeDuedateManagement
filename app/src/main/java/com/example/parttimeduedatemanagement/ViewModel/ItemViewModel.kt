@@ -65,7 +65,9 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
 
         items.forEach{
             if (it.location !in headers){
-                headers.add(it.location)
+                if (it.itemName == "" && it.date == ""){
+                    headers.add(it.location)
+                }
                 result.add(it)
             }
             if (it.itemName!= "" ){
@@ -73,8 +75,6 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
                 result.add(it)
             }
         }
-
-
         when(sortedType){
             "addTime" -> {
                 result.sortWith(compareBy({it.location},{it.id}))
@@ -182,5 +182,4 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
             mItemRepository.resetEA()
         }
     }
-
 }
