@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parttimeduedatemanagement.databinding.TypeEditRecyclerItemBinding
 
-class TypeEditAdapter : RecyclerView.Adapter<TypeEditAdapter.TypeEditViewHolder>(){
+class TypeEditAdapter : RecyclerView.Adapter<TypeEditViewHolder>(){
     private val TAG : String = "TypeEditAdapter"
     private val types = arrayListOf<String>()
     private lateinit var binding : TypeEditRecyclerItemBinding
@@ -18,28 +18,18 @@ class TypeEditAdapter : RecyclerView.Adapter<TypeEditAdapter.TypeEditViewHolder>
 
     override fun getItemCount(): Int = this.types.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType : Int) : TypeEditAdapter.TypeEditViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType : Int) : TypeEditViewHolder {
         binding = TypeEditRecyclerItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return TypeEditViewHolder(binding)
     }
-    override fun onBindViewHolder(holder : TypeEditAdapter.TypeEditViewHolder, position : Int){
+    override fun onBindViewHolder(holder : TypeEditViewHolder, position : Int){
         holder.bind(types[position])
         binding.imgDelete.setOnClickListener{
             onClickListener.onClick(types[position])
         }
     }
-
-    inner class TypeEditViewHolder(binding : TypeEditRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root){
-
-        fun bind(type : String){
-            binding.tvType.text = type
-        }
-    }
-    interface OnClickListener{
-        fun onClick(typesHeader : String)
-    }
-    private lateinit var onClickListener : OnClickListener
-    fun setOnClickListener(onClickListener : OnClickListener){
+    private lateinit var onClickListener : OnItemClickListener
+    fun setOnClickListener(onClickListener : OnItemClickListener){
         this.onClickListener = onClickListener
     }
 }

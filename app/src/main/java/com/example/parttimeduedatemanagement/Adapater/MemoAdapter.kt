@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.parttimeduedatemanagement.MemoDatabase.Memo
 import com.example.parttimeduedatemanagement.databinding.MemoItemBinding
 
-class MemoAdapter : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
+class MemoAdapter : RecyclerView.Adapter<MemoViewHolder>() {
     private val TAG = "MemoAdapter"
     private val memos = arrayListOf<Memo>()
     private lateinit var binding : MemoItemBinding
@@ -32,24 +32,12 @@ class MemoAdapter : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
             return@setOnLongClickListener(true)
         }
     }
-    inner class MemoViewHolder(binding : MemoItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(memo : Memo){
-            binding.tvTitle.text = memo.title
-            binding.tvUpdateDate.text = memo.date
-        }
-    }
-    interface OnClickListener{
-        fun onClick(memo : Memo)
-    }
-    interface OnLongClickListener{
-        fun onLongClick(id : Int)
-    }
-    private lateinit var onClickListener : OnClickListener
-    private lateinit var onLongClickListener : OnLongClickListener
-    fun setOnClickListener(onClickListener : OnClickListener){
+    private lateinit var onClickListener : OnItemClickListener
+    private lateinit var onLongClickListener : OnItemLongClickListener
+    fun setOnClickListener(onClickListener : OnItemClickListener){
         this.onClickListener = onClickListener
     }
-    fun setOnLongClickListener(onLongClickListener : OnLongClickListener){
+    fun setOnLongClickListener(onLongClickListener : OnItemLongClickListener){
         this.onLongClickListener = onLongClickListener
     }
 }

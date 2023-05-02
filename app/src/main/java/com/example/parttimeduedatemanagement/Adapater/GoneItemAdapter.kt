@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.databinding.GoneItemContainerBinding
 
-class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>(){
+class GoneItemAdapter : RecyclerView.Adapter<GoneItemViewHolder>(){
     private val TAG : String = "ItemAdapter"
     private val items = arrayListOf<Item>()
     private lateinit var binding : GoneItemContainerBinding
@@ -33,22 +33,9 @@ class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>
         }
     }
 
-    interface OnGoneItemClickListener{
-        fun onClick(item : Item)
-    }
-    fun setGoneItemClickListener(goneItemClickListener : OnGoneItemClickListener){
+    fun setGoneItemClickListener(goneItemClickListener : OnItemClickListener){
         this.goneItemClickListener = goneItemClickListener
     }
 
-    private lateinit var goneItemClickListener : OnGoneItemClickListener
-
-    inner class GoneItemViewHolder(private val binding : GoneItemContainerBinding) : RecyclerView.ViewHolder(binding.root){
-
-        fun bind(item : Item){
-
-            binding.tvItemName.text = item.itemName
-            binding.tvItemDate.text = item.date
-            binding.tvItemLocation.text = item.location
-        }
-    }
+    private lateinit var goneItemClickListener : OnItemClickListener
 }

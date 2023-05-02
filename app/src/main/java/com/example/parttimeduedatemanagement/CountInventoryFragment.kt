@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.Adapater.CountInventoryAdapter
+import com.example.parttimeduedatemanagement.Adapater.OnBtnClickListener
+import com.example.parttimeduedatemanagement.Adapater.OnEditorActionListener
 import com.example.parttimeduedatemanagement.Memo.MemoFragment
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentCountInventoryBinding
@@ -72,7 +74,7 @@ class CountInventoryFragment : Fragment() {
     private fun initRecyclerView(){
         binding.apply{
             rcvCountInventory.adapter = mCountInventoryAdapter
-            mCountInventoryAdapter.setOnBtnClickListener(object : CountInventoryAdapter.OnBtnClickListener {
+            mCountInventoryAdapter.setOnBtnClickListener(object : OnBtnClickListener {
                 override fun onPlus(id : Int, ea : Int) {
                     mItemViewModel.updateEA(id, ea+1)
                     mItemViewModel.fetchItems("stringBuilder")
@@ -86,8 +88,8 @@ class CountInventoryFragment : Fragment() {
                     mItemViewModel.fetchItems("stringBuilder")
                 }
             })
-            mCountInventoryAdapter.setOnEditorActionListener(object : CountInventoryAdapter.OnEditorActionListener {
-                override fun onClickEnter(item: Item, ea : Int) {
+            mCountInventoryAdapter.setOnEditorActionListener(object : OnEditorActionListener {
+                override fun onEnterClick(item: Item, ea : Int) {
                     mItemViewModel.updateEA(item.id, ea)
                     mItemViewModel.fetchItems("stringBuilder")
                 }
