@@ -6,23 +6,19 @@ import android.util.Log
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
-import com.example.parttimeduedatemanagement.Adapater.ItemChildViewHolder
-import com.example.parttimeduedatemanagement.Database.CheckItemList
-import com.example.parttimeduedatemanagement.Event.HoldableSwipeHelper
-import com.example.parttimeduedatemanagement.Event.SwipeButtonAction
+import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.ViewModel.MemoViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -75,9 +71,6 @@ class HomeFragment : Fragment() {
             }
         }
         binding.apply{
-            btnRefresh.setOnClickListener{
-                mItemViewModel.fetchItems("")
-            }
             val menus = listOf("아이템 추가 순","유통기한순","이름순")
             val adapter = ArrayAdapter.createFromResource(requireContext(),R.array.sortingMenu,R.layout.choice_spinner_item)
             spSort.adapter = adapter
@@ -97,14 +90,19 @@ class HomeFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
+            homeFragment.setOnRefreshListener {
+                val isAtTop = scrollView.scrollY == 0
+
+                if (isAtTop){
+                    mItemViewModel.fetchItems("")
+                    message("새로고침 완료")
+                    homeFragment.isRefreshing = false
+                } else {
+                    scrollView.smoothScrollTo(0,0)
+                }
+            }
         }
     }
-
-    override fun onStart(){
-        super.onStart()
-        mItemViewModel.fetchItems("")
-    }
-
     /** ViewModel 초기화 */
     private fun initItemViewModel(){
         mItemViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
@@ -119,31 +117,12 @@ class HomeFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun initRecyclerView (){
         mItemViewModel.items.observe(viewLifecycleOwner){
+            Log.d("BBBBB","${it}")
             mItemAdapter.submitList(it)
             binding.itemCount.text = "등록된 상품의 개수 : " + mItemViewModel.getItemCount().toString()
         }
         binding.apply{
             /* swipe 이벤트 적용 */
-            HoldableSwipeHelper.Builder(requireContext())
-                .setOnRecyclerView(itemList)
-                .setSwipeButtonAction(object : SwipeButtonAction{
-                    override fun onClickFirstButton(viewHolder: ItemChildViewHolder, isChecked : Boolean) {
-                        val id = viewHolder.getBindingId()
-                        mItemViewModel.viewModelScope.launch(Dispatchers.IO){
-                            val item = mItemViewModel.searchItem(id).await()
-                            withContext(Dispatchers.Main){
-                                viewHolder.setImageTag(item.isEmpty)
-                            }
-                            mItemViewModel.updateIsEmpty(item.id)
-                        }
-                    }
-                })
-                .setDismissOnClickFirstItem(true)
-                .excludeFromHoldableViewHolder(200)
-                .setBackgroundColor("#ff0000")
-                .setDirectionAsRightToLeft(false)
-                .build()
-
             itemList.apply{
                 addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
                 layoutManager = LinearLayoutManager(context)
@@ -151,7 +130,7 @@ class HomeFragment : Fragment() {
                 setHasFixedSize(true)
             }
             mItemAdapter.setItemLongClickListener(object : ItemAdapter.OnItemLongClickListener{
-                override fun onLongClick(v: View, id : CheckItemList) {
+                override fun onLongClick(v: View, item : Item) {
                     val dialog = BottomDialog()
                     /* BottomDialogFragment 생성 */
                     dialog.setOnDoneClickListener(object : BottomDialog.OnDoneClickListener{
@@ -161,12 +140,15 @@ class HomeFragment : Fragment() {
                             dialog.dismiss()
                         }
                     })
-                    mActivity.createBottomDialog(dialog,id.item)
+                    mActivity.createBottomDialog(dialog,item)
                 }
             })
         }
     }
     private fun setResetFlag(isReset : Boolean){
         this.isReset = isReset
+    }
+    private fun message(s : String){
+        Toast.makeText(context,s,Toast.LENGTH_SHORT).show()
     }
 }

@@ -9,10 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.part_timedatemanagement.Database.Item
+import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.Adapater.CountInventoryAdapter
-import com.example.parttimeduedatemanagement.Adapater.OnBtnClickListener
-import com.example.parttimeduedatemanagement.Adapater.OnEditorActionListener
 import com.example.parttimeduedatemanagement.Memo.MemoFragment
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentCountInventoryBinding
@@ -21,7 +19,7 @@ class CountInventoryFragment : Fragment() {
 
     private lateinit var binding : FragmentCountInventoryBinding
     private lateinit var mItemViewModel : ItemViewModel
-    private lateinit var sb : StringBuilder
+    private var sb = StringBuilder()
 
     private val mCountInventoryAdapter by lazy{
         CountInventoryAdapter()
@@ -35,10 +33,9 @@ class CountInventoryFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentCountInventoryBinding.inflate(layoutInflater, container, false)
-
+        sb.clear()
         initItemViewModel()
         initRecyclerView()
-
         return binding.root
     }
 
@@ -46,12 +43,12 @@ class CountInventoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply{
             btnDone.setOnClickListener{
+                mItemViewModel.fetchItems("stringBuilder")
                 val memoFragment = MemoFragment()
                 val bundle = Bundle()
                 bundle.putString("content",sb.toString())
                 memoFragment.arguments = bundle
                 message("확인")
-
                 mActivity.switchFragment(memoFragment)
             }
             btnCancel.setOnClickListener{
@@ -62,7 +59,7 @@ class CountInventoryFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        mItemViewModel.fetchEas()
+        mItemViewModel.fetchItems("")
     }
 
     private fun message(s : String){
@@ -75,10 +72,10 @@ class CountInventoryFragment : Fragment() {
     private fun initRecyclerView(){
         binding.apply{
             rcvCountInventory.adapter = mCountInventoryAdapter
-            mCountInventoryAdapter.setOnBtnClickListener(object : OnBtnClickListener {
+            mCountInventoryAdapter.setOnBtnClickListener(object : CountInventoryAdapter.OnBtnClickListener {
                 override fun onPlus(id : Int, ea : Int) {
                     mItemViewModel.updateEA(id, ea+1)
-                    mItemViewModel.fetchEas()
+                    mItemViewModel.fetchItems("stringBuilder")
                 }
                 override fun onMinus(id : Int, ea : Int) {
                     if (ea == 0){
@@ -86,22 +83,22 @@ class CountInventoryFragment : Fragment() {
                         return
                     }
                     mItemViewModel.updateEA(id, ea-1)
-                    mItemViewModel.fetchEas()
+                    mItemViewModel.fetchItems("stringBuilder")
                 }
             })
-            mCountInventoryAdapter.setOnEditorActionListener(object : OnEditorActionListener{
+            mCountInventoryAdapter.setOnEditorActionListener(object : CountInventoryAdapter.OnEditorActionListener {
                 override fun onClickEnter(item: Item, ea : Int) {
                     mItemViewModel.updateEA(item.id, ea)
-                    mItemViewModel.fetchEas()
+                    mItemViewModel.fetchItems("stringBuilder")
                 }
             })
             val layoutManager = LinearLayoutManager(context)
             rcvCountInventory.layoutManager = layoutManager
             rcvCountInventory.setHasFixedSize(true)
         }
-        mItemViewModel.eaData.observe(viewLifecycleOwner) {
+        mItemViewModel.items.observe(viewLifecycleOwner) {
             mCountInventoryAdapter.submitList(it)
-            this.sb = mItemViewModel.sb
+            this.sb = mItemViewModel.getStringBuilder()
         }
     }
 }

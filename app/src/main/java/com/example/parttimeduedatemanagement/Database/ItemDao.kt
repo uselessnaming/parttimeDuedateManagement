@@ -1,6 +1,7 @@
 package com.example.part_timedatemanagement.Database
 
 import androidx.room.*
+import com.example.parttimeduedatemanagement.Database.Item
 
 @Dao
 interface ItemDao {

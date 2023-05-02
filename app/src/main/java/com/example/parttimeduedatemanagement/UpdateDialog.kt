@@ -9,6 +9,7 @@ import android.util.Size
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -60,27 +61,49 @@ class UpdateDialog : DialogFragment(){
                 dismiss()
             }
             btnDone.setOnClickListener{
-                val month = binding.etUpdateMonth.text.toString()
-                val day = binding.etUpdateDay.text.toString()
-                val name = binding.etEditName.text.toString()
-                var date = binding.etUpdateYear.text.toString() + "년 "
-                if (month.length == 1){
-                    date += "0"
+                if (etUpdateYear.text.isBlank() || etUpdateMonth.text.isBlank() || etUpdateDay.text.isBlank()){
+                    message("유통기한 란이 공백입니다. 빈칸 없이 입력해주세요")
+                } else if (etEditName.text.isBlank()) {
+                    message("이름 란이 공백입니다. 빈칸 없이 입력해주세요")
+                } else if (etUpdateMonth.text.toString().toInt() !in 1..12) {
+                    message("1년은 12월까지만 있습니다")
+                } else {
+                    val month = etUpdateMonth.text.toString()
+                    val day = etUpdateDay.text.toString()
+                    val name = etEditName.text.toString()
+                    var date = etUpdateYear.text.toString() + "년 "
+
+                    if (month.length == 1){
+                        date += "0"
+                    }
+                    date += month + "월 "
+                    if (day.length == 1){
+                        date += "0"
+                    }
+                    date += day + "일"
+                    onDoneClickListener.onClick(itemId,location, name, date)
+                    mItemViewModel.updateIsEmpty(itemId,false)
+                    dismiss()
                 }
-                date += month + "월 "
-                if (day.length == 1){
-                    date += "0"
-                }
-                date += day + "일"
-                onDoneClickListener.onClick(itemId,location, name, date)
-                dismiss()
             }
             mItemViewModel.viewModelScope.launch(Dispatchers.IO){
                 val item = mItemViewModel.searchItem(itemId).await()
                 val duedate = item.date
-                val year = duedate.substring(0,4)
-                val month = duedate.substring(6,8)
-                val day = duedate.substring(10,12)
+                val year = if (duedate == "") {
+                    ""
+                } else {
+                    duedate.substring(0,4)
+                }
+                val month = if (duedate == "") {
+                    ""
+                } else {
+                    duedate.substring(6,8)
+                }
+                val day = if (duedate == "") {
+                    ""
+                } else {
+                    duedate.substring(10,12)
+                }
                 etEditName.setText(item.itemName)
                 etUpdateYear.setText(year)
                 etUpdateMonth.setText(month)
@@ -137,5 +160,8 @@ class UpdateDialog : DialogFragment(){
         val newHeight = (size.height * 0.4).toInt()
         val window = this.dialog?.window
         window?.setLayout(newWidth,newHeight)
+    }
+    private fun message(s : String){
+        Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
     }
 }

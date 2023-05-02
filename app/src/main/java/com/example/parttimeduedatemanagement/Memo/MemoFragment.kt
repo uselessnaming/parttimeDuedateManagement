@@ -81,9 +81,10 @@ class MemoFragment : Fragment() {
             })
             mActivity.switchFragment(addMemoFragment)
         }
-        binding.btnRefresh.setOnClickListener{ 
-            mMemoViewModel.fetchMemos()
-            message("새로 고침 완료")
+        binding.memoFragment.setOnRefreshListener {
+            onStart()
+            message("새로고침 완료")
+            binding.memoFragment.isRefreshing = false
         }
     }
 

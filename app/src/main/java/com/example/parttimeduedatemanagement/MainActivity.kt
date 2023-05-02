@@ -14,7 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.part_timedatemanagement.Database.Item
+import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.Memo.AddMemoFragment
 import com.example.parttimeduedatemanagement.Memo.MemoFragment
 import com.example.parttimeduedatemanagement.Memo.UpdateMemoFragment
@@ -148,14 +148,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun createDialog(d : DialogFragment, itemId : Int, tag : String){
-        if (tag == "typeEditDialog"){
-            d.show(supportFragmentManager,tag)
-        } else if (tag == "updateDialog"){
-            val bundle = Bundle()
-            bundle.putInt("itemId", itemId)
-            d.arguments = bundle
-            d.show(supportFragmentManager, tag)
-        }
+        val bundle = Bundle()
+        bundle.putInt("itemId", itemId)
+        d.arguments = bundle
+        d.show(supportFragmentManager, tag)
+    }
+    fun createDialog(d : DialogFragment, tag : String){
+        d.show(supportFragmentManager, tag)
     }
     private fun message(s : String){
         Toast.makeText(this,s,Toast.LENGTH_SHORT).show()

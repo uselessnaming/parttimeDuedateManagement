@@ -7,6 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.parttimeduedatemanagement.Database.Item
 
 @Database(entities = [Item::class], version = 3)
 abstract class ItemDatabase : RoomDatabase(){
@@ -16,9 +17,9 @@ abstract class ItemDatabase : RoomDatabase(){
         @Volatile
         private var instance : ItemDatabase? = null
 
-        fun getInstance(application : Application) : ItemDatabase = instance ?: synchronized(this){
+        fun getInstance(application : Application) : ItemDatabase =  instance ?: synchronized(this){
             instance ?: buildDatabase(application).also {instance = it}
-        }
+    }
         private fun buildDatabase(context : Context) : ItemDatabase {
             return Room.databaseBuilder(
                 context.applicationContext,
@@ -44,7 +45,7 @@ abstract class ItemDatabase : RoomDatabase(){
                 database.execSQL("""CREATE TABLE new_Item (id INTEGER PRIMARY KEY NOT NULL, location STRING NOT NULL, itemName STRING NOT NULL, date STRING NOT NULL, ea INTEGER NOT NULL DEFAULT 0, isEmpty INTEGER NOT NULL DEFAULT 0)""".trimMargin())
                 database.execSQL("""INSERT INTO new_Item (id,location,itemName,date,ea) SELECT id, location, itemName, date, ea FROM Item""".trimIndent())
                 database.execSQL("DROP TABLE itemTable")
-                database.execSQL("ALTER TABLE newItem RENAME TO Item")
+                database.execSQL("ALTER TABLE new_Item RENAME TO Item")
             }
         }
     }

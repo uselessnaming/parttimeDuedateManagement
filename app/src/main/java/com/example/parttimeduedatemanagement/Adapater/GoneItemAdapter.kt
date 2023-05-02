@@ -1,9 +1,10 @@
 package com.example.parttimeduedatemanagement.Adapater
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.part_timedatemanagement.Database.Item
+import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.databinding.GoneItemContainerBinding
 
 class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>(){
@@ -27,12 +28,13 @@ class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>
         holder.bind(items[position])
 
         holder.itemView.setOnClickListener{
-            goneItemClickListener.onClick(items[position].id)
+            Log.d("AAAAA","item[position] - ${items[position]}")
+            goneItemClickListener.onClick(items[position])
         }
     }
 
     interface OnGoneItemClickListener{
-        fun onClick(itemId : Int)
+        fun onClick(item : Item)
     }
     fun setGoneItemClickListener(goneItemClickListener : OnGoneItemClickListener){
         this.goneItemClickListener = goneItemClickListener
@@ -40,11 +42,13 @@ class GoneItemAdapter : RecyclerView.Adapter<GoneItemAdapter.GoneItemViewHolder>
 
     private lateinit var goneItemClickListener : OnGoneItemClickListener
 
-    inner class GoneItemViewHolder(binding : GoneItemContainerBinding) : RecyclerView.ViewHolder(binding.root){
+    inner class GoneItemViewHolder(private val binding : GoneItemContainerBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item : Item){
-            binding.goneItemName.text = item.itemName
-            binding.goneItemDate.text = item.date
+
+            binding.tvItemName.text = item.itemName
+            binding.tvItemDate.text = item.date
+            binding.tvItemLocation.text = item.location
         }
     }
 }

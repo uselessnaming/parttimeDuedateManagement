@@ -5,7 +5,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.part_timedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.MemoDatabase.Memo
 import com.example.parttimeduedatemanagement.MemoDatabase.MemoRepository
 import kotlinx.coroutines.*
@@ -48,7 +47,7 @@ class MemoViewModel(application : Application) : AndroidViewModel(application) {
         return@async mMemoRepository.searchId(title)
     }
     suspend fun searchMemo(id : Int) : Deferred<Memo> = viewModelScope.async(Dispatchers.IO + coroutineException){
-        var memo : Memo? = mMemoRepository.searchMemo(id) ?: Memo("","","")
+        val memo : Memo? = mMemoRepository.searchMemo(id) ?: Memo("","","")
         return@async memo!!
     }
 }

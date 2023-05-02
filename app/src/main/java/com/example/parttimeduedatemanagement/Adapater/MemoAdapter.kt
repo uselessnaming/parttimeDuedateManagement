@@ -1,10 +1,8 @@
 package com.example.parttimeduedatemanagement.Adapater
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.parttimeduedatemanagement.Database.CheckItemList
 import com.example.parttimeduedatemanagement.MemoDatabase.Memo
 import com.example.parttimeduedatemanagement.databinding.MemoItemBinding
 

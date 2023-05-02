@@ -1,4 +1,4 @@
-package com.example.part_timedatemanagement.Database
+package com.example.parttimeduedatemanagement.Database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -12,7 +12,7 @@ data class Item(
     @ColumnInfo
     @PrimaryKey(autoGenerate = true) val id : Int = 0,
     @ColumnInfo var ea : Int = 0,
-    @ColumnInfo var isEmpty : Boolean = false
+    @ColumnInfo var isEmpty : Boolean = false,
 ){
     constructor() : this("","","")
 }

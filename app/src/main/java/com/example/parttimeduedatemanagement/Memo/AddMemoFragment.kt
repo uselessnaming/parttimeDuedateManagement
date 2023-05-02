@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.parttimeduedatemanagement.MemoDatabase.Memo
-import com.example.parttimeduedatemanagement.R
 import com.example.parttimeduedatemanagement.databinding.FragmentAddMemoBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

@@ -6,11 +6,10 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.part_timedatemanagement.Database.Item
+import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.TypeEditAdapter
 import com.example.parttimeduedatemanagement.databinding.FragmentTypeEditBinding
@@ -95,7 +94,12 @@ class TypeEditFragment : Fragment() {
                         dialog.dismiss()
                     }
                 })
-                mActivity.createDialog(dialog,0,"typeEditDialog")
+                mActivity.createDialog(dialog,"typeEditDialog")
+            }
+            typeEditFragment.setOnRefreshListener {
+                onStart()
+                message("새로고침 완료")
+                typeEditFragment.isRefreshing = false
             }
         }
     }
