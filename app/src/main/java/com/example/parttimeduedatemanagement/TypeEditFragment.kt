@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.parttimeduedatemanagement.Adapater.OnTypeClickListener
 import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.TypeEditAdapter
@@ -43,8 +44,8 @@ class TypeEditFragment : Fragment() {
         binding.apply{
             tvEditTitle.text = "카테고리 수정"
             rcTypeEdit.apply{
-                mTypeEditAdapter.setOnClickListener(object : TypeEditAdapter.OnClickListener{
-                    override fun onClick(typesHeader : String) {
+                mTypeEditAdapter.setOnClickListener(object : OnTypeClickListener{
+                    override fun onClick(typeHeader : String) {
                         val dialog = AlertDialog.Builder(requireContext())
                         dialog.apply{
                             setTitle("경고")
@@ -54,9 +55,9 @@ class TypeEditFragment : Fragment() {
                                     DialogInterface.BUTTON_POSITIVE -> {
                                         var messageText = ""
                                         mItemViewModel.viewModelScope.launch(Dispatchers.IO){
-                                            val typeItems = mItemViewModel.checkType(typesHeader).await()
+                                            val typeItems = mItemViewModel.checkType(typeHeader).await()
                                             messageText = if (typeItems.size == 1){
-                                                mItemViewModel.deleteType(typesHeader,"")
+                                                mItemViewModel.deleteType(typeHeader,"")
                                                 mItemViewModel.fetchTypes()
                                                 "삭제 완료"
                                             } else {

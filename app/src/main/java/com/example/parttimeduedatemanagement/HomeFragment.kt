@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.ItemAdapter
+import com.example.parttimeduedatemanagement.Adapater.OnItemLongClickListener
 import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.ViewModel.MemoViewModel
 import com.example.parttimeduedatemanagement.databinding.FragmentHomeBinding
@@ -129,7 +130,7 @@ class HomeFragment : Fragment() {
                 adapter = mItemAdapter
                 setHasFixedSize(true)
             }
-            mItemAdapter.setItemLongClickListener(object : ItemAdapter.OnItemLongClickListener{
+            mItemAdapter.setItemLongClickListener(object : OnItemLongClickListener {
                 override fun onLongClick(v: View, item : Item) {
                     val dialog = BottomDialog()
                     /* BottomDialogFragment 생성 */

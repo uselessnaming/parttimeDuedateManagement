@@ -32,12 +32,12 @@ class MemoAdapter : RecyclerView.Adapter<MemoViewHolder>() {
             return@setOnLongClickListener(true)
         }
     }
-    private lateinit var onClickListener : OnItemClickListener
-    private lateinit var onLongClickListener : OnItemLongClickListener
-    fun setOnClickListener(onClickListener : OnItemClickListener){
+    private lateinit var onClickListener : OnMemoClickListener
+    private lateinit var onLongClickListener : OnIdLongClickListener
+    fun setOnClickListener(onClickListener : OnMemoClickListener){
         this.onClickListener = onClickListener
     }
-    fun setOnLongClickListener(onLongClickListener : OnItemLongClickListener){
+    fun setOnLongClickListener(onLongClickListener : OnIdLongClickListener){
         this.onLongClickListener = onLongClickListener
     }
 }

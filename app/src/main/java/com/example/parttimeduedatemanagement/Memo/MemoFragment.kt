@@ -2,8 +2,6 @@ package com.example.parttimeduedatemanagement.Memo
 
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,11 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.parttimeduedatemanagement.Adapater.MemoAdapter
+import com.example.parttimeduedatemanagement.Adapater.*
+import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.MainActivity
 import com.example.parttimeduedatemanagement.MemoDatabase.Memo
 import com.example.parttimeduedatemanagement.ViewModel.MemoViewModel
@@ -52,23 +50,6 @@ class MemoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-<<<<<<< HEAD
-        /* view create 당시 재고파악 memo의 date와 현재 날짜가 다르다면 memo.delete */
-        mMemoViewModel.viewModelScope.launch(Dispatchers.Main){
-            val isTitle = mMemoViewModel.isTitle("재고 파악").await()
-            if (isTitle) {
-                val memoId = mMemoViewModel.searchId("재고 파악").await()
-                val memo = mMemoViewModel.searchMemo(memoId).await()
-                val date = LocalDateTime.parse(memo.date, formatter)
-                if (!currentDate.equals(date)){
-                    mMemoViewModel.deleteMemo(memoId)
-                    mMemoViewModel.fetchMemos()
-                }
-            }
-        }
-
-=======
->>>>>>> d9bdbe945eb72798e93dc611c962f6b02caaf2dd
         binding.imgPlus.setOnClickListener{
             /* AddMemoFragment 띄우기 */
             val addMemoFragment = AddMemoFragment()
@@ -112,7 +93,7 @@ class MemoFragment : Fragment() {
     private fun initRecyclerView(){
         binding.apply{
             rcvMemoTitle.adapter = mMemoAdapter
-            mMemoAdapter.setOnClickListener(object : MemoAdapter.OnClickListener{
+            mMemoAdapter.setOnClickListener(object : OnMemoClickListener {
                 override fun onClick(memo : Memo) {
                     val updateMemoFragment = UpdateMemoFragment()
                     val id = memo.id
@@ -133,7 +114,7 @@ class MemoFragment : Fragment() {
                     mActivity.switchFragment(updateMemoFragment)
                 }
             })
-            mMemoAdapter.setOnLongClickListener(object : MemoAdapter.OnLongClickListener{
+            mMemoAdapter.setOnLongClickListener(object : OnIdLongClickListener {
                 override fun onLongClick(id : Int) {
                     val dialog = AlertDialog.Builder(context)
                     val listener = DialogInterface.OnClickListener { _, p1 ->

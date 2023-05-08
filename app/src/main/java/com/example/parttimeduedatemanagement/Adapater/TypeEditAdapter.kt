@@ -28,8 +28,8 @@ class TypeEditAdapter : RecyclerView.Adapter<TypeEditViewHolder>(){
             onClickListener.onClick(types[position])
         }
     }
-    private lateinit var onClickListener : OnItemClickListener
-    fun setOnClickListener(onClickListener : OnItemClickListener){
+    private lateinit var onClickListener : OnTypeClickListener
+    fun setOnClickListener(onClickListener : OnTypeClickListener){
         this.onClickListener = onClickListener
     }
 }

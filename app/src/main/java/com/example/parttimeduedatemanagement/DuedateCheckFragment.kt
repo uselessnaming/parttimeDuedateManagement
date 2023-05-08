@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.ViewModel.ItemViewModel
 import com.example.parttimeduedatemanagement.Adapater.GoneItemAdapter
+import com.example.parttimeduedatemanagement.Adapater.OnItemClickListener
 import com.example.parttimeduedatemanagement.databinding.FragmentDuedateCheckBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -57,7 +58,7 @@ class DuedateCheckFragment : Fragment() {
         binding.apply{
             goneItems.adapter = mGoneItemAdapter
 
-            mGoneItemAdapter.setGoneItemClickListener(object : GoneItemAdapter.OnGoneItemClickListener {
+            mGoneItemAdapter.setGoneItemClickListener(object : OnItemClickListener {
                 override fun onClick(item : Item) {
                     val dialog = DuedateCheckDialog()
                     dialog.setOnButtonClickListener(object : DuedateCheckDialog.OnButtonClickListener{
@@ -91,8 +92,5 @@ class DuedateCheckFragment : Fragment() {
         mItemViewModel.goneItems.observe(viewLifecycleOwner){
             mGoneItemAdapter.submitList(it)
         }
-    }
-    private fun message(s : String){
-        Toast.makeText(requireContext(),s,Toast.LENGTH_SHORT).show()
     }
 }
