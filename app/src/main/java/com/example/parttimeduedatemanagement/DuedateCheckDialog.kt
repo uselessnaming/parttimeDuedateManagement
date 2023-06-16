@@ -90,10 +90,6 @@ class DuedateCheckDialog : DialogFragment() {
         val window = this.dialog?.window
         window?.setLayout(newWidth,newHeight)
     }
-    private fun message(s : String){
-        Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
-    }
-
     interface OnButtonClickListener{
         fun onSoldOutClick()
         fun onUpdateDateClick()

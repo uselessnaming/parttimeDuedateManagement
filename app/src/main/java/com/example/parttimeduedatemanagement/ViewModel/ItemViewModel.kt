@@ -1,6 +1,7 @@
 package com.example.parttimeduedatemanagement.ViewModel
 
 import android.app.Application
+import android.os.Build.VERSION_CODES.P
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.parttimeduedatemanagement.Database.Item
@@ -120,24 +121,44 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
     }
     fun goneItemsFetch(today : String){
         viewModelScope.launch(Dispatchers.IO + coroutineException){
-            val news = getGoneItems(mItemRepository.getAll(),today)
+            val news = getGoneItems(mItemRepository.getAll(),today,"goneItem")
             goneItemLiveData.postValue(news)
         }
     }
-    private fun getGoneItems(items : List<Item>, today : String) : List<Item>{
+    private fun getGoneItems(items : List<Item>, today : String, type : String) : List<Item>{
         val result = arrayListOf<Item>()
-        val baseFormat = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
-        val currentDate = LocalDate.parse(today,baseFormat)
 
-        items.forEach{
-            if (it.date != ""){
-                val targetDate = LocalDate.parse(it.date,baseFormat)
-                if (!currentDate.isBefore(targetDate)){
+        if (type == "goneItem"){
+            val baseFormat = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
+            val currentDate = LocalDate.parse(today,baseFormat)
+            items.forEach{
+                if (it.date != ""){
+                    val targetDate = LocalDate.parse(it.date,baseFormat)
+                    if (!currentDate.isBefore(targetDate)){
+                        result.add(it)
+                    }
+                }
+            }
+        } else if (type == "soldOut") {
+            Log.d("AAAAAA", "In ViewModel")
+            items.forEach {
+                if (it.date.isEmpty() && it.itemName.isNotBlank()) {
                     result.add(it)
                 }
             }
+            result.sortWith(compareBy{it.location})
         }
         return result
+    }
+
+    /* SoldOutCheckFragment의 adapter 아이템들 구성 */
+    private var soldOutLD = MutableLiveData<List<Item>>()
+    val soldOutList : LiveData<List<Item>> get() = soldOutLD
+    fun fetchSoldOutList(){
+        viewModelScope.launch(Dispatchers.IO + coroutineException){
+            val soldOuts = getGoneItems(mItemRepository.getAll(), "", "soldOut")
+            soldOutLD.postValue(soldOuts)
+        }
     }
 
     /* Repository 구현 */

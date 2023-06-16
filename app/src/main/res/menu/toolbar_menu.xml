@@ -5,6 +5,8 @@
         android:title="@string/add" />
     <item android:id="@+id/checkDuedate"
         android:title="@string/checkDuedate"/>
+    <item android:id="@+id/checkSoldOut"
+        android:title="@string/checkSoldOut"/>
     <item android:id="@+id/countInventory"
         android:title="@string/countInventory"/>
     <item android:id="@+id/editType"

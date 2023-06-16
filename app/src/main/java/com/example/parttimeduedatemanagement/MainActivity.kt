@@ -79,6 +79,12 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.closeDrawer(GravityCompat.END)
                     true
                 }
+                R.id.checkSoldOut -> {
+                    switchFragment(SoldOutCheckFragment())
+                    isHomeFragment = false
+                    drawerLayout.closeDrawer(GravityCompat.END)
+                    true
+                }
                 R.id.reset -> {
                     val builder = AlertDialog.Builder(this@MainActivity)
                     builder.apply {
