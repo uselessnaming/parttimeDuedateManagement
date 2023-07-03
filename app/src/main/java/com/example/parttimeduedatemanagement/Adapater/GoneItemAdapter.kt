@@ -8,7 +8,6 @@ import com.example.parttimeduedatemanagement.Database.Item
 import com.example.parttimeduedatemanagement.databinding.GoneItemContainerBinding
 
 class GoneItemAdapter : RecyclerView.Adapter<GoneItemViewHolder>(){
-    private val TAG : String = "ItemAdapter"
     private val items = arrayListOf<Item>()
     private lateinit var binding : GoneItemContainerBinding
 
@@ -28,7 +27,6 @@ class GoneItemAdapter : RecyclerView.Adapter<GoneItemViewHolder>(){
         holder.bind(items[position])
 
         holder.itemView.setOnClickListener{
-            Log.d("AAAAA","item[position] - ${items[position]}")
             goneItemClickListener.onClick(items[position])
         }
     }

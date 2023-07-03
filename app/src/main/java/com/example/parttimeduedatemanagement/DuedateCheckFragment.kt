@@ -1,11 +1,11 @@
 package com.example.parttimeduedatemanagement
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.parttimeduedatemanagement.Database.Item
@@ -18,7 +18,6 @@ import java.time.format.DateTimeFormatter
 
 class DuedateCheckFragment : Fragment() {
 
-    private val TAG = "DuedateCheckFragment"
     private lateinit var binding : FragmentDuedateCheckBinding
     private lateinit var mItemViewModel : ItemViewModel
     private val mGoneItemAdapter by lazy{ GoneItemAdapter()}

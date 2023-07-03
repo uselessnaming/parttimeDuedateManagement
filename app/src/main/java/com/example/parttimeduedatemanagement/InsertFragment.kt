@@ -65,6 +65,11 @@ class InsertFragment : Fragment() {
                     message("이름을 입력해주세요")
                 } else if (etInputYear.text.isBlank() || etInputMonth.text.isBlank() || etInputDay.text.isBlank()){
                     message("날짜를 선택해주세요")
+                } else if (etInputYear.text.length != 4){
+                    message("년도는 4자리로 입력해주세요")
+                } else if (checkDigit(etInputYear.text.toString()) || checkDigit(etInputYear.text.toString()) || checkDigit(etInputYear.text.toString())) {
+                    //만약 년월일 입력 칸에 숫자 말고 다른 것이 있다면
+                    message("날짜는 숫자로만 구성해주세요")
                 } else{
                     if (!checkMonth(etInputMonth.text.toString().toInt())){
                         message("월은 12월까지 있습니다")
@@ -116,5 +121,12 @@ class InsertFragment : Fragment() {
             2 -> d in 1..28
             else -> throw IllegalArgumentException("Error input error")
         }
+    }
+    //문자열이 숫자로만 이뤄져있는지 확인
+    private fun checkDigit(s : String) : Boolean{
+        s.forEach{
+            if(!it.isDigit()) return true
+        }
+        return false
     }
 }

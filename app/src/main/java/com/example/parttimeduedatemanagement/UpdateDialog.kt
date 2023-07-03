@@ -67,6 +67,9 @@ class UpdateDialog : DialogFragment(){
                     message("이름 란이 공백입니다. 빈칸 없이 입력해주세요")
                 } else if (etUpdateMonth.text.toString().toInt() !in 1..12) {
                     message("1년은 12월까지만 있습니다")
+                }  else if (checkDigit(etUpdateYear.text.toString()) || checkDigit(etUpdateYear.text.toString()) || checkDigit(etUpdateYear.text.toString())) {
+                    //만약 년월일 입력 칸에 숫자 말고 다른 것이 있다면
+                    message("날짜는 숫자로만 구성해주세요")
                 } else {
                     val month = etUpdateMonth.text.toString()
                     val day = etUpdateDay.text.toString()
@@ -163,5 +166,12 @@ class UpdateDialog : DialogFragment(){
     }
     private fun message(s : String){
         Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
+    }
+    //문자열이 숫자로만 이뤄져있는지 확인
+    private fun checkDigit(s : String) : Boolean{
+        s.forEach{
+            if(!it.isDigit()) return true
+        }
+        return false
     }
 }

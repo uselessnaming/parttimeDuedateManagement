@@ -1,7 +1,6 @@
 package com.example.parttimeduedatemanagement.ViewModel
 
 import android.app.Application
-import android.os.Build.VERSION_CODES.P
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.parttimeduedatemanagement.Database.Item
@@ -11,7 +10,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class ItemViewModel(application : Application) : AndroidViewModel(application){
-    private val TAG = "ViewModel"
     private val mItemRepository : ItemRepository = ItemRepository.get(application)
 
     private var typeLiveData = MutableLiveData<List<String>>()
@@ -128,25 +126,30 @@ class ItemViewModel(application : Application) : AndroidViewModel(application){
     private fun getGoneItems(items : List<Item>, today : String, type : String) : List<Item>{
         val result = arrayListOf<Item>()
 
-        if (type == "goneItem"){
-            val baseFormat = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
-            val currentDate = LocalDate.parse(today,baseFormat)
-            items.forEach{
-                if (it.date != ""){
-                    val targetDate = LocalDate.parse(it.date,baseFormat)
-                    if (!currentDate.isBefore(targetDate)){
-                        result.add(it)
+        when (type) {
+            "goneItem" -> {
+                val baseFormat = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
+                val currentDate = LocalDate.parse(today,baseFormat)
+                items.forEach{
+                    if (it.date != ""){
+                        val targetDate = LocalDate.parse(it.date,baseFormat)
+                        if (!currentDate.isBefore(targetDate)){
+                            result.add(it)
+                        }
                     }
                 }
             }
-        } else if (type == "soldOut") {
-            Log.d("AAAAAA", "In ViewModel")
-            items.forEach {
-                if (it.date.isEmpty() && it.itemName.isNotBlank()) {
-                    result.add(it)
+            "soldOut" -> {
+                items.forEach {
+                    if (it.date.isEmpty() && it.itemName.isNotBlank()) {
+                        result.add(it)
+                    }
                 }
+                result.sortWith(compareBy{it.location})
             }
-            result.sortWith(compareBy{it.location})
+            else -> {
+                throw NullPointerException("The Type is NONE")
+            }
         }
         return result
     }
